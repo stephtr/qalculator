@@ -1,0 +1,39 @@
+
+{
+	"extends": "tonalio",
+	"parserOptions": {
+		"project": [
+			"tsconfig.json",
+			"shared-js/tsconfig.json",
+			"clients/**/tsconfig.json"
+		]
+	},
+	"settings": {
+		"react": {
+			"version": "17.0.1"
+		}
+	},
+	"rules": {
+		"eslint-comments/no-unlimited-disable": "off"
+	},
+	"overrides": [
+		{
+			"files": [ "*.svelte" ],
+			"rules": {
+				"prettier/prettier": "off"
+			}
+		}
+	],
+	"ignorePatterns": [
+		".yarn/",
+		".pnp.js",
+		".vscode/",
+		"coverage/",
+		"package.json",
+		"**/obj/**",
+		"**/bin/**",
+		"**/dist/**",
+		"**/build/**",
+		"static/calc.js"
+	]
+}
