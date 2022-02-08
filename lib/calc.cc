@@ -19,6 +19,8 @@ struct Calculation
 Calculation calculate(std::string calculation)
 {
 	calculator->clearMessages();
+
+	calculation = calc.unlocalizeExpression(calculation, eo.parse_options);
 	std::string parsed_str;
 	bool resultIsComparison;
 	auto result = calc.calculateAndPrint(calculation, 500, eo, po, AUTOMATIC_FRACTION_AUTO, AUTOMATIC_APPROXIMATION_AUTO, &parsed_str, -1, &resultIsComparison, true, 2, TAG_TYPE_HTML);
@@ -46,6 +48,7 @@ std::string info()
 int main()
 {
 	calc.loadGlobalDefinitions();
+	calc.useDecimalComma();
 	po.use_unicode_signs = true;
 	po.interval_display = INTERVAL_DISPLAY_SIGNIFICANT_DIGITS;
 	po.base_display = BASE_DISPLAY_NORMAL;
