@@ -17,9 +17,10 @@
 
 	function submitCalculation() {
 		if (
-			currentInput === '' ||
+			currentInput === '' || // nothing to calculate
 			(calculations.length > 0 &&
-				currentInput === calculations[0].rawInput)
+				currentInput === calculations[0].rawInput && // same calculation as before
+				!calculations[0].id.startsWith('tut')) // only allow that for tutorials
 		)
 			return;
 		const calculation = Module.calculate(currentInput);
