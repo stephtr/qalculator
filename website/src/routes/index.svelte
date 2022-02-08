@@ -1,33 +1,10 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
-
-	type Severity = 'error' | 'warning' | 'info';
-
-	interface Calculation {
-		id: string;
-		input: string;
-		rawInput: string;
-		output: string;
-		messages: string[];
-		severity?: Severity;
-	}
-
-	function parseMessages(
-		messagesString: string,
-	): [messages: string[], severity?: Severity] {
-		const messages = messagesString.split('\n');
-		const severity = messages.find((m) => m.startsWith('Error'))
-			? 'error'
-			: messages.find((m) => m.startsWith('Warning'))
-			? 'warning'
-			: messages.length > 0
-			? 'info'
-			: null;
-		return [
-			messages.map((m) => m.replace(/^(Error|Warning|Info): /, '')),
-			severity,
-		];
-	}
+	import {
+		Calculation,
+		tutorialCalculations,
+		parseMessages,
+	} from '../calculation';
 
 	let currentInput = '';
 	let savedHistory = null;
@@ -36,7 +13,7 @@
 	}
 	let calculations: Calculation[] = savedHistory
 		? JSON.parse(savedHistory)
-		: [];
+		: tutorialCalculations;
 
 	function submitCalculation() {
 		const lastCalculation =
@@ -104,7 +81,6 @@
 				transition:slide
 			>
 				<div class="input">
-					<span class="announce">&gt;</span>
 					{@html calculation.input}
 				</div>
 				<div class="output">
@@ -191,15 +167,11 @@
 		margin-top: 10px;
 	}
 
-	.announce {
-		opacity: 0.4;
-		margin-right: 5px;
-	}
-
 	.message {
 		margin: 10px 0 5px;
 		font-size: 0.8em;
 		opacity: 0.8;
+		hyphens: auto;
 	}
 
 	.error {
@@ -216,6 +188,14 @@
 
 	.input {
 		opacity: 0.85;
+		padding-left: 25px;
+	}
+
+	.input::before {
+		content: '>';
+		position: absolute;
+		opacity: 0.4;
+		margin-left: -25px;
 	}
 
 	.output {
