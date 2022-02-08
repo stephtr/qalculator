@@ -1,13 +1,32 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 
+	type Severity = 'error' | 'warning' | 'info';
+
 	interface Calculation {
 		id: string;
 		input: string;
 		rawInput: string;
 		output: string;
 		messages: string[];
-		severity: 'error' | 'warning' | 'info' | null;
+		severity?: Severity;
+	}
+
+	function parseMessages(
+		messagesString: string,
+	): [messages: string[], severity?: Severity] {
+		const messages = messagesString.split('\n');
+		const severity = messages.find((m) => m.startsWith('Error'))
+			? 'error'
+			: messages.find((m) => m.startsWith('Warning'))
+			? 'warning'
+			: messages.length > 0
+			? 'info'
+			: null;
+		return [
+			messages.map((m) => m.replace(/^(Error|Warning|Info): /, '')),
+			severity,
+		];
 	}
 
 	let currentInput = '';
@@ -30,14 +49,7 @@
 		)
 			return;
 		const calculation = Module.calculate(currentInput);
-		const messages = calculation.messages.split('\n');
-		const severity = messages.find((m) => m.startsWith('Error'))
-			? 'error'
-			: messages.find((m) => m.startsWith('Warning'))
-			? 'warning'
-			: messages.length > 0
-			? 'info'
-			: null;
+		const [messages, severity] = parseMessages(calculation.messages);
 		calculations = [
 			{
 				id: Math.random().toString(),
