@@ -16,13 +16,10 @@
 		: tutorialCalculations;
 
 	function submitCalculation() {
-		const lastCalculation =
-			calculations.length > 0
-				? calculations[calculations.length - 1]
-				: null;
 		if (
 			currentInput === '' ||
-			(lastCalculation && currentInput === lastCalculation.rawInput)
+			(calculations.length > 0 &&
+				currentInput === calculations[0].rawInput)
 		)
 			return;
 		const calculation = Module.calculate(currentInput);
