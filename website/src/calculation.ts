@@ -9,6 +9,23 @@ export interface Calculation {
 	severity?: Severity;
 }
 
+export function parseMessages(
+	messagesString: string,
+): [messages: string[], severity?: Severity] {
+	const messages = messagesString.split('\n');
+	const severity = messages.find((m) => m.startsWith('Error'))
+		? 'error'
+		: messages.find((m) => m.startsWith('Warning'))
+		? 'warning'
+		: messages.length > 0
+		? 'info'
+		: null;
+	return [
+		messages.map((m) => m.replace(/^(Error|Warning|Info): /, '')),
+		severity,
+	];
+}
+
 export const tutorialCalculations: Calculation[] = [
 	{
 		id: 'tut3',
@@ -35,20 +52,3 @@ export const tutorialCalculations: Calculation[] = [
 		severity: null,
 	},
 ];
-
-export function parseMessages(
-	messagesString: string,
-): [messages: string[], severity?: Severity] {
-	const messages = messagesString.split('\n');
-	const severity = messages.find((m) => m.startsWith('Error'))
-		? 'error'
-		: messages.find((m) => m.startsWith('Warning'))
-		? 'warning'
-		: messages.length > 0
-		? 'info'
-		: null;
-	return [
-		messages.map((m) => m.replace(/^(Error|Warning|Info): /, '')),
-		severity,
-	];
-}
