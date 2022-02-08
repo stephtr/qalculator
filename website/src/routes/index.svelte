@@ -191,9 +191,11 @@
 
 	.input::before {
 		content: '>';
-		position: absolute;
 		opacity: 0.4;
+		display: inline-block;
 		margin-left: -25px;
+		margin-right: 25px;
+		width: 0;
 	}
 
 	.output {
