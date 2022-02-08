@@ -11,7 +11,13 @@
 	}
 
 	let currentInput = '';
-	let calculations: Calculation[] = [];
+	let savedHistory = null;
+	if (typeof window !== 'undefined') {
+		savedHistory = window.localStorage?.getItem('qalculator-history');
+	}
+	let calculations: Calculation[] = savedHistory
+		? JSON.parse(savedHistory)
+		: [];
 
 	function submitCalculation() {
 		const lastCalculation =
@@ -34,7 +40,7 @@
 			: null;
 		calculations = [
 			{
-				id: Math.random(),
+				id: Math.random().toString(),
 				input: calculation.input,
 				rawInput: currentInput,
 				output: calculation.output,
@@ -43,8 +49,15 @@
 			},
 			...calculations,
 		];
+		if (calculations.length > 30) {
+			calculations = calculations.slice(0, 30);
+		}
 		calculation.delete();
 		currentInput = '';
+		window.localStorage?.setItem(
+			'qalculator-history',
+			JSON.stringify(calculations),
+		);
 	}
 
 	function keypress(ev: KeyboardEvent) {
@@ -102,7 +115,7 @@
 	</div>
 	<div class="disclaimer">
 		by Stephan Troyer, powered by <a
-			href="https://github.com/Qalculate/libqalculate">libcalculate</a
+			href="https://github.com/Qalculate/libqalculate">libqalculate</a
 		>
 	</div>
 </div>
