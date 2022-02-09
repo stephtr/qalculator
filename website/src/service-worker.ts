@@ -5,7 +5,7 @@ import { build, files, timestamp } from '$service-worker';
 const worker = self as unknown as ServiceWorkerGlobalScope;
 const FILES = `cache${timestamp}`;
 
-const to_cache = build.concat(files);
+const to_cache = build.concat(files).concat(['/']);
 const staticAssets = new Set(to_cache);
 
 worker.addEventListener('install', (event) => {
