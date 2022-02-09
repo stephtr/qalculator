@@ -1,5 +1,9 @@
 type Severity = 'error' | 'warning' | 'info';
 
+export function delay(ms: number) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export interface Calculation {
 	id: string;
 	input: string;

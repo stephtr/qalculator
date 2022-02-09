@@ -4,7 +4,30 @@
 		Calculation,
 		tutorialCalculations,
 		parseMessages,
+		delay,
 	} from '../calculation';
+
+	let pendingCalculationOnceLoaded: string;
+	let isLoading = typeof window !== 'undefined' && !window.Module?.calculate;
+	if (isLoading) {
+		const onLoaded = async () => {
+			while (!Module.calculate) {
+				await delay(250);
+			}
+			isLoading = false;
+			if (pendingCalculationOnceLoaded) {
+				submitCalculation(pendingCalculationOnceLoaded);
+				pendingCalculationOnceLoaded = undefined;
+			}
+		};
+		if (window.Module) {
+			(window as any).Module.preRun = onLoaded;
+		} else {
+			(window as any).Module = {
+				preRun: onLoaded,
+			};
+		}
+	}
 
 	let currentInput = '';
 	let savedHistory = null;
@@ -15,21 +38,18 @@
 		? JSON.parse(savedHistory)
 		: tutorialCalculations;
 
-	function submitCalculation() {
-		if (
-			currentInput === '' || // nothing to calculate
-			(calculations.length > 0 &&
-				currentInput === calculations[0].rawInput && // same calculation as before
-				!calculations[0].id.startsWith('tut')) // only allow that for tutorials
-		)
+	function submitCalculation(input: string) {
+		if (isLoading) {
+			pendingCalculationOnceLoaded = input;
 			return;
-		const calculation = Module.calculate(currentInput);
+		}
+		const calculation = Module.calculate(input);
 		const [messages, severity] = parseMessages(calculation.messages);
 		calculations = [
 			{
 				id: Math.random().toString(),
 				input: calculation.input,
-				rawInput: currentInput,
+				rawInput: input,
 				output: calculation.output,
 				messages,
 				severity,
@@ -40,16 +60,27 @@
 			calculations = calculations.slice(0, 30);
 		}
 		calculation.delete();
-		currentInput = '';
 		window.localStorage?.setItem(
 			'qalculator-history',
 			JSON.stringify(calculations),
 		);
 	}
 
+	function submitCalculationFromInput() {
+		if (
+			currentInput === '' || // nothing to calculate
+			(calculations.length > 0 &&
+				currentInput === calculations[0].rawInput && // same calculation as before
+				!calculations[0].id.startsWith('tut')) // only allow that for tutorials
+		)
+			return;
+		submitCalculation(currentInput);
+		currentInput = '';
+	}
+
 	function keypress(ev: KeyboardEvent) {
 		if (ev.key === 'Enter') {
-			submitCalculation();
+			submitCalculationFromInput();
 		}
 	}
 	let inputElement: HTMLInputElement;
@@ -66,7 +97,7 @@
 	function inputBlur() {
 		setTimeout(() => {
 			if (!windowBluring) {
-				submitCalculation();
+				submitCalculationFromInput();
 			}
 		}, 100);
 	}
@@ -87,6 +118,11 @@
 		on:blur={inputBlur}
 	/>
 	<div class="responses">
+		{#if isLoading && pendingCalculationOnceLoaded}
+			<div transition:slide>
+				<div class="loading"><span /></div>
+			</div>
+		{/if}
 		{#each calculations as calculation (calculation.id)}
 			<div
 				on:click={() => selectCalculation(calculation.rawInput)}
@@ -120,7 +156,7 @@
 	</div>
 </div>
 
-{@html '<scr' + 'ipt src="/calc.js"></script>'}
+{@html '<scr' + 'ipt src="/calc.js" async></script>'}
 
 <style>
 	.content {
@@ -219,8 +255,47 @@
 	}
 
 	.disclaimer {
-		font-size: 0.75em;
+		font-size: 0.9rem;
 		opacity: 0.5;
 		margin: 5px 10px;
+	}
+
+	.loading {
+		display: block;
+		margin: 10px auto;
+		height: 40px;
+		width: 40px;
+	}
+
+	.loading::before,
+	.loading::after,
+	.loading > span {
+		content: '';
+		display: block;
+		position: absolute;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		background-color: #899;
+		opacity: 0.5;
+		animation: bounce 2s infinite ease-in-out;
+	}
+
+	.loading > span {
+		animation-delay: -1.33s;
+	}
+
+	.loading::after {
+		animation-delay: -0.66s;
+	}
+
+	@keyframes bounce {
+		0%,
+		100% {
+			transform: scale(0);
+		}
+		50% {
+			transform: scale(1);
+		}
 	}
 </style>
