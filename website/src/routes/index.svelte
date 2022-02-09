@@ -57,8 +57,22 @@
 		currentInput = calc;
 		inputElement.focus();
 	}
+
+	let windowBluring = false;
+	function windowBlur() {
+		windowBluring = true;
+		setTimeout(() => (windowBluring = false), 250);
+	}
+	function inputBlur() {
+		setTimeout(() => {
+			if (!windowBluring) {
+				submitCalculation();
+			}
+		}, 100);
+	}
 </script>
 
+<svelte:window on:blur={windowBlur} />
 <div class="content">
 	<h1>Qalculator</h1>
 	<input
@@ -70,7 +84,7 @@
 		bind:value={currentInput}
 		bind:this={inputElement}
 		on:keypress={keypress}
-		on:blur={submitCalculation}
+		on:blur={inputBlur}
 	/>
 	<div class="responses">
 		{#each calculations as calculation (calculation.id)}
