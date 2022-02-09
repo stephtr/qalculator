@@ -1,0 +1,17 @@
+{
+	"short_name": "Qalculator",
+	"name": "Qalculator",
+	"start_url": "/",
+	"icons": [
+		{
+			"src": "logo.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	],
+	"background_color": "#091111",
+	"theme_color": "#344",
+	"display": "standalone",
+	"scope": "/",
+	"description": "Calculating the awesome way"
+}

@@ -169,6 +169,7 @@
 		margin: 10px 0 5px;
 		font-size: 0.8em;
 		opacity: 0.8;
+		-webkit-hyphens: auto;
 		hyphens: auto;
 	}
 
