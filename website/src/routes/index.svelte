@@ -121,15 +121,14 @@
 			</div>
 		{/each}
 		{#if History.isEmpty(calculations)}
-			<button class="clearHistoryButton" on:click={clearHistory}
-				>Clear history</button
-			>
+			<button class="clearHistoryButton" on:click={clearHistory}>
+				Clear history
+			</button>
 		{/if}
 	</div>
 	<div class="disclaimer">
-		by Stephan Troyer, powered by <a
-			href="https://github.com/Qalculate/libqalculate">libqalculate</a
-		>
+		by Stephan Troyer, powered by
+		<a href="https://github.com/Qalculate/libqalculate">libqalculate</a>
 	</div>
 </div>
 
