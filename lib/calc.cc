@@ -16,14 +16,14 @@ struct Calculation
 	std::string messages;
 };
 
-Calculation calculate(std::string calculation)
+Calculation calculate(std::string calculation, int timeout = 500)
 {
 	calculator->clearMessages();
 
 	calculation = calc.unlocalizeExpression(calculation, eo.parse_options);
 	std::string parsed_str;
 	bool resultIsComparison;
-	auto result = calc.calculateAndPrint(calculation, 500, eo, po, AUTOMATIC_FRACTION_AUTO, AUTOMATIC_APPROXIMATION_AUTO, &parsed_str, -1, &resultIsComparison, true, 2, TAG_TYPE_HTML);
+	auto result = calc.calculateAndPrint(calculation, timeout, eo, po, AUTOMATIC_FRACTION_AUTO, AUTOMATIC_APPROXIMATION_AUTO, &parsed_str, -1, &resultIsComparison, true, 2, TAG_TYPE_HTML);
 
 	Calculation ret;
 	ret.input = parsed_str;

@@ -175,18 +175,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-static@npm:^1.0.0-next.0":
-  version: 1.0.0-next.27
-  resolution: "@sveltejs/adapter-static@npm:1.0.0-next.27"
+"@sveltejs/adapter-static@npm:next":
+  version: 1.0.0-next.28
+  resolution: "@sveltejs/adapter-static@npm:1.0.0-next.28"
   dependencies:
     tiny-glob: ^0.2.9
-  checksum: 1959b76a87678ca1d52cb525b0796f663f1e14c106cca152c93929c7a678cd20ae7e3eb9c7d597dc70958efd42a295bef43cfdeac5d28b77953640b5a9c97e85
+  checksum: c13a3fd9dd99f625ff52f7e6b8cf4b47f8562cec27142adc6239b463477733f5c9e80d1bdc0f9bb689f20975450fd85435792ed361742f1aa3e57fd7edd4dee7
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^1.0.0-next.1":
-  version: 1.0.0-next.263
-  resolution: "@sveltejs/kit@npm:1.0.0-next.263"
+"@sveltejs/kit@npm:next":
+  version: 1.0.0-next.266
+  resolution: "@sveltejs/kit@npm:1.0.0-next.266"
   dependencies:
     "@sveltejs/vite-plugin-svelte": ^1.0.0-next.32
     sade: ^1.7.4
@@ -195,7 +195,7 @@ __metadata:
     svelte: ^3.44.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 3f9aca565923dbfd1f1259401bc0090c586d1b539e8e6ad2bb14c41ece5b454d76c5cc679c2599e894e67f7f81a218a6254079eaad9a04771d944e2008b56239
+  checksum: 1d24bc1abbfd7b4e03e014a6ba8230461c26f4a036d456c47cb984c81d7803a72945c85bc88dd51119871dbe89c37e3e17f4fc81e65399595335764ece173cf0
   languageName: node
   linkType: hard
 
@@ -3962,8 +3962,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "website@workspace:website"
   dependencies:
-    "@sveltejs/adapter-static": ^1.0.0-next.0
-    "@sveltejs/kit": ^1.0.0-next.1
+    "@sveltejs/adapter-static": next
+    "@sveltejs/kit": next
     svelte: ^3.46.4
     svelte-check: ^2.4.3
     svelte-preprocess: ^4.10.2

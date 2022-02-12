@@ -43,7 +43,7 @@
 			pendingCalculationOnceLoaded = input;
 			return;
 		}
-		const calculation = Module.calculate(input);
+		const calculation = Module.calculate(input, 500);
 		const [messages, severity] = parseMessages(calculation.messages);
 		calculations = [
 			{
