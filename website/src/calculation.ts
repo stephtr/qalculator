@@ -1,3 +1,5 @@
+import { delay } from './tools';
+
 type Severity = 'error' | 'warning' | 'info';
 
 export interface Calculation {
@@ -24,10 +26,6 @@ function parseMessages(
 		messages.map((m) => m.replace(/^(Error|Warning|Info): /, '')),
 		severity,
 	];
-}
-
-function delay(ms: number) {
-	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function isCalculatorLoaded(cb: () => void): boolean {

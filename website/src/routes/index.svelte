@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
+	import { getOS } from '../tools';
 	import {
 		Calculation,
 		History,
@@ -120,6 +121,21 @@
 				{/if}
 			</div>
 		{/each}
+		{#if ['win', 'linux', 'mac'].includes(getOS())}
+			<div class="calloutQalculate">
+				<a href="https://qalculate.github.io/">
+					<img src="/qalculate.svg" width="64" height="64" alt="" />
+				</a>
+				<div>
+					Looking for a fully fledged calculator for PC/Mac?<br />
+					<small
+						>Give <a href="https://qalculate.github.io/"
+							>Qalculate</a
+						> a try!</small
+					>
+				</div>
+			</div>
+		{/if}
 		{#if History.isEmpty(calculations)}
 			<button class="clearHistoryButton" on:click={clearHistory}>
 				Clear history
@@ -273,6 +289,24 @@
 		50% {
 			transform: scale(1);
 		}
+	}
+
+	.calloutQalculate.calloutQalculate {
+		display: flex;
+		align-items: center;
+		line-height: 1.5;
+		font-size: 1.2rem;
+		cursor: default;
+	}
+
+	.calloutQalculate img {
+		display: block;
+		margin: 0 15px 0 -5px;
+	}
+
+	.calloutQalculate small {
+		font-size: 1rem;
+		opacity: 0.9;
 	}
 
 	.clearHistoryButton {
