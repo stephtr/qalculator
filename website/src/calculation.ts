@@ -1,9 +1,5 @@
 type Severity = 'error' | 'warning' | 'info';
 
-export function delay(ms: number) {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export interface Calculation {
 	id: string;
 	input: string;
@@ -13,7 +9,7 @@ export interface Calculation {
 	severity?: Severity;
 }
 
-export function parseMessages(
+function parseMessages(
 	messagesString: string,
 ): [messages: string[], severity?: Severity] {
 	const messages = messagesString.split('\n');
@@ -30,7 +26,74 @@ export function parseMessages(
 	];
 }
 
-export const tutorialCalculations: Calculation[] = [
+function delay(ms: number) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function isCalculatorLoaded(cb: () => void): boolean {
+	const isBrowser = typeof window !== 'undefined';
+	const hasLoaded = isBrowser && !!window.Module?.calculate;
+	if (isBrowser && !hasLoaded) {
+		const onLoaded = async () => {
+			while (!Module.calculate) {
+				await delay(250);
+			}
+			cb();
+		};
+		if (window.Module) {
+			(window as any).Module.preRun = onLoaded;
+		} else {
+			(window as any).Module = {
+				preRun: onLoaded,
+			};
+		}
+	}
+	return hasLoaded;
+}
+
+export const History = {
+	load: () => {
+		let savedHistory: string = null;
+		if (typeof window !== 'undefined') {
+			savedHistory = window.localStorage?.getItem('qalculator-history');
+		}
+		return savedHistory ? JSON.parse(savedHistory) : History.reset();
+	},
+
+	save: (calculations: Calculation[]) => {
+		if (typeof window == 'undefined') return;
+		window.localStorage?.setItem(
+			'qalculator-history',
+			JSON.stringify(calculations),
+		);
+	},
+
+	reset: () => {
+		History.save(tutorialCalculations);
+		return [...tutorialCalculations];
+	},
+
+	isEmpty: (calculations: Calculation[]) => {
+		return calculations.find((c) => !c.id.startsWith('tut'));
+	},
+};
+
+export function calculate(textInput, timeoutMs = 500): Calculation {
+	const calculation = Module.calculate(textInput, timeoutMs);
+	const [messages, severity] = parseMessages(calculation.messages);
+	const { input, output } = calculation;
+	calculation.delete();
+	return {
+		id: Math.random().toString(),
+		input,
+		rawInput: textInput,
+		output,
+		messages,
+		severity,
+	};
+}
+
+const tutorialCalculations: Calculation[] = [
 	{
 		id: 'tut3',
 		input: 'sqrt(<span style="color:#FFFFAA">pi</span>^<span style="color:#AAFFFF">2</span>)',

@@ -2,64 +2,36 @@
 	import { slide } from 'svelte/transition';
 	import {
 		Calculation,
-		tutorialCalculations,
-		parseMessages,
-		delay,
+		History,
+		isCalculatorLoaded,
+		calculate,
 	} from '../calculation';
 
 	let pendingCalculationOnceLoaded: string;
-	let isLoading = typeof window !== 'undefined' && !window.Module?.calculate;
-	if (isLoading) {
-		const onLoaded = async () => {
-			while (!Module.calculate) {
-				await delay(250);
-			}
-			isLoading = false;
-			if (pendingCalculationOnceLoaded) {
-				submitCalculation(pendingCalculationOnceLoaded);
-				pendingCalculationOnceLoaded = undefined;
-			}
-		};
-		if (window.Module) {
-			(window as any).Module.preRun = onLoaded;
-		} else {
-			(window as any).Module = {
-				preRun: onLoaded,
-			};
+	let isLoading = !isCalculatorLoaded(() => {
+		isLoading = false;
+		if (pendingCalculationOnceLoaded) {
+			submitCalculation(pendingCalculationOnceLoaded);
+			pendingCalculationOnceLoaded = undefined;
 		}
-	}
+	});
 
 	let currentInput = '';
-	let savedHistory = null;
-	if (typeof window !== 'undefined') {
-		savedHistory = window.localStorage?.getItem('qalculator-history');
+	let calculations: Calculation[] = History.load();
+
+	function clearHistory() {
+		calculations = History.reset();
 	}
-	let calculations: Calculation[] = savedHistory
-		? JSON.parse(savedHistory)
-		: tutorialCalculations;
 
 	function submitCalculation(input: string) {
 		if (isLoading) {
 			pendingCalculationOnceLoaded = input;
 			return;
 		}
-		const calculation = Module.calculate(input, 500);
-		const [messages, severity] = parseMessages(calculation.messages);
-		calculations = [
-			{
-				id: Math.random().toString(),
-				input: calculation.input,
-				rawInput: input,
-				output: calculation.output,
-				messages,
-				severity,
-			},
-			...calculations,
-		];
+		calculations = [calculate(input), ...calculations];
 		if (calculations.length > 30) {
 			calculations = calculations.slice(0, 30);
 		}
-		calculation.delete();
 		window.localStorage?.setItem(
 			'qalculator-history',
 			JSON.stringify(calculations),
@@ -148,6 +120,11 @@
 				{/if}
 			</div>
 		{/each}
+		{#if History.isEmpty(calculations)}
+			<button class="clearHistoryButton" on:click={clearHistory}
+				>Clear history</button
+			>
+		{/if}
 	</div>
 	<div class="disclaimer">
 		by Stephan Troyer, powered by <a
@@ -297,5 +274,18 @@
 		50% {
 			transform: scale(1);
 		}
+	}
+
+	.clearHistoryButton {
+		display: block;
+		background: none;
+		font: inherit;
+		color: inherit;
+		border: none;
+		font-size: 0.9rem;
+		opacity: 0.5;
+		text-decoration: underline;
+		cursor: pointer;
+		margin: 5px auto;
 	}
 </style>
