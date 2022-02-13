@@ -18,6 +18,20 @@
 	});
 
 	let currentInput = '';
+	let currentResult = null;
+	$: {
+		currentResult = null;
+		if (currentInput !== '') {
+			try {
+				const result = calculate(currentInput, 20);
+				if (result.severity !== 'error' && result.output.length < 200) {
+					currentResult = result.output;
+				}
+			} catch (e) {
+				currentResult = 'Error';
+			}
+		}
+	}
 	let calculations: Calculation[] = History.load();
 
 	function clearHistory() {
@@ -92,6 +106,11 @@
 		on:keypress={keypress}
 		on:blur={inputBlur}
 	/>
+	{#if currentResult}
+		<div class="directResult" transition:slide>
+			= {@html currentResult}
+		</div>
+	{/if}
 	<div class="responses">
 		{#if isLoading && pendingCalculationOnceLoaded}
 			<div transition:slide>
@@ -188,6 +207,7 @@
 		background: #344;
 		color: #eff;
 		text-align: center;
+		margin-bottom: 10px;
 	}
 	.query::placeholder {
 		color: #dee;
@@ -198,7 +218,7 @@
 	.responses {
 		flex: 1;
 		overflow: auto;
-		margin: 20px auto 0;
+		margin: 10px auto 0;
 		width: 100%;
 		max-width: 750px;
 	}

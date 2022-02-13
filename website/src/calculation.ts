@@ -11,9 +11,10 @@ export interface Calculation {
 	severity?: Severity;
 }
 
-function parseMessages(
-	messagesString: string,
-): [messages: string[], severity?: Severity] {
+function parseCalculation(messagesString: string): {
+	messages: string[];
+	severity?: Severity;
+} {
 	const messages = messagesString.split('\n');
 	const severity = messages.find((m) => m.startsWith('Error'))
 		? 'error'
@@ -22,10 +23,10 @@ function parseMessages(
 		: messages.length > 0
 		? 'info'
 		: null;
-	return [
-		messages.map((m) => m.replace(/^(Error|Warning|Info): /, '')),
+	return {
+		messages: messages.map((m) => m.replace(/^(Error|Warning|Info): /, '')),
 		severity,
-	];
+	};
 }
 
 export function isCalculatorLoaded(cb: () => void): boolean {
@@ -78,8 +79,13 @@ export const History = {
 
 export function calculate(textInput, timeoutMs = 500): Calculation {
 	const calculation = Module.calculate(textInput, timeoutMs);
-	const [messages, severity] = parseMessages(calculation.messages);
-	const { input, output } = calculation;
+	let { messages, severity } = parseCalculation(calculation.messages);
+	let { input, output } = calculation;
+	if (output === 'timed out') {
+		messages = ['Calculation timed out'];
+		severity = 'error';
+		output = '';
+	}
 	calculation.delete();
 	return {
 		id: Math.random().toString(),
