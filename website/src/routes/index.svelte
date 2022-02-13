@@ -153,6 +153,7 @@
 <style>
 	.content {
 		width: 90vw;
+		width: calc(100vw - 2*max(env(safe-area-inset-right) + env(safe-area-inset-left), 5vw));
 		max-width: 800px;
 		margin: 0 auto;
 		text-align: center;
@@ -168,6 +169,9 @@
 
 	h1 {
 		padding: 20px 0;
+		padding: max(min(20px, 2vh), env(safe-area-inset-top)) 0 min(20px, 2vh);
+		font-size: 3.5rem;
+		font-size: max(min(3.5rem, 10vh), 1.5rem);
 	}
 
 	.query {
@@ -248,8 +252,11 @@
 
 	.disclaimer {
 		font-size: 0.9rem;
+		font-size: max(min(0.9rem, 2.5vh), 0.6rem);
 		opacity: 0.5;
-		margin: 5px 10px;
+		line-height: 1.25;
+		margin: 7px 10px;
+		margin: 7px 10px calc(max(7px, env(safe-area-inset-bottom)));
 	}
 
 	.loading {
