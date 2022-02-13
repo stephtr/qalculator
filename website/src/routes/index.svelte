@@ -301,8 +301,8 @@
 	.calloutQalculate.calloutQalculate {
 		display: flex;
 		align-items: center;
-		line-height: 1.5;
-		font-size: 1.2rem;
+		line-height: 1.3;
+		font-size: 1.1rem;
 		cursor: default;
 	}
 
@@ -313,7 +313,7 @@
 
 	.calloutQalculate small {
 		font-size: 1rem;
-		opacity: 0.9;
+		opacity: 0.85;
 	}
 
 	.clearHistoryButton {
