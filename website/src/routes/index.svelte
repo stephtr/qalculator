@@ -74,6 +74,8 @@
 			}
 		}, 100);
 	}
+
+	const isDesktopOS = ['win', 'linux', 'mac'].includes(getOS());
 </script>
 
 <svelte:window on:blur={windowBlur} />
@@ -121,18 +123,18 @@
 				{/if}
 			</div>
 		{/each}
-		{#if ['win', 'linux', 'mac'].includes(getOS())}
+		{#if isDesktopOS}
 			<div class="calloutQalculate">
 				<a href="https://qalculate.github.io/">
 					<img src="/qalculate.svg" width="64" height="64" alt="" />
 				</a>
 				<div>
 					Looking for a fully fledged calculator for PC/Mac?<br />
-					<small
-						>Give <a href="https://qalculate.github.io/"
-							>Qalculate</a
-						> a try!</small
-					>
+					<small>
+						Give
+						<a href="https://qalculate.github.io/">Qalculate!</a>
+						a try!
+					</small>
 				</div>
 			</div>
 		{/if}
@@ -153,7 +155,10 @@
 <style>
 	.content {
 		width: 90vw;
-		width: calc(100vw - 2*max(env(safe-area-inset-right) + env(safe-area-inset-left), 5vw));
+		width: calc(
+			100vw - 2 *
+				max(env(safe-area-inset-right), env(safe-area-inset-left), 5vw)
+		);
 		max-width: 800px;
 		margin: 0 auto;
 		text-align: center;
