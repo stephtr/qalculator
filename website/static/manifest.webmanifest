@@ -5,13 +5,21 @@
 	"icons": [
 		{
 			"src": "logo.png",
+			"sizes": "512x512",
 			"type": "image/png",
-			"sizes": "512x512"
+			"purpose": "any"
+		},
+		{
+			"src": "logo_maskable.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
 		}
 	],
 	"background_color": "#091111",
 	"theme_color": "#344",
 	"display": "standalone",
 	"scope": "/",
-	"description": "Calculating the awesome way"
+	"description": "Calculating the awesome way",
+	"orientation": "any"
 }
