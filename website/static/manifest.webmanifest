@@ -25,8 +25,13 @@
 	"categories": ["utilities", "education", "productivity"],
 	"screenshots": [
 		{
-			"src": "app_screenshot.png",
-			"sizes": "750x1334",
+			"src": "app_screenshot_mobile.png",
+			"sizes": "1080x1920",
+			"type": "image/png"
+		},
+		{
+			"src": "app_screenshot_desktop.png",
+			"sizes": "2732x1536",
 			"type": "image/png"
 		}
 	]
