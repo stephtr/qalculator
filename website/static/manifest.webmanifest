@@ -23,6 +23,7 @@
 	"description": "Calculating the awesome way",
 	"orientation": "any",
 	"categories": ["utilities", "education", "productivity"],
+	"iarc_rating_id": "755df9b8-e843-45a6-978a-a7ee99cd5e9d",
 	"screenshots": [
 		{
 			"src": "app_screenshot_mobile.png",
