@@ -21,5 +21,13 @@
 	"display": "standalone",
 	"scope": "/",
 	"description": "Calculating the awesome way",
-	"orientation": "any"
+	"orientation": "any",
+	"categories": ["utilities", "education", "productivity"],
+	"screenshots": [
+		{
+			"src": "app_screenshot.png",
+			"sizes": "750x1334",
+			"type": "image/png"
+		}
+	]
 }
