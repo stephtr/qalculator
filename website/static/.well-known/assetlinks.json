@@ -1,0 +1,6 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "xyz.qalculator.twa",
+                     "sha256_cert_fingerprints": ["7C:21:02:03:6E:C8:98:F6:81:C9:B5:C2:57:37:28:23:37:E2:BA:38:36:56:79:68:F1:F7:96:81:A5:9B:46:44"] }
+      }
+]
