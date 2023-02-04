@@ -55,7 +55,7 @@ int main()
 	po.indicate_infinite_series = true;
 	eo.parse_options.angle_unit = ANGLE_UNIT_RADIANS;
 	eo.parse_options.unknowns_enabled = false;
-	eo.parse_options.limit_implicit_multiplication = false;
+	eo.parse_options.limit_implicit_multiplication = true;
 	return 0;
 }
 
