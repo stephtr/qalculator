@@ -51,13 +51,15 @@ export function isCalculatorLoaded(cb: () => void): boolean {
 	return hasLoaded;
 }
 
-export const History = {
+export const CalculationHistory = {
 	load: () => {
 		let savedHistory: string = null;
 		if (typeof window !== 'undefined') {
 			savedHistory = window.localStorage?.getItem('qalculator-history');
 		}
-		return savedHistory ? JSON.parse(savedHistory) : History.reset();
+		return savedHistory
+			? JSON.parse(savedHistory)
+			: CalculationHistory.reset();
 	},
 
 	save: (calculations: Calculation[]) => {
@@ -69,11 +71,11 @@ export const History = {
 	},
 
 	reset: () => {
-		History.save(tutorialCalculations);
+		CalculationHistory.save(tutorialCalculations);
 		return [...tutorialCalculations];
 	},
 
-	isEmpty: (calculations: Calculation[]) => {
+	hasEntries: (calculations: Calculation[]) => {
 		return calculations.find((c) => !c.id.startsWith('tut'));
 	},
 };
