@@ -18,9 +18,11 @@
 	});
 
 	let suggestionsEnabled = location.hash === '#suggest';
-	window.onhashchange = () => {
-		suggestionsEnabled = location.hash === '#suggest';
-	};
+	if (typeof window !== 'undefined') {
+		window.onhashchange = () => {
+			suggestionsEnabled = location.hash === '#suggest';
+		};
+	}
 
 	let currentInput = '';
 	let currentResult = null;
@@ -78,7 +80,11 @@
 		if (suggestionsEnabled && ev.key === 'Escape') {
 			hideSuggestions();
 		}
-		if (suggestionsEnabled && ev.key === 'ArrowDown' && suggestions.length > 0) {
+		if (
+			suggestionsEnabled &&
+			ev.key === 'ArrowDown' &&
+			suggestions.length > 0
+		) {
 			if (selectedSuggestion === '') {
 				selectedSuggestion = suggestions[0].name;
 			} else {
@@ -90,7 +96,11 @@
 			}
 			return;
 		}
-		if (suggestionsEnabled && ev.key === 'ArrowUp' && suggestions.length > 0) {
+		if (
+			suggestionsEnabled &&
+			ev.key === 'ArrowUp' &&
+			suggestions.length > 0
+		) {
 			if (selectedSuggestion === '') {
 				selectedSuggestion = suggestions[suggestions.length - 1].name;
 			} else {
