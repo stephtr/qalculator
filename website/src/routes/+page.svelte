@@ -17,8 +17,9 @@
 		}
 	});
 
-	let suggestionsEnabled = location.hash === '#suggest';
+	let suggestionsEnabled = false;
 	if (typeof window !== 'undefined') {
+		suggestionsEnabled = location.hash === '#suggest';
 		window.onhashchange = () => {
 			suggestionsEnabled = location.hash === '#suggest';
 		};
@@ -124,6 +125,8 @@
 					ev.target.value.substring(0, ev.target.selectionStart - 1),
 				);
 				if (wordUpToSelection) {
+					const newSelectionPos = ev.target.selectionStart - wordUpToSelection[0].length + selectedSuggestion.length;
+					
 					ev.target.value =
 						textUpToSelection.substring(
 							0,
@@ -133,6 +136,7 @@
 						) +
 						selectedSuggestion +
 						ev.target.value.substring(ev.target.selectionStart - 1);
+					ev.target.selectionStart = ev.target.selectionEnd = newSelectionPos;
 					hideSuggestions();
 					return;
 				}
