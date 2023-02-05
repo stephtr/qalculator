@@ -30,9 +30,9 @@
 #include <unistd.h>
 #include <stdint.h>
 
-#define QALCULATE_MAJOR_VERSION (3)
-#define QALCULATE_MINOR_VERSION (22)
-#define QALCULATE_MICRO_VERSION (0)
+#define QALCULATE_MAJOR_VERSION (4)
+#define QALCULATE_MINOR_VERSION (5)
+#define QALCULATE_MICRO_VERSION (1)
 
 static std::string empty_string;
 
@@ -239,7 +239,8 @@ typedef enum {
 	PLOT_STYLE_HISTOGRAM,
 	PLOT_STYLE_STEPS,
 	PLOT_STYLE_CANDLESTICKS,
-	PLOT_STYLE_DOTS
+	PLOT_STYLE_DOTS,
+	PLOT_STYLE_POLAR
 } PlotStyle;
 
 /// Smoothing a plotted lines
@@ -321,6 +322,7 @@ typedef enum {
 #define BASE_PI			-7
 #define BASE_E			-8
 #define BASE_SQRT2		-9
+#define BASE_BINARY_DECIMAL	-20
 #define BASE_BIJECTIVE_26	-26
 #define BASE_FP16		-30
 #define BASE_FP32		-31
@@ -348,13 +350,15 @@ typedef enum {
 } NumberFractionFormat;
 
 /// Options for ordering the parts of a mathematical expression/result before display
-static const struct SortOptions {
+struct SortOptions {
 	/// Put currency units before quantity. Default: true
 	bool prefix_currencies;
 	/// If true, avoid placing negative terms first. Default: true
 	bool minus_last;
 	SortOptions() : prefix_currencies(true), minus_last(true) {}
-} default_sort_options;
+};
+
+static const SortOptions default_sort_options;
 
 typedef enum {
 	MULTIPLICATION_SIGN_ASTERISK,
@@ -402,8 +406,13 @@ typedef enum {
 	TIME_ZONE_CUSTOM
 } TimeZone;
 
+// temporary custom time zone value for truncation rounding in output
+#define TZ_TRUNCATE -21586
+// temporary custom time zone value for special duodecimal symbols in output
+#define TZ_DOZENAL -53172
+
 /// Options for formatting and display of mathematical structures/results.
-static const struct PrintOptions {
+struct PrintOptions {
 	int min_exp;
 	/// Number base for displaying numbers. Default: 10
 	int base;
@@ -519,9 +528,11 @@ static const struct PrintOptions {
 	/// Returns the decimal sign used (default sign or decimalpoint_sign)
 	const std::string &decimalpoint() const;
 	/// Returns the digit grouping separator used
-} default_print_options;
+};
 
-static const struct InternalPrintStruct {
+static const PrintOptions default_print_options;
+
+struct InternalPrintStruct {
 	int depth, power_depth, division_depth;
 	bool wrap;
 	std::string *num, *den, *re, *im, *exp;
@@ -530,7 +541,9 @@ static const struct InternalPrintStruct {
 	int parent_precision;
 	long int *iexp;
 	InternalPrintStruct();
-} top_ips;
+};
+
+static const InternalPrintStruct top_ips;
 
 typedef enum {
 	/// Allow only exact results
@@ -622,7 +635,7 @@ typedef enum {
 } IntervalCalculation;
 
 /// Options for parsing expressions.
-static const struct ParseOptions {
+struct ParseOptions {
 	/// If variables will be parsed. Default: true
 	bool variables_enabled;
 	/// If functions will be parsed. Default: true
@@ -665,10 +678,12 @@ static const struct ParseOptions {
 
 	ParseOptions();
 
-} default_parse_options;
+};
+
+static const ParseOptions default_parse_options;
 
 /// Options for calculation.
-static const struct EvaluationOptions {
+struct EvaluationOptions {
 	/// How exact the result must be. Default: TRY_EXACT
 	ApproximationMode approximation;
 	/// If units will be synced/converted to allow evaluation (ex. 1 min + 1 s=60 s+ 1 s = 61 s). Default: true
@@ -727,9 +742,9 @@ static const struct EvaluationOptions {
 	IntervalCalculation interval_calculation;
 
 	EvaluationOptions();
+};
 
-} default_evaluation_options;
-
+static const EvaluationOptions default_evaluation_options;
 static EvaluationOptions default_user_evaluation_options;
 
 extern MathStructure m_undefined, m_empty_vector, m_empty_matrix, m_zero, m_one, m_minus_one, m_one_i;
@@ -788,6 +803,8 @@ extern Calculator *calculator;
 #define SIGN_PLUSMINUS			"±"
 
 #define THIN_SPACE " "
+#define NNBSP " "
+#define NBSP " "
 
 #define ID_WRAP_LEFT_CH		'{'
 #define ID_WRAP_RIGHT_CH	'}'
