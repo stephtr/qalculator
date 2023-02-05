@@ -1,5 +1,6 @@
 #include <emscripten/bind.h>
 #include <libqalculate/Calculator.h>
+#include <libqalculate/Variable.h>
 
 using namespace emscripten;
 
@@ -33,7 +34,7 @@ Calculation calculate(std::string calculation, int timeout = 500)
 	{
 		auto msgType = message->type();
 		std::string severity = msgType == MESSAGE_INFORMATION ? "Info" : msgType == MESSAGE_WARNING ? "Warning"
-																							 : "Error";
+																									: "Error";
 		ret.messages += severity + ": " + message->message() + "\n";
 	}
 
@@ -43,6 +44,43 @@ Calculation calculate(std::string calculation, int timeout = 500)
 std::string info()
 {
 	return "libqalculate by Hanna Knutsson, compiled by Stephan Troyer";
+}
+
+struct VariableInfo
+{
+	std::string name;
+	std::string description;
+	std::string aliases;
+};
+
+std::vector<VariableInfo> getVariables()
+{
+	std::vector<VariableInfo> variables;
+	for (auto &variable : calc.variables)
+	{
+		if (!variable->isKnown() || variable->isHidden())
+			continue;
+
+		VariableInfo info;
+		info.name = variable->preferredDisplayName(true, true).name;
+		info.description = variable->title(false, true);
+		auto nameCount = variable->countNames();
+		if (nameCount < 1)
+		{
+			info.aliases = variable->preferredDisplayName(true, true).name;
+		}
+		else
+		{
+			for (size_t i = 1; i <= nameCount; i++)
+			{
+				info.aliases += variable->getName(i).name;
+				if (i < nameCount)
+					info.aliases += "\t";
+			}
+		}
+		variables.push_back(info);
+	}
+	return variables;
 }
 
 int main()
@@ -63,6 +101,7 @@ EMSCRIPTEN_BINDINGS(Calculator)
 {
 	function("calculate", &calculate);
 	function("info", &info);
+	function("getVariables", &getVariables);
 }
 
 EMSCRIPTEN_BINDINGS(calculation)
@@ -72,4 +111,14 @@ EMSCRIPTEN_BINDINGS(calculation)
 		.property("input", &Calculation::input)
 		.property("output", &Calculation::output)
 		.property("messages", &Calculation::messages);
+}
+
+EMSCRIPTEN_BINDINGS(variableInfo)
+{
+	class_<VariableInfo>("VariableInfo")
+		.constructor<>()
+		.property("name", &VariableInfo::name)
+		.property("description", &VariableInfo::description)
+		.property("aliases", &VariableInfo::aliases);
+	register_vector<VariableInfo>("vector<VariableInfo>");
 }
