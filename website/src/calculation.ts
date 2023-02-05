@@ -1,4 +1,4 @@
-import { delay } from './tools';
+import { delay, wasmVectorToArray } from './tools';
 
 type Severity = 'error' | 'warning' | 'info';
 
@@ -35,6 +35,7 @@ export function isCalculatorLoaded(cb: () => void): boolean {
 	if (isBrowser && !hasLoaded) {
 		const onLoaded = async () => {
 			while (!Module.calculate) {
+				// eslint-disable-next-line no-await-in-loop
 				await delay(250);
 			}
 			cb();
@@ -60,7 +61,7 @@ export const History = {
 	},
 
 	save: (calculations: Calculation[]) => {
-		if (typeof window == 'undefined') return;
+		if (typeof window === 'undefined') return;
 		window.localStorage?.setItem(
 			'qalculator-history',
 			JSON.stringify(calculations),
@@ -77,7 +78,10 @@ export const History = {
 	},
 };
 
-export function calculate(textInput, timeoutMs = 500): Calculation {
+export function calculate(
+	textInput: string,
+	timeoutMs: number = 500,
+): Calculation {
 	const calculation = Module.calculate(textInput, timeoutMs);
 	let { messages, severity } = parseCalculation(calculation.messages);
 	let { input, output } = calculation;
@@ -123,3 +127,17 @@ const tutorialCalculations: Calculation[] = [
 		severity: null,
 	},
 ];
+
+function initCalculator() {
+	const M = Module as any;
+	if (M.getVariables) {
+		M.variables = wasmVectorToArray(M.getVariables()).map((v) => ({
+			name: v.name,
+			description: v.description,
+			aliases: v.aliases.split('\t'),
+		}));
+	}
+}
+if (isCalculatorLoaded(initCalculator)) {
+	initCalculator();
+}

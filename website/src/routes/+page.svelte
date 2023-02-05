@@ -2,7 +2,7 @@
 	import { slide } from 'svelte/transition';
 	import { getOS } from '../tools';
 	import {
-		Calculation,
+		type Calculation,
 		History,
 		isCalculatorLoaded,
 		calculate,
@@ -16,6 +16,11 @@
 			pendingCalculationOnceLoaded = undefined;
 		}
 	});
+
+	let suggestionsEnabled = location.hash === '#suggest';
+	window.onhashchange = () => {
+		suggestionsEnabled = location.hash === '#suggest';
+	};
 
 	let currentInput = '';
 	let currentResult = null;
@@ -65,9 +70,66 @@
 		currentInput = '';
 	}
 
-	function keypress(ev: KeyboardEvent) {
+	function keyup(ev: KeyboardEvent) {
 		if (ev.key === 'Enter') {
 			submitCalculationFromInput();
+			hideSuggestions();
+		}
+		if (suggestionsEnabled && ev.key === 'Escape') {
+			hideSuggestions();
+		}
+		if (suggestionsEnabled && ev.key === 'ArrowDown' && suggestions.length > 0) {
+			if (selectedSuggestion === '') {
+				selectedSuggestion = suggestions[0].name;
+			} else {
+				const index = suggestions.findIndex(
+					(s) => s.name === selectedSuggestion,
+				);
+				selectedSuggestion =
+					suggestions[(index + 1) % suggestions.length].name;
+			}
+			return;
+		}
+		if (suggestionsEnabled && ev.key === 'ArrowUp' && suggestions.length > 0) {
+			if (selectedSuggestion === '') {
+				selectedSuggestion = suggestions[suggestions.length - 1].name;
+			} else {
+				const index = suggestions.findIndex(
+					(s) => s.name === selectedSuggestion,
+				);
+				selectedSuggestion =
+					suggestions[
+						(index + suggestions.length - 1) % suggestions.length
+					].name;
+			}
+			return;
+		}
+		if (suggestionsEnabled && ev.key.length === 1) {
+			const textUpToSelection = ev.target.value.substring(
+				0,
+				ev.target.selectionStart,
+			);
+			if (!/[\p{L}_\d]/u.exec(ev.key) && selectedSuggestion) {
+				const wordUpToSelection = /\p{L}[\p{L}_\d]*$/u.exec(
+					ev.target.value.substring(0, ev.target.selectionStart - 1),
+				);
+				if (wordUpToSelection) {
+					ev.target.value =
+						textUpToSelection.substring(
+							0,
+							ev.target.selectionStart -
+								1 -
+								wordUpToSelection[0].length,
+						) +
+						selectedSuggestion +
+						ev.target.value.substring(ev.target.selectionStart - 1);
+					hideSuggestions();
+					return;
+				}
+			}
+			createSuggestions(textUpToSelection);
+		} else if (!['Control', 'Alt', 'Shift', 'AltGraph'].includes(ev.key)) {
+			hideSuggestions();
 		}
 	}
 	let inputElement: HTMLInputElement;
@@ -87,6 +149,36 @@
 				submitCalculationFromInput();
 			}
 		}, 100);
+		hideSuggestions();
+	}
+
+	let suggestions = [];
+	let selectedSuggestion = '';
+	function createSuggestions(text: string) {
+		const lastWordSelector = /\p{L}[\p{L}_\d]*$/u.exec(text);
+		if (!lastWordSelector) {
+			hideSuggestions();
+			return;
+		}
+		const lastWord = lastWordSelector[0];
+
+		suggestions = Module.variables
+			.map((v) => ({
+				match: v.aliases.some((a) => a === lastWord),
+				partialMatch:
+					v.aliases.some((a) => a.startsWith(lastWord)) ||
+					(v.name === 'ℎ' && lastWord === 'h'),
+				...v,
+			}))
+			.filter((v) => v.partialMatch)
+			.sort((a, b) => +b.match - +a.match);
+		if (suggestions?.[0]?.match) {
+			selectedSuggestion = suggestions[0].name;
+		}
+	}
+	function hideSuggestions() {
+		suggestions = [];
+		selectedSuggestion = '';
 	}
 
 	const isDesktopOS = ['win', 'linux', 'mac'].includes(getOS());
@@ -101,16 +193,30 @@
 		autocomplete="off"
 		class="query"
 		autofocus
+		spellcheck="false"
 		bind:value={currentInput}
 		bind:this={inputElement}
-		on:keypress={keypress}
+		on:keyup={keyup}
 		on:blur={inputBlur}
 	/>
-	{#if currentResult}
-		<div class="directResult" transition:slide>
-			= {@html currentResult}
+	<div class="suggestion-host">
+		<div class="suggestions">
+			{#each suggestions as suggestion (suggestion.name)}
+				<div class:selected={suggestion.name === selectedSuggestion}>
+					{suggestion.name}
+					{#if suggestion.description}
+						<span class="description">{suggestion.description}</span
+						>
+					{/if}
+				</div>
+			{/each}
 		</div>
-	{/if}
+	</div>
+	<div class="directResult" transition:slide>
+		{#if currentResult}
+			= {@html currentResult}
+		{/if}
+	</div>
 	<div class="responses">
 		{#if isLoading && pendingCalculationOnceLoaded}
 			<div transition:slide>
@@ -270,6 +376,10 @@
 		width: 0;
 	}
 
+	.directResult {
+		min-height: 1.5rem;
+	}
+
 	.output {
 		margin: 20px 40px;
 		font-size: 1.1em;
@@ -352,5 +462,41 @@
 		text-decoration: underline;
 		cursor: pointer;
 		margin: 5px auto;
+	}
+
+	.suggestion-host {
+		position: relative;
+		margin: 0 25px;
+		display: flex;
+		justify-content: center;
+	}
+
+	.suggestions {
+		position: absolute;
+		background: #344;
+		text-align: left;
+		overflow-x: hidden;
+		overflow-y: auto;
+		white-space: nowrap;
+		max-height: 6em;
+		max-width: 20em;
+		z-index: 1;
+		box-shadow: rgba(0, 0, 0, 0.5) 0 2px 10px;
+		border-radius: 5px;
+		margin-top: 1.5rem;
+	}
+
+	.suggestions > div {
+		padding: 2px 5px;
+	}
+	.suggestions > div.selected {
+		background: #cdd;
+		color: #122;
+	}
+
+	.suggestions .description {
+		font-style: italic;
+		font-size: 0.8em;
+		opacity: 0.8;
 	}
 </style>

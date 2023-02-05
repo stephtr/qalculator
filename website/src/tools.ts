@@ -16,3 +16,11 @@ export function getOS():
 	if (navigator.userAgent.includes('Linux')) return 'linux';
 	if (navigator.userAgent.includes('Android')) return 'android';
 }
+
+export function wasmVectorToArray(vector: any) {
+	const array = [];
+	for (let i = 0; i < vector.size(); i++) {
+		array.push(vector.get(i));
+	}
+	return array;
+}

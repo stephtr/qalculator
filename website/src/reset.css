@@ -1,8 +1,12 @@
+:root {
+	color-scheme: dark;
+}
+
 body {
 	font-family: system-ui, sans-serif;
 	background: #091111;
 	background: linear-gradient(to right, #091111, #131919);
-	color:#dee;
+	color: #dee;
 }
 
 h1,
