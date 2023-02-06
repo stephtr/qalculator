@@ -56,6 +56,18 @@ export class Calculator {
 		);
 	}
 
+	private submittedListeners: Array<(calculation: string) => void> = [];
+
+	addOnCalculationListener(listener: (calculation: string) => void) {
+		this.submittedListeners.push(listener);
+	}
+
+	removeOnCalculationListener(listener: (calculation: string) => void) {
+		this.submittedListeners = this.submittedListeners.filter(
+			(l) => l !== listener,
+		);
+	}
+
 	calculate(textInput: string, timeoutMs: number = 500): Calculation {
 		const calculation = Module.calculate(textInput, timeoutMs);
 		let { messages, severity } = parseCalculationMessages(
@@ -81,6 +93,7 @@ export class Calculator {
 	private pendingCalculationOnceLoaded: string | null = null;
 
 	submitCalculation(input: string) {
+		this.submittedListeners.forEach((l) => l(input));
 		if (!this.isLoaded) {
 			this.pendingCalculationOnceLoaded = input;
 			return;

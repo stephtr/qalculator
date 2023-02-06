@@ -1,218 +1,33 @@
 <script lang="ts">
 	import { readable } from 'svelte/store';
-	import { slide } from 'svelte/transition';
 	import { Calculator } from '../calculator';
-	import History from '../lib/history.svelte';
-
-	let suggestionsEnabled = false;
-	if (typeof window !== 'undefined') {
-		suggestionsEnabled = window.location.hash === '#suggest';
-		window.onhashchange = () => {
-			suggestionsEnabled = window.location.hash === '#suggest';
-		};
-	}
+	import HistoryWidget from '$lib/history.svelte';
+	import CalculatorWidget from '$lib/calculator.svelte';
 
 	const calculator = new Calculator();
 
-	$: store = readable<boolean>(undefined, (set) => {
+	$: loadedStore = readable<boolean>(undefined, (set) => {
 		const onLoadedChange = () => set(calculator.isLoaded);
 		onLoadedChange();
 		calculator.addOnLoadedListener(onLoadedChange);
 		return () => calculator.removeOnLoadedListener(onLoadedChange);
 	});
-	$: isLoaded = $store;
-	let madeACalculation = false;
+	$: isLoaded = $loadedStore;
 
-	let currentInput = '';
-	let currentResult: string | null = null;
-	$: {
-		currentResult = null;
-		if (currentInput !== '' && calculator.isLoaded) {
-			try {
-				const result = calculator.calculate(currentInput, 20);
-				if (result.severity !== 'error' && result.output.length < 200) {
-					currentResult = result.output;
-				}
-			} catch (e) {
-				currentResult = 'Error';
-			}
-		}
-	}
+	$: calculationStore = readable<boolean>(false, (set) => {
+		const onCalculation = () => set(true);
+		calculator.addOnCalculationListener(onCalculation);
+		return () => calculator.removeOnCalculationListener(onCalculation);
+	});
+	$: madeACalculation = $calculationStore;
 
-	function submitCalculationFromInput() {
-		if (
-			currentInput === '' || // nothing to calculate
-			(calculator.history.entries.length > 0 &&
-				currentInput === calculator.history.entries[0].rawInput && // same calculation as before
-				!calculator.history.entries[0].id.startsWith('tut')) // only allow that for tutorials
-		)
-			return;
-		calculator.submitCalculation(currentInput);
-		madeACalculation = true;
-		currentInput = '';
-	}
-
-	function keyup(ev: KeyboardEvent) {
-		if (ev.key === 'Enter') {
-			submitCalculationFromInput();
-			hideSuggestions();
-		}
-		if (suggestionsEnabled && ev.key === 'Escape') {
-			hideSuggestions();
-		}
-		if (
-			suggestionsEnabled &&
-			ev.key === 'ArrowDown' &&
-			suggestions.length > 0
-		) {
-			if (selectedSuggestion === '') {
-				selectedSuggestion = suggestions[0].name;
-			} else {
-				const index = suggestions.findIndex(
-					(s) => s.name === selectedSuggestion,
-				);
-				selectedSuggestion =
-					suggestions[(index + 1) % suggestions.length].name;
-			}
-			return;
-		}
-		if (
-			suggestionsEnabled &&
-			ev.key === 'ArrowUp' &&
-			suggestions.length > 0
-		) {
-			if (selectedSuggestion === '') {
-				selectedSuggestion = suggestions[suggestions.length - 1].name;
-			} else {
-				const index = suggestions.findIndex(
-					(s) => s.name === selectedSuggestion,
-				);
-				selectedSuggestion =
-					suggestions[
-						(index + suggestions.length - 1) % suggestions.length
-					].name;
-			}
-			return;
-		}
-		if (suggestionsEnabled && ev.key.length === 1) {
-			const textUpToSelection = ev.target.value.substring(
-				0,
-				ev.target.selectionStart,
-			);
-			if (!/[\p{L}_\d]/u.exec(ev.key) && selectedSuggestion) {
-				const wordUpToSelection = /\p{L}[\p{L}_\d]*$/u.exec(
-					ev.target.value.substring(0, ev.target.selectionStart - 1),
-				);
-				if (wordUpToSelection) {
-					const newSelectionPos =
-						ev.target.selectionStart -
-						wordUpToSelection[0].length +
-						selectedSuggestion.length;
-
-					ev.target.value =
-						textUpToSelection.substring(
-							0,
-							ev.target.selectionStart -
-								1 -
-								wordUpToSelection[0].length,
-						) +
-						selectedSuggestion +
-						ev.target.value.substring(ev.target.selectionStart - 1);
-					ev.target.selectionStart = ev.target.selectionEnd =
-						newSelectionPos;
-					hideSuggestions();
-					return;
-				}
-			}
-			createSuggestions(textUpToSelection);
-		} else if (!['Control', 'Alt', 'Shift', 'AltGraph'].includes(ev.key)) {
-			hideSuggestions();
-		}
-	}
-	let inputElement: HTMLInputElement;
-	function selectCalculation(calc: string) {
-		currentInput = calc;
-		inputElement.focus();
-	}
-
-	let windowBluring = false;
-	function windowBlur() {
-		windowBluring = true;
-		setTimeout(() => (windowBluring = false), 250);
-	}
-	function inputBlur() {
-		setTimeout(() => {
-			if (!windowBluring) {
-				submitCalculationFromInput();
-			}
-		}, 100);
-		hideSuggestions();
-	}
-
-	let suggestions: { name: string; description: string }[] = [];
-	let selectedSuggestion = '';
-	function createSuggestions(text: string) {
-		const lastWordSelector = /\p{L}[\p{L}_\d]*$/u.exec(text);
-		if (!lastWordSelector) {
-			hideSuggestions();
-			return;
-		}
-		const lastWord = lastWordSelector[0];
-
-		suggestions = Module.variables
-			.map((v) => ({
-				match: v.aliases.some((a) => a === lastWord),
-				partialMatch:
-					v.aliases.some((a) => a.startsWith(lastWord)) ||
-					(v.name === 'ℎ' && lastWord === 'h'),
-				...v,
-			}))
-			.filter((v) => v.partialMatch)
-			.sort((a, b) => +b.match - +a.match);
-		if ((suggestions as any)?.[0]?.match) {
-			selectedSuggestion = suggestions[0].name;
-		}
-	}
-	function hideSuggestions() {
-		suggestions = [];
-		selectedSuggestion = '';
-	}
+	let selectCalculation: (calculation: string) => void;
 </script>
 
-<svelte:window on:blur={windowBlur} />
 <div class="content">
 	<h1>Qalculator</h1>
-	<input
-		type="text"
-		placeholder="Your calculation"
-		autocomplete="off"
-		class="query"
-		autofocus
-		spellcheck="false"
-		bind:value={currentInput}
-		bind:this={inputElement}
-		on:keyup={keyup}
-		on:blur={inputBlur}
-	/>
-	<div class="suggestion-host">
-		<div class="suggestions">
-			{#each suggestions as suggestion (suggestion.name)}
-				<div class:selected={suggestion.name === selectedSuggestion}>
-					{suggestion.name}
-					{#if suggestion.description}
-						<span class="description">{suggestion.description}</span
-						>
-					{/if}
-				</div>
-			{/each}
-		</div>
-	</div>
-	<div class="directResult" transition:slide>
-		{#if currentResult}
-			= {@html currentResult}
-		{/if}
-	</div>
-	<History
+	<CalculatorWidget {calculator} bind:selectCalculation />
+	<HistoryWidget
 		history={calculator.history}
 		showLoadingIndicator={!isLoaded && madeACalculation}
 		onselectcalculation={selectCalculation}
@@ -252,27 +67,6 @@
 		font-size: max(min(3.5rem, 10vh), 1.5rem);
 	}
 
-	.query {
-		width: 100%;
-		border: none;
-		border-radius: 25px;
-		height: 50px;
-		padding: 0 20px;
-		background: #344;
-		color: #eff;
-		text-align: center;
-		margin-bottom: 10px;
-	}
-	.query::placeholder {
-		color: #dee;
-		opacity: 0.5;
-		text-align: center;
-	}
-
-	.directResult {
-		min-height: 1.5rem;
-	}
-
 	.disclaimer {
 		font-size: 0.9rem;
 		font-size: max(min(0.9rem, 2.5vh), 0.6rem);
@@ -280,41 +74,5 @@
 		line-height: 1.25;
 		margin: 7px 10px;
 		margin: 7px 10px calc(max(7px, env(safe-area-inset-bottom)));
-	}
-
-	.suggestion-host {
-		position: relative;
-		margin: 0 25px;
-		display: flex;
-		justify-content: center;
-	}
-
-	.suggestions {
-		position: absolute;
-		background: #344;
-		text-align: left;
-		overflow-x: hidden;
-		overflow-y: auto;
-		white-space: nowrap;
-		max-height: 6em;
-		max-width: 20em;
-		z-index: 1;
-		box-shadow: rgba(0, 0, 0, 0.5) 0 2px 10px;
-		border-radius: 5px;
-		margin-top: 1.5rem;
-	}
-
-	.suggestions > div {
-		padding: 2px 5px;
-	}
-	.suggestions > div.selected {
-		background: #cdd;
-		color: #122;
-	}
-
-	.suggestions .description {
-		font-style: italic;
-		font-size: 0.8em;
-		opacity: 0.8;
 	}
 </style>
