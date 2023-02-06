@@ -29,14 +29,15 @@
 
 <div class="responses">
 	{#if showLoadingIndicator}
-		<div transition:slide>
+		<div transition:slide class="response">
 			<div class="loading"><span /></div>
 		</div>
 	{/if}
 	{#each calculations as calculation (calculation.id)}
-		<div
+		<button
 			on:click={() => onselectcalculation(calculation.rawInput)}
 			transition:slide
+			class="response"
 		>
 			<div class="input">
 				{@html calculation.input}
@@ -56,10 +57,10 @@
 					{/each}
 				</div>
 			{/if}
-		</div>
+		</button>
 	{/each}
 	{#if isDesktopOS}
-		<div class="calloutQalculate">
+		<div class="calloutQalculate response">
 			<a href="https://qalculate.github.io/">
 				<img src="/qalculate.svg" width="64" height="64" alt="" />
 			</a>
@@ -128,7 +129,7 @@
 		max-width: 750px;
 	}
 
-	.responses > div {
+	.response {
 		background: rgba(255, 255, 255, 0.1);
 		border-radius: 10px;
 		padding: 5px 10px;
@@ -136,9 +137,12 @@
 		cursor: pointer;
 		overflow: hidden;
 		position: relative;
+		display: block;
+		width: 100%;
+		border: none;
 	}
 
-	.responses > div + div {
+	.response + .response {
 		margin-top: 10px;
 	}
 
