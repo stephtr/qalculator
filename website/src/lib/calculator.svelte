@@ -169,6 +169,7 @@
 </script>
 
 <svelte:window on:blur={windowBlur} />
+<!-- svelte-ignore a11y-autofocus -->
 <input
 	type="text"
 	placeholder="Your calculation"
