@@ -1,14 +1,30 @@
 <script lang="ts">
+	import { readable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
-	import { type Calculation, CalculationHistory } from '../calculation';
+	import { type Calculation } from '../calculator';
+	import { type CalculationHistory } from '../calculationHistory';
 	import { getOS } from '../tools';
 
-	export let calculations: Calculation[];
+	export let history: CalculationHistory;
 	export let showLoadingIndicator: boolean;
-	export let onclearhistory: () => void;
 	export let onselectcalculation: (input: string) => void;
 
 	const isDesktopOS = ['win', 'linux', 'mac'].includes(getOS() ?? '');
+
+	$: store = readable<{
+		calculations: Calculation[];
+		historyHasEntries: boolean;
+	}>(undefined, (set) => {
+		const onHistoryChanges = () =>
+			set({
+				calculations: history.entries,
+				historyHasEntries: !history.isEmpty(),
+			});
+		onHistoryChanges();
+		history.addChangeListener(onHistoryChanges);
+		return () => history.removeChangeListener(onHistoryChanges);
+	});
+	$: ({ calculations, historyHasEntries } = $store);
 </script>
 
 <div class="responses">
@@ -57,8 +73,8 @@
 			</div>
 		</div>
 	{/if}
-	{#if CalculationHistory.hasEntries(calculations)}
-		<button class="clearHistoryButton" on:click={onclearhistory}>
+	{#if historyHasEntries}
+		<button class="clearHistoryButton" on:click={() => history.clear()}>
 			Clear history
 		</button>
 	{/if}
@@ -119,6 +135,7 @@
 		text-align: left;
 		cursor: pointer;
 		overflow: hidden;
+		position: relative;
 	}
 
 	.responses > div + div {

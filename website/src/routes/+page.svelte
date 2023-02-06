@@ -1,37 +1,35 @@
 <script lang="ts">
+	import { readable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
-	import {
-		type Calculation,
-		CalculationHistory,
-		isCalculatorLoaded,
-		calculate,
-	} from '../calculation';
+	import { Calculator } from '../calculator';
 	import History from '../lib/history.svelte';
-
-	let pendingCalculationOnceLoaded: string;
-	let isLoading = !isCalculatorLoaded(() => {
-		isLoading = false;
-		if (pendingCalculationOnceLoaded) {
-			submitCalculation(pendingCalculationOnceLoaded);
-			pendingCalculationOnceLoaded = undefined;
-		}
-	});
 
 	let suggestionsEnabled = false;
 	if (typeof window !== 'undefined') {
-		suggestionsEnabled = location.hash === '#suggest';
+		suggestionsEnabled = window.location.hash === '#suggest';
 		window.onhashchange = () => {
-			suggestionsEnabled = location.hash === '#suggest';
+			suggestionsEnabled = window.location.hash === '#suggest';
 		};
 	}
+
+	const calculator = new Calculator();
+
+	$: store = readable<boolean>(undefined, (set) => {
+		const onLoadedChange = () => set(calculator.isLoaded);
+		onLoadedChange();
+		calculator.addOnLoadedListener(onLoadedChange);
+		return () => calculator.removeOnLoadedListener(onLoadedChange);
+	});
+	$: isLoaded = $store;
+	let madeACalculation = false;
 
 	let currentInput = '';
 	let currentResult: string | null = null;
 	$: {
 		currentResult = null;
-		if (currentInput !== '') {
+		if (currentInput !== '' && calculator.isLoaded) {
 			try {
-				const result = calculate(currentInput, 20);
+				const result = calculator.calculate(currentInput, 20);
 				if (result.severity !== 'error' && result.output.length < 200) {
 					currentResult = result.output;
 				}
@@ -40,39 +38,17 @@
 			}
 		}
 	}
-	let calculations: Calculation[] = CalculationHistory.load();
-
-	function clearHistory() {
-		calculations = CalculationHistory.reset();
-	}
-
-	function submitCalculation(input: string) {
-		if (isLoading) {
-			pendingCalculationOnceLoaded = input;
-			return;
-		}
-		calculations = [
-			calculate(input),
-			...calculations.filter((c) => c.rawInput !== input),
-		];
-		if (calculations.length > 30) {
-			calculations = calculations.slice(0, 30);
-		}
-		window.localStorage?.setItem(
-			'qalculator-history',
-			JSON.stringify(calculations),
-		);
-	}
 
 	function submitCalculationFromInput() {
 		if (
 			currentInput === '' || // nothing to calculate
-			(calculations.length > 0 &&
-				currentInput === calculations[0].rawInput && // same calculation as before
-				!calculations[0].id.startsWith('tut')) // only allow that for tutorials
+			(calculator.history.entries.length > 0 &&
+				currentInput === calculator.history.entries[0].rawInput && // same calculation as before
+				!calculator.history.entries[0].id.startsWith('tut')) // only allow that for tutorials
 		)
 			return;
-		submitCalculation(currentInput);
+		calculator.submitCalculation(currentInput);
+		madeACalculation = true;
 		currentInput = '';
 	}
 
@@ -237,10 +213,9 @@
 		{/if}
 	</div>
 	<History
-		{calculations}
-		showLoadingIndicator={isLoading && !!pendingCalculationOnceLoaded}
+		history={calculator.history}
+		showLoadingIndicator={!isLoaded && madeACalculation}
 		onselectcalculation={selectCalculation}
-		onclearhistory={clearHistory}
 	/>
 	<div class="disclaimer">
 		by Stephan Troyer, powered by
