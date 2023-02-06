@@ -1,3 +1,8 @@
 {
-	"extends": "./.svelte-kit/tsconfig.json"
+	"extends": "./.svelte-kit/tsconfig.json",
+	"compilerOptions": {
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"strictNullChecks": true
+	}
 }

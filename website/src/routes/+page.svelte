@@ -26,7 +26,7 @@
 	}
 
 	let currentInput = '';
-	let currentResult = null;
+	let currentResult: string | null = null;
 	$: {
 		currentResult = null;
 		if (currentInput !== '') {
@@ -173,7 +173,7 @@
 		hideSuggestions();
 	}
 
-	let suggestions = [];
+	let suggestions: { name: string; description: string }[] = [];
 	let selectedSuggestion = '';
 	function createSuggestions(text: string) {
 		const lastWordSelector = /\p{L}[\p{L}_\d]*$/u.exec(text);
@@ -193,7 +193,7 @@
 			}))
 			.filter((v) => v.partialMatch)
 			.sort((a, b) => +b.match - +a.match);
-		if (suggestions?.[0]?.match) {
+		if ((suggestions as any)?.[0]?.match) {
 			selectedSuggestion = suggestions[0].name;
 		}
 	}

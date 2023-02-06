@@ -8,7 +8,7 @@
 	export let onclearhistory: () => void;
 	export let onselectcalculation: (input: string) => void;
 
-	const isDesktopOS = ['win', 'linux', 'mac'].includes(getOS());
+	const isDesktopOS = ['win', 'linux', 'mac'].includes(getOS() ?? '');
 </script>
 
 <div class="responses">

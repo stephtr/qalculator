@@ -8,21 +8,22 @@ export interface Calculation {
 	rawInput: string;
 	output: string;
 	messages: string[];
-	severity?: Severity;
+	severity: Severity | null;
 }
 
 function parseCalculation(messagesString: string): {
 	messages: string[];
-	severity?: Severity;
+	severity: Severity | null;
 } {
 	const messages = messagesString.split('\n');
-	const severity = messages.find((m) => m.startsWith('Error'))
-		? 'error'
-		: messages.find((m) => m.startsWith('Warning'))
-		? 'warning'
-		: messages.length > 0
-		? 'info'
-		: null;
+	let severity: Severity | null = null;
+	if (messages.find((m) => m.startsWith('Error'))) {
+		severity = 'error';
+	} else if (messages.find((m) => m.startsWith('Warning'))) {
+		severity = 'warning';
+	} else if (messages.length > 0) {
+		severity = 'info';
+	}
 	return {
 		messages: messages.map((m) => m.replace(/^(Error|Warning|Info): /, '')),
 		severity,
@@ -53,7 +54,7 @@ export function isCalculatorLoaded(cb: () => void): boolean {
 
 export const CalculationHistory = {
 	load: () => {
-		let savedHistory: string = null;
+		let savedHistory: string | null = null;
 		if (typeof window !== 'undefined') {
 			savedHistory = window.localStorage?.getItem('qalculator-history');
 		}
