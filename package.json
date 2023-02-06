@@ -1,12 +1,13 @@
 {
 	"name": "qalculator",
 	"version": "0.0.1",
+	"private": true,
 	"scripts": {
-		"lint-js": "eslint . --cache --ext .js,.jsx,.ts,.tsx,.json,.svelte --max-warnings 0",
+		"lint-js": "eslint . --ext .js,.jsx,.ts,.tsx,.json,.svelte --max-warnings 0",
 		"check-ts": "tsc --noEmit",
 		"lint-css": "stylelint **/*.css",
-		"lint": "yarn lint-js; yarn check-ts; yarn lint-css; yarn prettier **/*.svelte --check",
-		"fix": "yarn lint-js --fix; yarn check-ts; yarn lint-css --fix; yarn prettier **/*.svelte --write"
+		"lint": "pnpm lint-js; pnpm check-ts; pnpm lint-css; pnpm prettier **/*.svelte --check",
+		"fix": "pnpm lint-js --fix; pnpm check-ts; pnpm lint-css --fix; pnpm prettier **/*.svelte --write"
 	},
 	"workspaces": [
 		"website"
@@ -16,7 +17,7 @@
 		"@typescript-eslint/parser": "^5.50.0",
 		"eslint": "^8.33.0",
 		"eslint-config-prettier": "^8.6.0",
-		"eslint-config-tonalio": "^5.1.5",
+		"eslint-config-tonalio": "^6.0.0",
 		"eslint-plugin-eslint-comments": "^3.2.0",
 		"eslint-plugin-import": "^2.27.5",
 		"eslint-plugin-json": "^3.1.0",
@@ -33,6 +34,5 @@
 		"tslib": "^2.5.0",
 		"typescript": "^4.9.5"
 	},
-	"type": "module",
-	"packageManager": "yarn@3.1.1"
+	"type": "module"
 }

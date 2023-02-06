@@ -1,12 +1,7 @@
-
 {
 	"extends": "tonalio",
 	"parserOptions": {
-		"project": [
-			"tsconfig.json",
-			"shared-js/tsconfig.json",
-			"clients/**/tsconfig.json"
-		]
+		"project": ["website/tsconfig.json", "website/tsconfig.eslint.json"]
 	},
 	"settings": {
 		"react": {
@@ -18,7 +13,7 @@
 	},
 	"overrides": [
 		{
-			"files": [ "*.svelte" ],
+			"files": ["*.svelte"],
 			"rules": {
 				"prettier/prettier": "off"
 			}
@@ -34,6 +29,6 @@
 		"**/bin/**",
 		"**/dist/**",
 		"**/build/**",
-		"static/calc.js"
+		"website/static/calc.js"
 	]
 }

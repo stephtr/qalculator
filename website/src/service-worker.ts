@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /// <reference lib="webworker" />
 
 import { build, files, version } from '$service-worker';
@@ -5,13 +6,13 @@ import { build, files, version } from '$service-worker';
 const worker = self as unknown as ServiceWorkerGlobalScope;
 const FILES = `cache-${version}`;
 
-const to_cache = build.concat(files).concat(['/']);
-const staticAssets = new Set(to_cache);
+const toCache = build.concat(files).concat(['/']);
+const staticAssets = new Set(toCache);
 
 worker.addEventListener('install', (event) => {
 	const preCache = async () => {
 		const cache = await caches.open(FILES);
-		await cache.addAll(to_cache);
+		await cache.addAll(toCache);
 		await worker.skipWaiting();
 	};
 	event.waitUntil(preCache());
@@ -33,6 +34,7 @@ async function fetchAndCache(req: Request) {
 	const cache = await caches.open(`offline-${version}`);
 	try {
 		const resp = await fetch(req);
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		cache.put(req, resp.clone());
 		return resp;
 	} catch (err) {

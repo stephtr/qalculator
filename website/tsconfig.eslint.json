@@ -1,0 +1,8 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"strictNullChecks": true,
+		"forceConsistentCasingInFileNames": true
+	},
+	"include": ["vite.config.js", "svelte.config.ts", "src/service-worker.ts"]
+}

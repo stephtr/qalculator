@@ -1,3 +1,0 @@
-{
-	"extends": "./website/.svelte-kit/tsconfig.json"
-}
