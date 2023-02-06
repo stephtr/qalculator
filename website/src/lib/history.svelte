@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { readable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
-	import { type Calculation } from '../calculator';
-	import { type CalculationHistory } from '../calculationHistory';
+	import type { Calculation } from '../calculator';
+	import type { CalculationHistory } from '../calculationHistory';
 	import { getOS } from '../tools';
 
 	export let history: CalculationHistory;

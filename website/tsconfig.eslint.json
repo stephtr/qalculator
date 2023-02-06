@@ -4,5 +4,5 @@
 		"strictNullChecks": true,
 		"forceConsistentCasingInFileNames": true
 	},
-	"include": ["vite.config.js", "svelte.config.ts", "src/service-worker.ts"]
+	"include": ["vite.config.js", "svelte.config.js", "src/service-worker.ts"]
 }

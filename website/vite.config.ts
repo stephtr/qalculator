@@ -1,12 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
-const config: import('vite').UserConfig = {
+export default defineConfig({
 	plugins: [sveltekit()],
-	server: {
-		fs: {
-			allow: ['../.yarn/unplugged'],
-		},
-	},
-};
-
-export default config;
+});

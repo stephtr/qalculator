@@ -8,7 +8,7 @@ importers:
       '@typescript-eslint/parser': ^5.50.0
       eslint: ^8.33.0
       eslint-config-prettier: ^8.6.0
-      eslint-config-tonalio: ^6.0.0
+      eslint-config-tonalio: ^6.0.1
       eslint-plugin-eslint-comments: ^3.2.0
       eslint-plugin-import: ^2.27.5
       eslint-plugin-json: ^3.1.0
@@ -29,7 +29,7 @@ importers:
       '@typescript-eslint/parser': 5.51.0_4vsywjlpuriuw3tl5oq6zy5a64
       eslint: 8.33.0
       eslint-config-prettier: 8.6.0_eslint@8.33.0
-      eslint-config-tonalio: 6.0.0_rf566xje27lgjlxvupgc4olgtm
+      eslint-config-tonalio: 6.0.1_rf566xje27lgjlxvupgc4olgtm
       eslint-plugin-eslint-comments: 3.2.0_eslint@8.33.0
       eslint-plugin-import: 2.27.5_yzj2n2b43wonjwaifya6xmk2zy
       eslint-plugin-json: 3.1.0
@@ -56,10 +56,11 @@ importers:
       tslib: ^2.5.0
       typescript: ^4.9.5
       vite: ^4.1.1
+    dependencies:
+      svelte: 3.55.1
     devDependencies:
       '@sveltejs/adapter-static': 1.0.6_@sveltejs+kit@1.5.0
       '@sveltejs/kit': 1.5.0_svelte@3.55.1+vite@4.1.1
-      svelte: 3.55.1
       svelte-check: 3.0.3_svelte@3.55.1
       svelte-preprocess: 5.0.1_4x7phaipmicbaooxtnresslofa
       tslib: 2.5.0
@@ -1133,8 +1134,8 @@ packages:
       eslint: 8.33.0
     dev: true
 
-  /eslint-config-tonalio/6.0.0_rf566xje27lgjlxvupgc4olgtm:
-    resolution: {integrity: sha512-6qU00vzNNkTZlg8aQU5DRa6gNwkCYaCvUqyYU3Y5+lQcnNYo/Mig4sGR6yH3c11Zp2sJ3XDTt7P2xrdp0n734w==}
+  /eslint-config-tonalio/6.0.1_rf566xje27lgjlxvupgc4olgtm:
+    resolution: {integrity: sha512-/BZCkMGInpsOzJJKYJDhZqCS4wT1kWyYwBvAVftl22jU01XvzKABBv/j7Gzeanlbx7oUkvL7IP/1NynuryYqbw==}
     peerDependencies:
       eslint: '>=7.32.0'
       prettier: '>=2.0.0'
@@ -2810,7 +2811,6 @@ packages:
   /svelte/3.55.1:
     resolution: {integrity: sha512-S+87/P0Ve67HxKkEV23iCdAh/SX1xiSfjF1HOglno/YTbSTW7RniICMCofWGdJJbdjw3S+0PfFb1JtGfTXE0oQ==}
     engines: {node: '>= 8'}
-    dev: true
 
   /svelte2tsx/0.6.1_4x7phaipmicbaooxtnresslofa:
     resolution: {integrity: sha512-O/1+5UyChfmhp1/GUv8b8iveTrn6eZwHxEXc+rw7LMKRidr9KHk5w/EiliLjDUwHa2VA6CoEty+CQylROVU4Sw==}

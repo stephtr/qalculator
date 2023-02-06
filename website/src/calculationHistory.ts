@@ -1,4 +1,4 @@
-import { type Calculation } from './calculator';
+import type { Calculation } from './calculator';
 
 const tutorialCalculations: Calculation[] = [
 	{
