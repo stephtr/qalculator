@@ -223,6 +223,8 @@
 	type="text"
 	placeholder="Your calculation"
 	autocomplete="off"
+	autocapitalize="off"
+	autocorrect="off"
 	class="query"
 	autofocus
 	spellcheck="false"
