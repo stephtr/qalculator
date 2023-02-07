@@ -76,7 +76,11 @@
 			}
 			return;
 		}
-		if (ev.key.length === 1) {
+		if (
+			ev.key.length === 1 &&
+			ev.target instanceof HTMLInputElement &&
+			ev.target.selectionStart !== null
+		) {
 			const textUpToSelection = ev.target.value.substring(
 				0,
 				ev.target.selectionStart,
