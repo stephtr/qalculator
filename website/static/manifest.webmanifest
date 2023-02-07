@@ -38,6 +38,10 @@
 	],
 	"related_applications": [
 		{
+			"platform": "webapp",
+			"url": "https://qalculator.xyz/manifest.webmanifest"
+		},
+		{
 			"platform": "play",
 			"url": "https://play.google.com/store/apps/details?id=xyz.qalculator.twa",
 			"id": "xyz.qalculator.twa"
