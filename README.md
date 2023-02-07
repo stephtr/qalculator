@@ -19,5 +19,5 @@ Live at https://qalculator.xyz/
 
 This repo is split into two parts:
 
--   `lib` is responsible for building a web assembly based on `libqalculate`.
+-   `lib` is responsible for building a web assembly based on [`libqalculate`](https://github.com/Qalculate/libqalculate).
 -   `website` is the progressive web app (a SvelteKit website)
