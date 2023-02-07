@@ -6,8 +6,8 @@ export interface Suggestion {
 }
 
 export interface MatchedSuggestion extends Suggestion {
+	matchIdenticalCasing: boolean;
 	match: boolean;
-	matchIgnoringCase: boolean;
 	partialMatch: boolean;
 }
 
@@ -21,8 +21,8 @@ export function generateSuggestions(input: string) {
 	const lastWordLowerCase = lastWord.toLocaleLowerCase();
 	return Module.variables
 		.map<MatchedSuggestion>((v) => ({
-			match: v.aliases.some((a) => a === lastWord),
-			matchIgnoringCase: v.aliases.some(
+			matchIdenticalCasing: v.aliases.some((a) => a === lastWord),
+			match: v.aliases.some(
 				(a) => a.toLocaleLowerCase() === lastWordLowerCase,
 			),
 			partialMatch:
@@ -35,7 +35,7 @@ export function generateSuggestions(input: string) {
 		.filter((v) => v.partialMatch)
 		.sort(
 			(a, b) =>
-				(+b.match - +a.match) * 2 +
-				(+b.matchIgnoringCase - +a.matchIgnoringCase),
+				(+b.matchIdenticalCasing - +a.matchIdenticalCasing) * 2 +
+				(+b.match - +a.match),
 		);
 }

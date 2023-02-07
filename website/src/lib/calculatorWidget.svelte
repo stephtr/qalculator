@@ -11,6 +11,8 @@
 
 	export let calculator: Calculator;
 
+	let inputElement: HTMLInputElement;
+
 	let currentInput = '';
 	let currentResult: string | null = null;
 	$: {
@@ -26,6 +28,11 @@
 			}
 		}
 	}
+
+	let suggestions: Suggestion[] = [];
+	let selectedSuggestion: string = '';
+	$: if (!suggestions.some((s) => s.name === selectedSuggestion))
+		selectedSuggestion = '';
 
 	function submitCalculationFromInput() {
 		if (
@@ -114,8 +121,8 @@
 							inputElement.value.substring(
 								inputElement.selectionStart - 1,
 							);
-						inputElement.selectionStart =
-							inputElement.selectionEnd = newSelectionPos;
+						inputElement.selectionStart = newSelectionPos;
+						inputElement.selectionEnd = newSelectionPos;
 						suggestions = [];
 						return;
 					}
@@ -127,7 +134,10 @@
 		}
 	}
 
-	let inputElement: HTMLInputElement;
+	let windowBluring = false;
+	let suggestionBluring = false;
+	let selectBluring = false;
+
 	export function selectCalculation(calc: string) {
 		submitCalculationFromInput();
 		currentInput = calc;
@@ -139,9 +149,6 @@
 		setTimeout(() => (selectBluring = false), 250);
 	}
 
-	let windowBluring = false;
-	let suggestionBluring = false;
-	let selectBluring = false;
 	function windowBlur() {
 		windowBluring = true;
 		setTimeout(() => (windowBluring = false), 250);
@@ -158,13 +165,8 @@
 		}, 100);
 	}
 
-	let suggestions: Suggestion[] = [];
-	let selectedSuggestion: string = '';
-	$: if (!suggestions.some((s) => s.name === selectedSuggestion))
-		selectedSuggestion = '';
-
 	function acceptSuggestion(selectionStart: number, replacement: string) {
-		const value = inputElement.value;
+		const { value } = inputElement;
 		const textUpToSelection = value.substring(0, selectionStart);
 		const wordUpToSelection = /\p{L}[\p{L}_\d]*$/u.exec(
 			value.substring(0, selectionStart),

@@ -5,6 +5,10 @@
 	}[];
 	export let selectedSuggestion: string | undefined;
 	export let acceptSuggestion: (suggestion: string) => void;
+
+	function hasSubscript(name: string) {
+		return name.includes('_') && name.indexOf('_') > name.length - 5;
+	}
 </script>
 
 <div class="suggestion-host">
@@ -15,7 +19,7 @@
 				class:selected={suggestion.name === selectedSuggestion}
 				on:mousedown={() => acceptSuggestion(suggestion.name)}
 			>
-				{#if suggestion.name.includes('_')}
+				{#if hasSubscript(suggestion.name)}
 					{suggestion.name.split('_')[0]}<sub
 						>{suggestion.name.split('_')[1]}</sub
 					>
