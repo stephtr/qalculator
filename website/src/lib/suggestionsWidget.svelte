@@ -4,23 +4,27 @@
 		description?: string;
 	}[];
 	export let selectedSuggestion: string | undefined;
+	export let acceptSuggestion: (suggestion: string) => void;
 </script>
 
 <div class="suggestion-host">
 	<div class="suggestions">
 		{#each suggestions as suggestion (suggestion.name)}
-			<div class:selected={suggestion.name === selectedSuggestion}>
+			<button
+				class="suggestion"
+				class:selected={suggestion.name === selectedSuggestion}
+				on:mousedown={() => acceptSuggestion(suggestion.name)}
+			>
 				{suggestion.name}
 				{#if suggestion.description}
 					<span class="description">{suggestion.description}</span>
 				{/if}
-			</div>
+			</button>
 		{/each}
 	</div>
 </div>
 
 <style>
-
 	.suggestion-host {
 		position: relative;
 		margin: 0 25px;
@@ -31,7 +35,6 @@
 	.suggestions {
 		position: absolute;
 		background: #344;
-		text-align: left;
 		overflow-x: hidden;
 		overflow-y: auto;
 		white-space: nowrap;
@@ -42,15 +45,21 @@
 		border-radius: 5px;
 	}
 
-	.suggestions > div {
+	.suggestion {
+		display: block;
+		border: none;
+		background: transparent;
 		padding: 2px 5px;
+		width: 100%;
+		text-align: left;
+		color: inherit;
 	}
-	.suggestions > div.selected {
+	.suggestion.selected, .suggestion:hover {
 		background: #cdd;
 		color: #122;
 	}
 
-	.suggestions .description {
+	.description {
 		font-style: italic;
 		font-size: 0.8em;
 		opacity: 0.8;

@@ -10,7 +10,7 @@ export interface MatchedSuggestion extends Suggestion {
 	partialMatch: boolean;
 }
 
-function getLastWord(input: string) {
+export function getLastWord(input: string) {
 	return lastWordSelector.exec(input)?.[0];
 }
 
