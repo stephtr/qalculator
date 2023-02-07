@@ -158,6 +158,7 @@
 		display: block;
 		width: 100%;
 		border: none;
+		color: inherit;
 	}
 
 	.response + .response {
