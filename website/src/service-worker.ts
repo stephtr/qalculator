@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-globals */
 /// <reference lib="webworker" />
 
+// eslint-disable-next-line import/no-unresolved
 import { build, files, version } from '$service-worker';
 
 const worker = self as unknown as ServiceWorkerGlobalScope;
@@ -47,7 +48,6 @@ async function fetchAndCache(req: Request) {
 }
 
 worker.addEventListener('fetch', (event) => {
-	console.log('handling', event.request.url);
 	if (event.request.method !== 'GET' || event.request.headers.has('range'))
 		return;
 

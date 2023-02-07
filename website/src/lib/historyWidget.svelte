@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { readable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
-	import type { Calculation } from '../calculator';
-	import type { CalculationHistory } from '../calculationHistory';
-	import { getOS } from '../tools';
+	import type { Calculation } from './calculator';
+	import type { History } from './history';
+	import { getOS } from './tools';
 
-	export let history: CalculationHistory;
+	export let history: History;
 	export let showLoadingIndicator: boolean;
 	export let onselectcalculation: (input: string) => void;
 

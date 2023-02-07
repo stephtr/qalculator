@@ -1,4 +1,4 @@
-import { CalculationHistory } from './calculationHistory';
+import { History } from './history';
 import { delay, wasmVectorToArray } from './tools';
 
 type Severity = 'error' | 'warning' | 'info';
@@ -32,7 +32,7 @@ function parseCalculationMessages(messagesString: string): {
 }
 
 export class Calculator {
-	history = new CalculationHistory();
+	history = new History();
 
 	#isLoaded = false;
 

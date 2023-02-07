@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { readable } from 'svelte/store';
-	import { Calculator } from '../calculator';
-	import HistoryWidget from '$lib/history.svelte';
-	import CalculatorWidget from '$lib/calculator.svelte';
+	import { Calculator } from '$lib/calculator';
+	import HistoryWidget from '$lib/historyWidget.svelte';
+	import CalculatorWidget from '$lib/calculatorWidget.svelte';
 
 	const calculator = new Calculator();
 

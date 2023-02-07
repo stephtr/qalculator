@@ -27,7 +27,7 @@ const tutorialCalculations: Calculation[] = [
 	},
 ];
 
-export class CalculationHistory {
+export class History {
 	entries: Calculation[] = [];
 
 	add(calculation: Calculation) {

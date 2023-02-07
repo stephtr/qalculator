@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
-	import type { Calculator } from '../calculator';
-	import Suggestions from './suggestions.svelte';
+	import type { Calculator } from './calculator';
+	import { generateSuggestions, type MatchedSuggestion } from './suggestions';
+	import Suggestions from './suggestionsWidget.svelte';
 
 	export let calculator: Calculator;
 
@@ -46,14 +47,10 @@
 			submitCalculationFromInput();
 			hideSuggestions();
 		}
-		if (suggestionsEnabled && ev.key === 'Escape') {
+		if (ev.key === 'Escape') {
 			hideSuggestions();
 		}
-		if (
-			suggestionsEnabled &&
-			ev.key === 'ArrowDown' &&
-			suggestions.length > 0
-		) {
+		if (ev.key === 'ArrowDown' && suggestions.length > 0) {
 			if (selectedSuggestion === '') {
 				selectedSuggestion = suggestions[0].name;
 			} else {
@@ -65,11 +62,7 @@
 			}
 			return;
 		}
-		if (
-			suggestionsEnabled &&
-			ev.key === 'ArrowUp' &&
-			suggestions.length > 0
-		) {
+		if (ev.key === 'ArrowUp' && suggestions.length > 0) {
 			if (selectedSuggestion === '') {
 				selectedSuggestion = suggestions[suggestions.length - 1].name;
 			} else {
@@ -83,7 +76,7 @@
 			}
 			return;
 		}
-		if (suggestionsEnabled && ev.key.length === 1) {
+		if (ev.key.length === 1) {
 			const textUpToSelection = ev.target.value.substring(
 				0,
 				ev.target.selectionStart,
@@ -138,27 +131,16 @@
 		hideSuggestions();
 	}
 
-	let suggestions: { name: string; description: string }[] = [];
+	let suggestions: MatchedSuggestion[] = [];
 	let selectedSuggestion = '';
 	function createSuggestions(text: string) {
-		const lastWordSelector = /\p{L}[\p{L}_\d]*$/u.exec(text);
-		if (!lastWordSelector) {
+		if (!suggestionsEnabled) return [];
+
+		suggestions = generateSuggestions(text);
+		if (suggestions.length === 0) {
 			hideSuggestions();
 			return;
-		}
-		const lastWord = lastWordSelector[0];
-
-		suggestions = Module.variables
-			.map((v) => ({
-				match: v.aliases.some((a) => a === lastWord),
-				partialMatch:
-					v.aliases.some((a) => a.startsWith(lastWord)) ||
-					(v.name === 'ℎ' && lastWord === 'h'),
-				...v,
-			}))
-			.filter((v) => v.partialMatch)
-			.sort((a, b) => +b.match - +a.match);
-		if ((suggestions as any)?.[0]?.match) {
+		} else if (suggestions?.[0]?.match) {
 			selectedSuggestion = suggestions[0].name;
 		}
 	}
