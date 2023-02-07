@@ -12,7 +12,8 @@
 
 A calculator for the web, based on [libqalculate by Hanna Knutsson](https://github.com/Qalculate/libqalculate)
 
-![Screenshot](website/static/app_screenshot_desktop.png)
+Live at https://qalculator.xyz/
+[![Screenshot](website/static/app_screenshot_desktop.png)](https://qalculator.xyz/)
 
 ## Development
 
