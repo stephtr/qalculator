@@ -48,7 +48,6 @@
 		overflow-x: hidden;
 		overflow-y: auto;
 		white-space: nowrap;
-		max-height: 6em;
 		max-width: 20em;
 		max-width: min(20em, 90vw);
 		z-index: 1;
@@ -60,7 +59,6 @@
 		display: block;
 		border: none;
 		background: transparent;
-		padding: 2px 5px;
 		width: 100%;
 		text-align: left;
 		color: inherit;
@@ -77,12 +75,20 @@
 		opacity: 0.8;
 	}
 
-	@media (pointer: coarse) {
+	@media (any-pointer: coarse) {
 		.suggestions {
 			max-height: 7em;
 		}
 		.suggestion {
 			padding: 12px 5px;
+		}
+	}
+	@media (any-pointer: fine) {
+		.suggestions {
+			max-height: 6em;
+		}
+		.suggestion {
+			padding: 2px 5px;
 		}
 	}
 </style>
