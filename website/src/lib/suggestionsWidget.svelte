@@ -4,8 +4,9 @@
 		description?: string;
 	}[];
 	export let selectedSuggestion: string | undefined;
-	export let acceptSuggestion: (suggestion: string) => void;
+	export let onAcceptSuggestion: (suggestion: string) => void;
 
+	/** whether a variable name contains a subscript*/
 	function hasSubscript(name: string) {
 		return name.includes('_') && name.indexOf('_') > name.length - 5;
 	}
@@ -17,7 +18,7 @@
 			<button
 				class="suggestion"
 				class:selected={suggestion.name === selectedSuggestion}
-				on:mousedown={() => acceptSuggestion(suggestion.name)}
+				on:mousedown={() => onAcceptSuggestion(suggestion.name)}
 			>
 				{#if hasSubscript(suggestion.name)}
 					{suggestion.name.split('_')[0]}<sub
@@ -27,9 +28,7 @@
 					{suggestion.name}
 				{/if}
 
-				{#if suggestion.description}
-					<span class="description">{suggestion.description}</span>
-				{/if}
+				<span class="description">{suggestion.description}</span>
 			</button>
 		{/each}
 	</div>

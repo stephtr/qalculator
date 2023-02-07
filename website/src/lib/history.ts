@@ -44,6 +44,7 @@ export class History {
 
 	private changeListeners: Array<() => void> = [];
 
+	/** adds a callback for whenever calculation history changes */
 	private notifyChangeListeners() {
 		this.changeListeners.forEach((l) => l());
 	}

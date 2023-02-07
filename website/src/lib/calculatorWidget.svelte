@@ -14,12 +14,15 @@
 	let inputElement: HTMLInputElement;
 
 	let currentInput = '';
-	let currentResult: string | null = null;
+	let currentResult = '';
 	$: {
-		currentResult = null;
+		// let's get a fresh as-you-type result
+		currentResult = '';
 		if (currentInput !== '' && calculator.isLoaded) {
 			try {
 				const result = calculator.calculate(currentInput, 20);
+				// only show the result if it's not too long
+				// otherwise it could also be a product of an incomplete query
 				if (result.severity !== 'error' && result.output.length < 200) {
 					currentResult = result.output;
 				}
@@ -63,6 +66,7 @@
 			suggestions = [];
 		}
 		if (ev.key === 'ArrowDown' && suggestions.length > 0) {
+			// let's choose the (next) suggestion
 			ev.preventDefault();
 			if (selectedSuggestion === '') {
 				selectedSuggestion = suggestions[0].name;
@@ -76,6 +80,7 @@
 			return;
 		}
 		if (ev.key === 'ArrowUp' && suggestions.length > 0) {
+			// let's choose the (previous) suggestion
 			ev.preventDefault();
 			if (selectedSuggestion === '') {
 				selectedSuggestion = suggestions[suggestions.length - 1].name;
@@ -91,6 +96,9 @@
 			return;
 		}
 		if (ev.key.length === 1) {
+			// it seems like a new character was typed
+			// let's therefore first wait for it to arrive in the input value
+			// (`setTimeout(..., 0)`)
 			setTimeout(() => {
 				if (inputElement.selectionStart === null) return;
 				const textUpToSelection = inputElement.value.substring(
@@ -98,6 +106,8 @@
 					inputElement.selectionStart,
 				);
 				if (!/[\p{L}_\d]/u.exec(ev.key) && selectedSuggestion) {
+					// the letter entered does not belong to the previous word,
+					// let's therefore accept the already selected suggestion
 					const wordUpToSelection = getLastWord(
 						inputElement.value.substring(
 							0,
@@ -105,6 +115,8 @@
 						),
 					);
 					if (wordUpToSelection) {
+						// let's remove the last word and
+						// replace it by the constant's primary name/symbol
 						const newSelectionPos =
 							inputElement.selectionStart -
 							wordUpToSelection.length +
@@ -127,25 +139,41 @@
 						return;
 					}
 				}
-				createSuggestions(textUpToSelection);
+				// otherwise, let's update the suggestions
+				updateSuggestions(textUpToSelection);
 			}, 10);
 		} else if (!['Control', 'Alt', 'Shift', 'AltGraph'].includes(ev.key)) {
+			// if there is a unknown key pressed, let's cautiously hide the suggestions
+			// (except for control keys)
 			suggestions = [];
 		}
 	}
 
+	// Usually, exiting the input's focus submits the calculation;
+	// Except for:
+	/** the whole browser window lost focus */
 	let windowBluring = false;
+	/** a suggestion was clicked */
 	let suggestionBluring = false;
+	/** a history item was clicked */
 	let selectBluring = false;
 
+	/** loads a calculation */
 	export function selectCalculation(calc: string) {
 		submitCalculationFromInput();
 		currentInput = calc;
 		inputElement.focus();
 	}
 
+	/**
+	 * give the component a warning that the user is
+	 * about to select a calculation, which shouldn't
+	 * result in the input focus getting lost
+	 */
 	export function aboutToSelectCalculation() {
 		selectBluring = true;
+		// we now have a time window of 250 ms where the code doesn't
+		// submit the calculation on loosing the input's focus
 		setTimeout(() => (selectBluring = false), 250);
 	}
 
@@ -153,6 +181,12 @@
 		windowBluring = true;
 		setTimeout(() => (windowBluring = false), 250);
 	}
+
+	/**
+	 * Sometimes it's necessary to keep the last known selection position
+	 * of the input element, for example when the input is loosing focus due
+	 * to the user clicking on a suggestion.
+	 */
 	let backedUpInputSelectionStart: number | null = null;
 	function inputBlur() {
 		backedUpInputSelectionStart = inputElement.selectionStart;
@@ -172,6 +206,7 @@
 			value.substring(0, selectionStart),
 		);
 		if (wordUpToSelection) {
+			// let's replace the last word by the provided replacement/selected suggestion
 			currentInput = inputElement.value =
 				textUpToSelection.substring(
 					0,
@@ -187,7 +222,7 @@
 		suggestions = [];
 	}
 
-	function createSuggestions(text: string) {
+	function updateSuggestions(text: string) {
 		suggestions = generateSuggestions(text);
 		if ((suggestions as MatchedSuggestion[])?.[0]?.match) {
 			selectedSuggestion = suggestions[0].name;
@@ -199,9 +234,9 @@
 			inputElement.selectionStart ?? backedUpInputSelectionStart;
 		if (selStart === null) return;
 		suggestionBluring = true;
-		setTimeout(() => (suggestionBluring = false), 250);
-		setTimeout(() => inputElement.focus(), 0);
 		acceptSuggestion(selStart, suggestion);
+		setTimeout(() => inputElement.focus(), 0);
+		setTimeout(() => (suggestionBluring = false), 250);
 	}
 
 	// on Android, the keydown event doesn't work as intended.
@@ -246,7 +281,7 @@
 <Suggestions
 	{suggestions}
 	{selectedSuggestion}
-	acceptSuggestion={suggestionClicked}
+	onAcceptSuggestion={suggestionClicked}
 />
 
 <style>

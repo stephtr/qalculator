@@ -6,12 +6,14 @@
 
 	const calculator = new Calculator();
 
+	// this mechanism is necessary for coupling Svelte to the events of `Calculator`
 	$: loadedStore = readable<boolean>(undefined, (set) => {
 		const onLoadedChange = () => set(calculator.isLoaded);
 		onLoadedChange();
 		calculator.addOnLoadedListener(onLoadedChange);
 		return () => calculator.removeOnLoadedListener(onLoadedChange);
 	});
+	/** Whether qalculator has fully loaded */
 	$: isLoaded = $loadedStore;
 
 	$: calculationStore = readable<boolean>(false, (set) => {
@@ -19,6 +21,7 @@
 		calculator.addOnCalculationListener(onCalculation);
 		return () => calculator.removeOnCalculationListener(onCalculation);
 	});
+	/** Whether the user already made a calculation */
 	$: madeACalculation = $calculationStore;
 
 	let selectCalculation: (calculation: string) => void;
@@ -27,7 +30,11 @@
 
 <div class="content">
 	<h1>Qalculator</h1>
-	<CalculatorWidget {calculator} bind:selectCalculation bind:aboutToSelectCalculation />
+	<CalculatorWidget
+		{calculator}
+		bind:selectCalculation
+		bind:aboutToSelectCalculation
+	/>
 	<HistoryWidget
 		history={calculator.history}
 		showLoadingIndicator={!isLoaded && madeACalculation}

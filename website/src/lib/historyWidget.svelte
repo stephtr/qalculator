@@ -8,10 +8,12 @@
 	export let history: History;
 	export let showLoadingIndicator: boolean;
 	export let onselectcalculation: (input: string) => void;
+	/** this event triggers on the onMouseDownEvent */
 	export let onabouttoselect: () => void;
 
 	const isDesktopOS = ['win', 'linux', 'mac'].includes(getOS() ?? '');
 
+	// this mechanism is necessary for coupling Svelte to the events of `History`
 	$: store = readable<{
 		calculations: Calculation[];
 		historyHasEntries: boolean;
@@ -36,7 +38,7 @@
 	{/if}
 	{#each calculations as calculation (calculation.id)}
 		<button
-			on:mousedown={()=> onabouttoselect()}
+			on:mousedown={() => onabouttoselect()}
 			on:click={() => onselectcalculation(calculation.rawInput)}
 			transition:slide
 			class="response"

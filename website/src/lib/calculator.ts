@@ -12,6 +12,7 @@ export interface Calculation {
 	severity: Severity | null;
 }
 
+/** Parses the status message coming from Web Assembly */
 function parseCalculationMessages(messagesString: string): {
 	messages: string[];
 	severity: Severity | null;
@@ -42,6 +43,7 @@ export class Calculator {
 
 	private loadedListeners: Array<() => void> = [];
 
+	/** adds a callback which gets executed when qalculator has finished loading */
 	addOnLoadedListener(listener: () => void) {
 		if (this.isLoaded) {
 			listener();
@@ -58,6 +60,7 @@ export class Calculator {
 
 	private submittedListeners: Array<(calculation: string) => void> = [];
 
+	/** adds a callback which gets executed whenever a calculation is submitted */
 	addOnCalculationListener(listener: (calculation: string) => void) {
 		this.submittedListeners.push(listener);
 	}
@@ -105,6 +108,7 @@ export class Calculator {
 		this.addOnLoadedListener(() => {
 			const M = Module as any;
 			if (M.getVariables) {
+				// parse the variables supported by libqalculate
 				M.variables = wasmVectorToArray(M.getVariables())
 					.map((v: any) => ({
 						name: v.name as string,
@@ -130,6 +134,9 @@ export class Calculator {
 				notifyLoaded();
 			} else {
 				const onLoaded = async () => {
+					// It takes a bit longer for the `calculate` routine to be ready than
+					// for the wasm module itself to load. Let's therefore wait for everything
+					// to be ready.
 					while (!Module.calculate) {
 						// eslint-disable-next-line no-await-in-loop
 						await delay(250);

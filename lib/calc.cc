@@ -4,8 +4,6 @@
 
 using namespace emscripten;
 
-void print_dual(const MathStructure &mresult, const std::string &original_expression, const MathStructure &mparse, MathStructure &mexact, std::string &result_str, std::vector<std::string> &results_v, PrintOptions &po, const EvaluationOptions &evalops, AutomaticFractionFormat auto_frac, AutomaticApproximation auto_approx, bool cplx_angle = false, bool *exact_cmp = NULL, bool b_parsed = true, bool format = false, int colorize = 0, int tagtype = TAG_TYPE_HTML, int max_length = -1);
-
 Calculator calc;
 EvaluationOptions eo;
 PrintOptions po;
@@ -39,11 +37,6 @@ Calculation calculate(std::string calculation, int timeout = 500)
 	}
 
 	return ret;
-}
-
-std::string info()
-{
-	return "libqalculate by Hanna Knutsson, compiled by Stephan Troyer";
 }
 
 struct VariableInfo
@@ -95,6 +88,11 @@ int main()
 	eo.parse_options.unknowns_enabled = false;
 	eo.parse_options.limit_implicit_multiplication = true;
 	return 0;
+}
+
+std::string info()
+{
+	return "libqalculate by Hanna Knutsson, compiled by Stephan Troyer";
 }
 
 EMSCRIPTEN_BINDINGS(Calculator)

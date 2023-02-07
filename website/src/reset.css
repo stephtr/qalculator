@@ -53,20 +53,12 @@ h3:last-child {
 a,
 .a {
 	color: var(--color-primary-button-darker);
-	/* text-decoration: none; */
 	outline: none;
 }
 
 a:hover,
 .a:hover {
 	color: var(--color-primary-button-lighter);
-}
-
-a:focus-visible,
-a.focus-visible,
-.a:focus-visible,
-.a.focus-visible {
-	/* text-decoration: underline; */
 }
 
 h1,
