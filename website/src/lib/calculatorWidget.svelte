@@ -45,10 +45,10 @@
 	function keyup(ev: KeyboardEvent) {
 		if (ev.key === 'Enter') {
 			submitCalculationFromInput();
-			hideSuggestions();
+			suggestions = [];
 		}
 		if (ev.key === 'Escape') {
-			hideSuggestions();
+			suggestions = [];
 		}
 		if (ev.key === 'ArrowDown' && suggestions.length > 0) {
 			if (selectedSuggestion === '') {
@@ -106,13 +106,13 @@
 						ev.target.value.substring(ev.target.selectionStart - 1);
 					ev.target.selectionStart = ev.target.selectionEnd =
 						newSelectionPos;
-					hideSuggestions();
+					suggestions = [];
 					return;
 				}
 			}
 			createSuggestions(textUpToSelection);
 		} else if (!['Control', 'Alt', 'Shift', 'AltGraph'].includes(ev.key)) {
-			hideSuggestions();
+			suggestions = [];
 		}
 	}
 	let inputElement: HTMLInputElement;
@@ -132,25 +132,21 @@
 				submitCalculationFromInput();
 			}
 		}, 100);
-		hideSuggestions();
+		suggestions = [];
 	}
 
 	let suggestions: MatchedSuggestion[] = [];
-	let selectedSuggestion = '';
+	let selectedSuggestion: string = '';
+	$: if (!suggestions.some((s) => s.name === selectedSuggestion))
+		selectedSuggestion = '';
+
 	function createSuggestions(text: string) {
 		if (!suggestionsEnabled) return [];
 
 		suggestions = generateSuggestions(text);
-		if (suggestions.length === 0) {
-			hideSuggestions();
-			return;
-		} else if (suggestions?.[0]?.match) {
+		if (suggestions?.[0]?.match) {
 			selectedSuggestion = suggestions[0].name;
 		}
-	}
-	function hideSuggestions() {
-		suggestions = [];
-		selectedSuggestion = '';
 	}
 </script>
 
