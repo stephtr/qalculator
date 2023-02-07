@@ -15,7 +15,14 @@
 				class:selected={suggestion.name === selectedSuggestion}
 				on:mousedown={() => acceptSuggestion(suggestion.name)}
 			>
-				{suggestion.name}
+				{#if suggestion.name.includes('_')}
+					{suggestion.name.split('_')[0]}<sub
+						>{suggestion.name.split('_')[1]}</sub
+					>
+				{:else}
+					{suggestion.name}
+				{/if}
+
 				{#if suggestion.description}
 					<span class="description">{suggestion.description}</span>
 				{/if}
@@ -54,7 +61,8 @@
 		text-align: left;
 		color: inherit;
 	}
-	.suggestion.selected, .suggestion:hover {
+	.suggestion.selected,
+	.suggestion:hover {
 		background: #cdd;
 		color: #122;
 	}
