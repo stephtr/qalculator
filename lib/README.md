@@ -1,3 +1,6 @@
+# Build instructions for enabling libqalculate to compile to wasm
+
+```bash
 sudo apt install build-essential lzip binutils autoconf intltool libtool automake lbzip2 lzip
 cd ~
 
@@ -49,3 +52,4 @@ emconfigure ./configure --prefix=${HOME}/opt CPPFLAGS=-I${HOME}/opt/include LDFL
 make
 make install
 cd ..
+```
