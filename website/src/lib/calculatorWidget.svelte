@@ -40,6 +40,7 @@
 	}
 
 	function keydown(ev: KeyboardEvent) {
+		if (ev.key === 'Unidentified') return;
 		if (ev.key === 'Enter') {
 			if (selectedSuggestion && inputElement.selectionStart !== null) {
 				acceptSuggestion(
@@ -128,12 +129,19 @@
 
 	let inputElement: HTMLInputElement;
 	export function selectCalculation(calc: string) {
+		submitCalculationFromInput();
 		currentInput = calc;
 		inputElement.focus();
+	}
+	
+	export function aboutToSelectCalculation() {
+		selectBluring = true;
+		setTimeout(() => (selectBluring = false), 250);
 	}
 
 	let windowBluring = false;
 	let suggestionBluring = false;
+	let selectBluring = false;
 	function windowBlur() {
 		windowBluring = true;
 		setTimeout(() => (windowBluring = false), 250);
@@ -142,7 +150,7 @@
 	function inputBlur() {
 		backedUpInputSelectionStart = inputElement.selectionStart;
 		setTimeout(() => {
-			if (!windowBluring && !suggestionBluring) {
+			if (!windowBluring && !suggestionBluring && !selectBluring) {
 				submitCalculationFromInput();
 				suggestions = [];
 				backedUpInputSelectionStart = null;
@@ -162,7 +170,7 @@
 			value.substring(0, selectionStart),
 		);
 		if (wordUpToSelection) {
-			inputElement.value =
+			currentInput = inputElement.value =
 				textUpToSelection.substring(
 					0,
 					selectionStart - wordUpToSelection[0].length,
@@ -193,6 +201,20 @@
 		setTimeout(() => inputElement.focus(), 0);
 		acceptSuggestion(selStart, suggestion);
 	}
+
+	// on Android, the keydown event doesn't work as intended.
+	// Let's therefore also map the textInput event to the keydown event.
+	function textInputDispatcher(node: HTMLInputElement) {
+		const handler = (ev: InputEvent) => {
+			if (ev.data) keydown({ key: ev.data, ...(ev as any) });
+		};
+		node.addEventListener('textInput' as any, handler);
+		return {
+			destroy() {
+				node.removeEventListener('textInput' as any, handler);
+			},
+		};
+	}
 </script>
 
 <svelte:window on:blur={windowBlur} />
@@ -208,6 +230,7 @@
 	bind:this={inputElement}
 	on:keydown={keydown}
 	on:blur={inputBlur}
+	use:textInputDispatcher
 />
 
 <div class="directResult" transition:slide>

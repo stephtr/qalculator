@@ -47,6 +47,7 @@
 		white-space: nowrap;
 		max-height: 6em;
 		max-width: 20em;
+		max-width: min(20em, 90vw);
 		z-index: 1;
 		box-shadow: rgba(0, 0, 0, 0.5) 0 2px 10px;
 		border-radius: 5px;
@@ -71,5 +72,14 @@
 		font-style: italic;
 		font-size: 0.8em;
 		opacity: 0.8;
+	}
+
+	@media (pointer: coarse) {
+		.suggestions {
+			max-height: 7em;
+		}
+		.suggestion {
+			padding: 12px 5px;
+		}
 	}
 </style>

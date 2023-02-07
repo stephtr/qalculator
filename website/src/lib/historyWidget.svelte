@@ -8,6 +8,7 @@
 	export let history: History;
 	export let showLoadingIndicator: boolean;
 	export let onselectcalculation: (input: string) => void;
+	export let onabouttoselect: () => void;
 
 	const isDesktopOS = ['win', 'linux', 'mac'].includes(getOS() ?? '');
 
@@ -35,6 +36,7 @@
 	{/if}
 	{#each calculations as calculation (calculation.id)}
 		<button
+			on:mousedown={()=> onabouttoselect()}
 			on:click={() => onselectcalculation(calculation.rawInput)}
 			transition:slide
 			class="response"

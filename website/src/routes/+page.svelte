@@ -22,15 +22,17 @@
 	$: madeACalculation = $calculationStore;
 
 	let selectCalculation: (calculation: string) => void;
+	let aboutToSelectCalculation: () => void;
 </script>
 
 <div class="content">
 	<h1>Qalculator</h1>
-	<CalculatorWidget {calculator} bind:selectCalculation />
+	<CalculatorWidget {calculator} bind:selectCalculation bind:aboutToSelectCalculation />
 	<HistoryWidget
 		history={calculator.history}
 		showLoadingIndicator={!isLoaded && madeACalculation}
 		onselectcalculation={selectCalculation}
+		onabouttoselect={aboutToSelectCalculation}
 	/>
 	<div class="disclaimer">
 		by
