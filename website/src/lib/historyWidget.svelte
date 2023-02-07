@@ -212,7 +212,7 @@
 	}
 
 	@media (display-mode: standalone) {
-		.calloutApp {
+		.calloutApp.calloutApp {
 			display: none;
 		}
 	}
