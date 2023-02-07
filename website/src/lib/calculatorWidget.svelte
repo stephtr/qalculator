@@ -133,7 +133,7 @@
 		currentInput = calc;
 		inputElement.focus();
 	}
-	
+
 	export function aboutToSelectCalculation() {
 		selectBluring = true;
 		setTimeout(() => (selectBluring = false), 250);
@@ -223,7 +223,7 @@
 	type="text"
 	placeholder="Your calculation"
 	autocomplete="off"
-	autocapitalize="off"
+	autocapitalize="none"
 	autocorrect="off"
 	class="query"
 	autofocus
