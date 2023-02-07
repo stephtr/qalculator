@@ -28,40 +28,30 @@
 	$: ({ calculations, historyHasEntries } = $store);
 
 	let appBanner: { link: string; imageUrl: string } | null = null;
-	// don't show the app banner for headless browsers
-	let isAppInstalled = typeof navigator === 'undefined';
-	if (
-		typeof navigator !== 'undefined' &&
-		(navigator as any).getInstalledRelatedApps
-	) {
-		isAppInstalled = false;
-		(navigator as any)
-			.getInstalledRelatedApps()
-			.then((v) => (isAppInstalled = v.length > 0));
-	}
-	switch (getOS()) {
-		case 'win':
-			if (typeof window !== 'undefined' && !(window as any).Windows) {
+	if (typeof window !== 'undefined')
+		switch (getOS()) {
+			case 'win':
+				if (typeof window !== 'undefined' && !(window as any).Windows) {
+					appBanner = {
+						link: 'ms-windows-store://pdp/?ProductId=9P4866X24PD3&mode=mini',
+						imageUrl: '/badge-microsoft-store.svg',
+					};
+				}
+				break;
+			case 'android':
 				appBanner = {
-					link: 'ms-windows-store://pdp/?ProductId=9P4866X24PD3&mode=mini',
-					imageUrl: '/badge-microsoft-store.svg',
+					link: 'https://play.google.com/store/apps/details?id=xyz.qalculator.twa',
+					imageUrl: '/badge-google-play.png',
 				};
-			}
-			break;
-		case 'android':
-			appBanner = {
-				link: 'https://play.google.com/store/apps/details?id=xyz.qalculator.twa',
-				imageUrl: '/badge-google-play.png',
-			};
-			break;
-		case 'ios':
-			appBanner = {
-				link: 'https://apps.apple.com/app/qalculator-xyz/id1611421527',
-				imageUrl: '/badge-appstore.png',
-			};
-			break;
-		default:
-	}
+				break;
+			case 'ios':
+				appBanner = {
+					link: 'https://apps.apple.com/app/qalculator-xyz/id1611421527',
+					imageUrl: '/badge-appstore.png',
+				};
+				break;
+			default:
+		}
 </script>
 
 <div class="responses">
@@ -219,6 +209,12 @@
 	.calloutApp {
 		font-size: 1rem;
 		opacity: 0.85;
+	}
+
+	@media (display-mode: standalone) {
+		.calloutApp {
+			display: none;
+		}
 	}
 
 	.clearHistoryButton {
