@@ -1,6 +1,6 @@
 # Qalculator
 
-<a href="ms-windows-store://pdp/?ProductId=9P4866X24PD3&mode=mini">
+<a href="https://www.microsoft.com/store/productId/9P4866X24PD3">
 	<img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Download from Microsoft" height="50" />
 </a>
 <a href="https://play.google.com/store/apps/details?id=xyz.qalculator.twa">
