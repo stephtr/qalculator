@@ -28,6 +28,17 @@
 	$: ({ calculations, historyHasEntries } = $store);
 
 	let appBanner: { link: string; imageUrl: string } | null = null;
+	// don't show the app banner for headless browsers
+	let isAppInstalled = typeof navigator === 'undefined';
+	if (
+		typeof navigator !== 'undefined' &&
+		(navigator as any).getInstalledRelatedApps
+	) {
+		isAppInstalled = false;
+		(navigator as any)
+			.getInstalledRelatedApps()
+			.then((v) => (isAppInstalled = v.length > 0));
+	}
 	switch (getOS()) {
 		case 'win':
 			if (typeof window !== 'undefined' && !(window as any).Windows) {
