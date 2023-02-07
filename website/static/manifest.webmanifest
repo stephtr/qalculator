@@ -35,5 +35,22 @@
 			"sizes": "2732x1536",
 			"type": "image/png"
 		}
-	]
+	],
+	"related_applications": [
+		{
+			"platform": "play",
+			"url": "https://play.google.com/store/apps/details?id=xyz.qalculator.twa",
+			"id": "xyz.qalculator.twa"
+		},
+		{
+			"platform": "itunes",
+			"url": "https://apps.apple.com/app/qalculator-xyz/id1611421527"
+		},
+		{
+			"platform": "windows",
+			"url": "https://www.microsoft.com/store/productId/9P4866X24PD3",
+			"id": "9P4866X24PD3"
+		}
+	],
+	"prefer_related_applications": true
 }
