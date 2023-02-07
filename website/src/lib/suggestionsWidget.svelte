@@ -6,7 +6,7 @@
 	export let selectedSuggestion: string | undefined;
 	export let onAcceptSuggestion: (suggestion: string) => void;
 
-	/** whether a variable name contains a subscript*/
+	/** whether a variable name contains a subscript */
 	function hasSubscript(name: string) {
 		return name.includes('_') && name.indexOf('_') > name.length - 5;
 	}

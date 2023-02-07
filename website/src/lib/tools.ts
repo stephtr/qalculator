@@ -13,8 +13,8 @@ export function getOS():
 	if (navigator.userAgent.includes('Win')) return 'win';
 	if (navigator.userAgent.includes('like Mac')) return 'ios';
 	if (navigator.userAgent.includes('Mac')) return 'mac';
-	if (navigator.userAgent.includes('Linux')) return 'linux';
 	if (navigator.userAgent.includes('Android')) return 'android';
+	if (navigator.userAgent.includes('Linux')) return 'linux';
 }
 
 export function wasmVectorToArray(vector: any) {

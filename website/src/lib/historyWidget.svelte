@@ -11,8 +11,6 @@
 	/** this event triggers on the onMouseDownEvent */
 	export let onabouttoselect: () => void;
 
-	const isDesktopOS = ['win', 'linux', 'mac'].includes(getOS() ?? '');
-
 	// this mechanism is necessary for coupling Svelte to the events of `History`
 	$: store = readable<{
 		calculations: Calculation[];
@@ -28,6 +26,31 @@
 		return () => history.removeChangeListener(onHistoryChanges);
 	});
 	$: ({ calculations, historyHasEntries } = $store);
+
+	let appBanner: { link: string; imageUrl: string } | null = null;
+	switch (getOS()) {
+		case 'win':
+			if (typeof window !== 'undefined' && !(window as any).Windows) {
+				appBanner = {
+					link: 'ms-windows-store://pdp/?ProductId=9P4866X24PD3&mode=mini',
+					imageUrl: '/badge-microsoft-store.svg',
+				};
+			}
+			break;
+		case 'android':
+			appBanner = {
+				link: 'https://play.google.com/store/apps/details?id=xyz.qalculator.twa',
+				imageUrl: '/badge-google-play.png',
+			};
+			break;
+		case 'ios':
+			appBanner = {
+				link: 'https://apps.apple.com/app/qalculator-xyz/id1611421527',
+				imageUrl: '/badge-appstore.png',
+			};
+			break;
+		default:
+	}
 </script>
 
 <div class="responses">
@@ -63,20 +86,11 @@
 			{/if}
 		</button>
 	{/each}
-	{#if isDesktopOS}
-		<div class="calloutQalculate response">
-			<a href="https://qalculate.github.io/">
-				<img src="/qalculate.svg" width="64" height="64" alt="" />
-			</a>
-			<div>
-				Looking for a fully fledged calculator for PC/Mac?<br />
-				<small>
-					Give
-					<a href="https://qalculate.github.io/">Qalculate!</a>
-					a try!
-				</small>
-			</div>
-		</div>
+	{#if appBanner}
+		<a href={appBanner.link} class="calloutApp response">
+			<img src={appBanner.imageUrl} alt="Download app" />
+			<span> Download the free Qalculator app </span>
+		</a>
 	{/if}
 	{#if historyHasEntries}
 		<button class="clearHistoryButton" on:click={() => history.clear()}>
@@ -175,20 +189,22 @@
 		font-size: 1.1em;
 	}
 
-	.calloutQalculate.calloutQalculate {
+	.calloutApp.calloutApp {
 		display: flex;
+		flex-direction: row;
 		align-items: center;
 		line-height: 1.3;
 		font-size: 1.1rem;
-		cursor: default;
+		text-decoration: none;
 	}
 
-	.calloutQalculate img {
+	.calloutApp img {
 		display: block;
 		margin: 0 15px 0 -5px;
+		width: 120px;
 	}
 
-	.calloutQalculate small {
+	.calloutApp {
 		font-size: 1rem;
 		opacity: 0.85;
 	}
