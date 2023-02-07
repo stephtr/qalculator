@@ -33,7 +33,10 @@
 		onselectcalculation={selectCalculation}
 	/>
 	<div class="disclaimer">
-		by Stephan Troyer, powered by
+		by
+		<a href="https://ufind.univie.ac.at/de/person.html?id=52302">
+			Stephan Troyer</a
+		>, powered by
 		<a href="https://github.com/Qalculate/libqalculate">libqalculate</a>
 	</div>
 </div>
