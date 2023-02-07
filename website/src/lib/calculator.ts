@@ -105,13 +105,15 @@ export class Calculator {
 		this.addOnLoadedListener(() => {
 			const M = Module as any;
 			if (M.getVariables) {
-				M.variables = wasmVectorToArray(M.getVariables()).map(
-					(v: any) => ({
-						name: v.name,
-						description: v.description,
-						aliases: v.aliases.split('\t'),
-					}),
-				);
+				M.variables = wasmVectorToArray(M.getVariables())
+					.map((v: any) => ({
+						name: v.name as string,
+						description: v.description as string,
+						aliases: (v.aliases as string).split('\t'),
+					}))
+					.filter(
+						(v) => !['true', 'false', 'undefined'].includes(v.name),
+					);
 			}
 
 			this.#isLoaded = true;
