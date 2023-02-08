@@ -37,6 +37,8 @@
 	$: if (!suggestions.some((s) => s.name === selectedSuggestion))
 		selectedSuggestion = '';
 
+	let scrollSuggestionIntoView: (suggestion: string) => void;
+
 	function submitCalculationFromInput() {
 		if (
 			currentInput === '' || // nothing to calculate
@@ -77,6 +79,7 @@
 				selectedSuggestion =
 					suggestions[(index + 1) % suggestions.length].name;
 			}
+			scrollSuggestionIntoView(selectedSuggestion);
 			return;
 		}
 		if (ev.key === 'ArrowUp' && suggestions.length > 0) {
@@ -93,6 +96,7 @@
 						(index + suggestions.length - 1) % suggestions.length
 					].name;
 			}
+			scrollSuggestionIntoView(selectedSuggestion);
 			return;
 		}
 		if (ev.key.length === 1) {
@@ -282,6 +286,7 @@
 	{suggestions}
 	{selectedSuggestion}
 	onAcceptSuggestion={suggestionClicked}
+	bind:scrollSuggestionIntoView
 />
 
 <style>

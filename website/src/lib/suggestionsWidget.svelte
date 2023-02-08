@@ -10,6 +10,14 @@
 	function hasSubscript(name: string) {
 		return name.includes('_') && name.indexOf('_') > name.length - 5;
 	}
+
+	const refs: Record<string, HTMLElement> = {};
+	export function scrollSuggestionIntoView(suggestion: string) {
+		refs[suggestion]?.scrollIntoView?.({
+			behavior: 'smooth',
+			block: 'nearest',
+		});
+	}
 </script>
 
 <div class="suggestion-host">
@@ -19,6 +27,7 @@
 				class="suggestion"
 				class:selected={suggestion.name === selectedSuggestion}
 				on:mousedown={() => onAcceptSuggestion(suggestion.name)}
+				bind:this={refs[suggestion.name]}
 			>
 				{#if hasSubscript(suggestion.name)}
 					{suggestion.name.split('_')[0]}<sub
