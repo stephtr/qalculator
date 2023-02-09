@@ -84,7 +84,11 @@ export class History {
 		if (typeof window === 'undefined') return;
 		window.localStorage?.setItem(
 			'qalculator-history',
-			JSON.stringify(this.entries),
+			JSON.stringify(
+				this.entries
+					.filter((e) => e.severity !== 'error')
+					.map((e) => ({ ...e, severity: null, messages: [] })),
+			),
 		);
 	}
 
