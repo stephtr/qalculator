@@ -40,13 +40,7 @@
 	let scrollSuggestionIntoView: (suggestion: string) => void;
 
 	function submitCalculationFromInput() {
-		if (
-			currentInput === '' || // nothing to calculate
-			(calculator.history.entries.length > 0 &&
-				currentInput === calculator.history.entries[0].rawInput && // same calculation as before
-				!calculator.history.entries[0].id.startsWith('tut')) // only allow that for tutorials
-		)
-			return;
+		if (currentInput === '') return; // nothing to calculate
 		calculator.submitCalculation(currentInput);
 		currentInput = '';
 	}

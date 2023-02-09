@@ -1,5 +1,9 @@
+import {
+	calculate,
+	CalculationOptions,
+	initializeCalculationModule,
+} from './calculatorModule';
 import { History } from './history';
-import { delay, wasmVectorToArray } from './tools';
 
 type Severity = 'error' | 'warning' | 'info';
 
@@ -72,17 +76,18 @@ export class Calculator {
 	}
 
 	calculate(textInput: string, timeoutMs: number = 500): Calculation {
-		const calculation = Module.calculate(textInput, timeoutMs);
-		let { messages, severity } = parseCalculationMessages(
-			calculation.messages,
-		);
-		let { input, output } = calculation;
+		// to adapt
+		let {
+			input,
+			output,
+			messages: rawMessages,
+		} = calculate(textInput, timeoutMs, CalculationOptions.None);
+		let { messages, severity } = parseCalculationMessages(rawMessages);
 		if (output === 'timed out') {
 			messages = ['Calculation timed out'];
 			severity = 'error';
 			output = '';
 		}
-		calculation.delete();
 		return {
 			id: Math.random().toString(),
 			input,
@@ -105,52 +110,17 @@ export class Calculator {
 	}
 
 	constructor() {
-		this.addOnLoadedListener(() => {
-			const M = Module as any;
-			if (M.getVariables) {
-				// parse the variables supported by libqalculate
-				M.variables = wasmVectorToArray(M.getVariables())
-					.map((v: any) => ({
-						name: v.name as string,
-						description: v.description as string,
-						aliases: (v.aliases as string).split('\t'),
-					}))
-					.filter(
-						(v) => !['true', 'false', 'undefined'].includes(v.name),
-					);
-			}
-
-			this.#isLoaded = true;
-
-			if (this.pendingCalculationOnceLoaded) {
-				this.submitCalculation(this.pendingCalculationOnceLoaded);
-				this.pendingCalculationOnceLoaded = null;
-			}
-		});
-
 		if (typeof window !== 'undefined') {
-			const notifyLoaded = () => this.loadedListeners.forEach((l) => l());
-			if (window.Module?.calculate as any) {
-				notifyLoaded();
-			} else {
-				const onLoaded = async () => {
-					// It takes a bit longer for the `calculate` routine to be ready than
-					// for the wasm module itself to load. Let's therefore wait for everything
-					// to be ready.
-					while (!Module.calculate) {
-						// eslint-disable-next-line no-await-in-loop
-						await delay(250);
-					}
-					notifyLoaded();
-				};
-				if (window.Module) {
-					(window as any).Module.preRun = onLoaded;
-				} else {
-					(window as any).Module = {
-						preRun: onLoaded,
-					};
+			// eslint-disable-next-line @typescript-eslint/no-floating-promises
+			initializeCalculationModule().then(() => {
+				this.#isLoaded = true;
+
+				if (this.pendingCalculationOnceLoaded) {
+					this.submitCalculation(this.pendingCalculationOnceLoaded);
+					this.pendingCalculationOnceLoaded = null;
 				}
-			}
+				this.loadedListeners.forEach((l) => l());
+			});
 		}
 	}
 }

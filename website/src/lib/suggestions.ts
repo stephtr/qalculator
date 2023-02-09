@@ -1,3 +1,5 @@
+import { getVariables } from './calculatorModule';
+
 // \p{L} matches any (unicode) letter
 // constants start with a letter, followed by some other letters, numbers or underscores
 const lastWordSelector = /\p{L}[\p{L}_\d]*$/u;
@@ -27,7 +29,7 @@ export function generateSuggestions(input: string): MatchedSuggestion[] {
 	const lastWord = getLastWord(input);
 	if (!lastWord) return [];
 	const lastWordLowerCase = lastWord.toLocaleLowerCase();
-	return Module.variables
+	return getVariables()
 		.map<MatchedSuggestion>((v) => ({
 			matchIdenticalCasing: v.aliases.some((a) => a === lastWord),
 			match: v.aliases.some(
