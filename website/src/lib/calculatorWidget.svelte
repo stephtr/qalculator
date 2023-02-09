@@ -37,6 +37,8 @@
 	$: if (!suggestions.some((s) => s.name === selectedSuggestion))
 		selectedSuggestion = '';
 
+	let scrollSuggestionIntoView: (suggestion: string) => void;
+
 	function submitCalculationFromInput() {
 		if (
 			currentInput === '' || // nothing to calculate
@@ -77,6 +79,7 @@
 				selectedSuggestion =
 					suggestions[(index + 1) % suggestions.length].name;
 			}
+			scrollSuggestionIntoView(selectedSuggestion);
 			return;
 		}
 		if (ev.key === 'ArrowUp' && suggestions.length > 0) {
@@ -93,12 +96,13 @@
 						(index + suggestions.length - 1) % suggestions.length
 					].name;
 			}
+			scrollSuggestionIntoView(selectedSuggestion);
 			return;
 		}
 		if (ev.key.length === 1) {
 			// it seems like a new character was typed
 			// let's therefore first wait for it to arrive in the input value
-			// (`setTimeout(..., 0)`)
+			// (`setTimeout(..., 100)`)
 			setTimeout(() => {
 				if (inputElement.selectionStart === null) return;
 				const textUpToSelection = inputElement.value.substring(
@@ -141,7 +145,7 @@
 				}
 				// otherwise, let's update the suggestions
 				updateSuggestions(textUpToSelection);
-			}, 10);
+			}, 100);
 		} else if (!['Control', 'Alt', 'Shift', 'AltGraph'].includes(ev.key)) {
 			// if there is a unknown key pressed, let's cautiously hide the suggestions
 			// (except for control keys)
@@ -282,6 +286,7 @@
 	{suggestions}
 	{selectedSuggestion}
 	onAcceptSuggestion={suggestionClicked}
+	bind:scrollSuggestionIntoView
 />
 
 <style>
