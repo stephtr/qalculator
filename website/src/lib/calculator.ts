@@ -4,6 +4,7 @@ import {
 	initializeCalculationModule,
 } from './calculatorModule';
 import { History } from './history';
+import { Settings } from './settings';
 
 type Severity = 'error' | 'warning' | 'info';
 
@@ -38,6 +39,8 @@ function parseCalculationMessages(messagesString: string): {
 
 export class Calculator {
 	history = new History();
+
+	settings = new Settings();
 
 	#isLoaded = false;
 
@@ -81,7 +84,13 @@ export class Calculator {
 			input,
 			output,
 			messages: rawMessages,
-		} = calculate(textInput, timeoutMs, CalculationOptions.None);
+		} = calculate(
+			textInput,
+			timeoutMs,
+			this.settings.useUnitPrefixes
+				? CalculationOptions.None
+				: CalculationOptions.NoUnits,
+		);
 		let { messages, severity } = parseCalculationMessages(rawMessages);
 		if (output === 'timed out') {
 			messages = ['Calculation timed out'];

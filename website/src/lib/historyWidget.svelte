@@ -10,6 +10,7 @@
 	export let onselectcalculation: (input: string) => void;
 	/** this event triggers on the onMouseDownEvent */
 	export let onabouttoselect: () => void;
+	export let onsettingsclick: () => void;
 
 	// this mechanism is necessary for coupling Svelte to the events of `History`
 	$: store = readable<{
@@ -93,11 +94,14 @@
 			<span> Download the free Qalculator app </span>
 		</a>
 	{/if}
-	{#if historyHasEntries}
-		<button class="clearHistoryButton" on:click={() => history.clear()}>
-			Clear history
-		</button>
-	{/if}
+	<div>
+		{#if historyHasEntries}
+			<button class="cleanButton" on:click={() => history.clear()}>
+				Clear history
+			</button>
+		{/if}
+		<button class="cleanButton" on:click={onsettingsclick}>Settings</button>
+	</div>
 </div>
 
 <style>
@@ -217,8 +221,8 @@
 		}
 	}
 
-	.clearHistoryButton {
-		display: block;
+	.cleanButton {
+		display: inline-block;
 		background: none;
 		font: inherit;
 		color: inherit;

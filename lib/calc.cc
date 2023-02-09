@@ -15,13 +15,16 @@ struct Calculation
 	std::string messages;
 };
 
-Calculation calculate(std::string calculation, int timeout = 500)
+#define OPTIONS_NO_UNIT 1
+
+Calculation calculate(std::string calculation, int timeout = 500, int optionFlags = 0)
 {
 	calculator->clearMessages();
 
 	calculation = calc.unlocalizeExpression(calculation, eo.parse_options);
 	std::string parsed_str;
 	bool resultIsComparison;
+	po.use_unit_prefixes = optionFlags & OPTIONS_NO_UNIT ? false : true;
 	auto result = calc.calculateAndPrint(calculation, timeout, eo, po, AUTOMATIC_FRACTION_AUTO, AUTOMATIC_APPROXIMATION_AUTO, &parsed_str, -1, &resultIsComparison, true, 2, TAG_TYPE_HTML);
 
 	Calculation ret;
@@ -95,10 +98,16 @@ std::string info()
 	return "libqalculate by Hanna Knutsson, compiled by Stephan Troyer";
 }
 
+int version()
+{
+	return 2;
+}
+
 EMSCRIPTEN_BINDINGS(Calculator)
 {
 	function("calculate", &calculate);
 	function("info", &info);
+	function("version", &version);
 	function("getVariables", &getVariables);
 }
 

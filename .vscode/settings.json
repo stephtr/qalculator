@@ -45,5 +45,9 @@
 		"**/.yarn": true,
 		"**/.pnp.*": true
 	},
-	"typescript.enablePromptUseWorkspaceTsdk": true
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"files.associations": {
+		"xstring": "cpp",
+		"system_error": "cpp"
+	}
 }

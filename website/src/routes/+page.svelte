@@ -3,6 +3,7 @@
 	import { Calculator } from '$lib/calculator';
 	import HistoryWidget from '$lib/historyWidget.svelte';
 	import CalculatorWidget from '$lib/calculatorWidget.svelte';
+	import SettingsWidget from '$lib/settingsWidget.svelte';
 
 	const calculator = new Calculator();
 
@@ -26,6 +27,8 @@
 
 	let selectCalculation: (calculation: string) => void;
 	let aboutToSelectCalculation: () => void;
+
+	let showSettings = false;
 </script>
 
 <div class="content">
@@ -35,12 +38,20 @@
 		bind:selectCalculation
 		bind:aboutToSelectCalculation
 	/>
-	<HistoryWidget
-		history={calculator.history}
-		showLoadingIndicator={!isLoaded && madeACalculation}
-		onselectcalculation={selectCalculation}
-		onabouttoselect={aboutToSelectCalculation}
-	/>
+	{#if showSettings}
+		<SettingsWidget
+			settings={calculator.settings}
+			onback={() => (showSettings = false)}
+		/>
+	{:else}
+		<HistoryWidget
+			history={calculator.history}
+			showLoadingIndicator={!isLoaded && madeACalculation}
+			onselectcalculation={selectCalculation}
+			onabouttoselect={aboutToSelectCalculation}
+			onsettingsclick={() => (showSettings = true)}
+		/>
+	{/if}
 	<div class="disclaimer">
 		by
 		<a href="https://ufind.univie.ac.at/de/person.html?id=52302">
