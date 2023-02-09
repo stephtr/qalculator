@@ -25,6 +25,14 @@ const tutorialCalculations: Calculation[] = [
 		messages: [],
 		severity: null,
 	},
+	{
+		id: 'tut4',
+		input: '(<span style="color:#FFFFAA">planck</span> ⋅ <span style="color:#FFFFAA">c</span>) ∕ (<span style="color:#AAFFFF">1550</span> <span style="color:#BBFFBB">nm</span>) to <span style="color:#BBFFBB">eV</span>',
+		rawInput: 'planck * c / 1550nm to eV',
+		output: '<span style="color:#AAFFFF">0,79989805</span> <span style="color:#BBFFBB">eV</span>',
+		messages: [],
+		severity: null,
+	},
 ];
 
 export class History {
