@@ -86,6 +86,7 @@ int main()
 	po.use_unicode_signs = true;
 	po.interval_display = INTERVAL_DISPLAY_SIGNIFICANT_DIGITS;
 	po.base_display = BASE_DISPLAY_NORMAL;
+	po.digit_grouping = DIGIT_GROUPING_STANDARD;
 	po.indicate_infinite_series = true;
 	eo.parse_options.angle_unit = ANGLE_UNIT_RADIANS;
 	eo.parse_options.unknowns_enabled = false;
