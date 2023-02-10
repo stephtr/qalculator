@@ -1,10 +1,9 @@
 <script lang="ts">
 	import HomeLink from '$lib/homeLink.svelte';
 
-	const email = ('stephanDELETEtroyer+qalculator' + '@' + 'live.at').replace(
-		'DELETE',
-		'',
-	);
+	const email = 'stephanDELETEtroyer+qalculator|live.at'
+		.replace('|', '@')
+		.replace('DELETE', '');
 </script>
 
 <h2>About Qalculator</h2>
