@@ -4,6 +4,7 @@
 	import { Calculator } from '$lib/calculator';
 	import { calculatorKey, type CalculatorContext } from '$lib/calculatorHost';
 	import CalculatorWidget from '$lib/calculatorWidget.svelte';
+	import LoadingIndicator from '$lib/loadingIndicator.svelte';
 
 	const calculator = new Calculator();
 
@@ -23,8 +24,10 @@
 	});
 
 	let newServiceWorker: ServiceWorker | null = null;
+	let isRestarting = false;
 
 	function updateQalculate() {
+		isRestarting = true;
 		newServiceWorker?.postMessage({
 			type: 'update',
 		});
@@ -67,7 +70,12 @@
 		{#if newServiceWorker}
 			<button on:click={updateQalculate} class="updateNotification">
 				<p class="update">
-					An update is available, click to restart Qalculator.
+					{#if isRestarting}
+						Updating..
+						<LoadingIndicator />
+					{:else}
+						An update is available, click to restart Qalculator.
+					{/if}
 				</p>
 			</button>
 		{/if}

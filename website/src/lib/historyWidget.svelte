@@ -3,6 +3,7 @@
 	import { slide } from 'svelte/transition';
 	import type { Calculation } from './calculator';
 	import type { History } from './history';
+	import LoadingIndicator from './loadingIndicator.svelte';
 	import { getOS } from './tools';
 
 	export let history: History;
@@ -58,7 +59,7 @@
 
 {#if showLoadingIndicator}
 	<div transition:slide class="response">
-		<div class="loading"><span /></div>
+		<LoadingIndicator />
 	</div>
 {/if}
 {#each calculations as calculation (calculation.id)}
@@ -103,45 +104,6 @@
 </div>
 
 <style>
-	.loading {
-		display: block;
-		margin: 10px auto;
-		height: 40px;
-		width: 40px;
-	}
-
-	.loading::before,
-	.loading::after,
-	.loading > span {
-		content: '';
-		display: block;
-		position: absolute;
-		width: 40px;
-		height: 40px;
-		border-radius: 50%;
-		background-color: #899;
-		opacity: 0.5;
-		animation: bounce 2s infinite ease-in-out;
-	}
-
-	.loading > span {
-		animation-delay: -1.33s;
-	}
-
-	.loading::after {
-		animation-delay: -0.66s;
-	}
-
-	@keyframes bounce {
-		0%,
-		100% {
-			transform: scale(0);
-		}
-		50% {
-			transform: scale(1);
-		}
-	}
-
 	.response {
 		background: rgba(255, 255, 255, 0.1);
 		border-radius: 10px;
