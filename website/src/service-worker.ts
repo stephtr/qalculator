@@ -10,14 +10,18 @@ const FILES = `cache-${version}`;
 const toCache = build.concat(files).concat(['/']);
 const staticAssets = new Set(toCache);
 
+self.addEventListener('message', async (evt) => {
+	if (evt.data?.type === 'update') {
+		await worker.skipWaiting();
+		const clients = await worker.clients.matchAll();
+		clients.forEach((client) => client.postMessage({ type: 'reload' }));
+	}
+});
+
 worker.addEventListener('install', (event) => {
 	const preCache = async () => {
 		const cache = await caches.open(FILES);
 		await cache.addAll(toCache);
-		const clients = await worker.clients.matchAll();
-		clients.forEach((client) =>
-			client.postMessage({ type: 'update-available' }),
-		);
 	};
 	event.waitUntil(preCache());
 });

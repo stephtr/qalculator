@@ -21,6 +21,37 @@
 		updateCurrentResult,
 		autofocus,
 	});
+
+	function updateQalculate() {
+		navigator.serviceWorker?.controller?.postMessage({
+			type: 'update',
+		});
+	}
+
+	let updateAvailable = false;
+
+	if (typeof window !== 'undefined') {
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		navigator.serviceWorker?.ready?.then((reg) => {
+			updateAvailable = !!reg.waiting;
+			reg.addEventListener('updatefound', () => {
+				const newWorker = reg.installing;
+				newWorker?.addEventListener('statechange', () => {
+					if (newWorker.state === 'installed') {
+						updateAvailable = true;
+					}
+				});
+			});
+		});
+		navigator.serviceWorker?.addEventListener(
+			'message',
+			(event: MessageEvent<{ type: string }>) => {
+				if (event.data?.type === 'reload') {
+					window.location.reload();
+				}
+			},
+		);
+	}
 </script>
 
 <div class="content">
@@ -33,6 +64,13 @@
 		bind:updateCurrentResult={$updateCurrentResult}
 	/>
 	<div class="slot">
+		{#if updateAvailable}
+			<button on:click={updateQalculate} class="updateNotification">
+				<p class="update">
+					An update is available, click to restart Qalculator.
+				</p>
+			</button>
+		{/if}
 		<slot />
 	</div>
 	<footer>
@@ -96,5 +134,22 @@
 		line-height: 1.25;
 		margin: 7px 10px 10px;
 		margin: 7px 10px calc(max(10px, env(safe-area-inset-bottom)));
+	}
+
+	.updateNotification {
+		background: rgba(255, 255, 255, 0.1);
+		border-radius: 10px;
+		padding: 5px 10px;
+		cursor: pointer;
+		overflow: hidden;
+		position: relative;
+		display: block;
+		width: 100%;
+		border: none;
+		color: inherit;
+		margin-bottom: 10px;
+		color: rgba(150, 180, 180);
+		font-size: 0.9em;
+		text-align: center;
 	}
 </style>
