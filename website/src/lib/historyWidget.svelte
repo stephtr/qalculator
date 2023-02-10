@@ -30,7 +30,7 @@
 
 	let appBanner: { link: string; imageUrl: string } | null = null;
 
-	let showUpdateHandler = true;
+	let showUpdateHandler = false;
 
 	function messageHandler(evt: MessageEvent<{ type: string }>) {
 		if (evt.data.type === 'update-available') {
