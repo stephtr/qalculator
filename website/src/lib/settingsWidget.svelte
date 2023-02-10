@@ -25,7 +25,7 @@
 		<span style="color:#AAFFFF">10</span>
 		<span style="color:#BBFFBB">kHz</span>
 	{:else}
-		<span style="color:#AAFFFF">10&thinsp;000</span>
+		<span style="color:#AAFFFF">10 000</span>
 		<span style="color:#BBFFBB">Hz</span>
 	{/if}
 </label>
