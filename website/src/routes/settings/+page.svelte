@@ -4,10 +4,7 @@
 	import SettingsWidget from '$lib/settingsWidget.svelte';
 	import HomeLink from '$lib/homeLink.svelte';
 
-	const { calculator, submitOnBlur } =
-		getContext<CalculatorContext>(calculatorKey);
-
-	submitOnBlur.set(false);
+	const { calculator } = getContext<CalculatorContext>(calculatorKey);
 </script>
 
 <h2>Settings</h2>
