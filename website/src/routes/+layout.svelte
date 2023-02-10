@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
+	import { slide } from 'svelte/transition';
 	import { Calculator } from '$lib/calculator';
 	import { calculatorKey, type CalculatorContext } from '$lib/calculatorHost';
 	import CalculatorWidget from '$lib/calculatorWidget.svelte';
@@ -67,15 +68,21 @@
 		bind:updateCurrentResult={$updateCurrentResult}
 	/>
 	<div class="slot">
-		{#if newServiceWorker}
-			<button on:click={updateQalculate} class="updateNotification">
+		{#if isRestarting}
+			<div class="updateNotification">
 				<p class="update">
-					{#if isRestarting}
-						Updating..
-						<LoadingIndicator />
-					{:else}
-						An update is available, click to restart Qalculator.
-					{/if}
+					Updating..
+					<LoadingIndicator />
+				</p>
+			</div>
+		{:else if newServiceWorker}
+			<button
+				on:click={updateQalculate}
+				class="updateNotification"
+				transition:slide
+			>
+				<p class="update">
+					An update is available, click to restart Qalculator.
 				</p>
 			</button>
 		{/if}
