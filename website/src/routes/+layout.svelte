@@ -22,23 +22,23 @@
 		autofocus,
 	});
 
+	let newServiceWorker: ServiceWorker | null = null;
+
 	function updateQalculate() {
-		navigator.serviceWorker?.controller?.postMessage({
+		newServiceWorker?.postMessage({
 			type: 'update',
 		});
 	}
 
-	let updateAvailable = false;
-
 	if (typeof window !== 'undefined') {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		navigator.serviceWorker?.ready?.then((reg) => {
-			updateAvailable = !!reg.waiting;
+			newServiceWorker = reg.waiting;
 			reg.addEventListener('updatefound', () => {
 				const newWorker = reg.installing;
 				newWorker?.addEventListener('statechange', () => {
 					if (newWorker.state === 'installed') {
-						updateAvailable = true;
+						newServiceWorker = newWorker;
 					}
 				});
 			});
@@ -64,7 +64,7 @@
 		bind:updateCurrentResult={$updateCurrentResult}
 	/>
 	<div class="slot">
-		{#if updateAvailable}
+		{#if newServiceWorker}
 			<button on:click={updateQalculate} class="updateNotification">
 				<p class="update">
 					An update is available, click to restart Qalculator.
