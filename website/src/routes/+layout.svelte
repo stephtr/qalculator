@@ -38,11 +38,13 @@
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		navigator.serviceWorker?.ready?.then((reg) => {
 			newServiceWorker = reg.waiting;
+			if (newServiceWorker) updateQalculate();
 			reg.addEventListener('updatefound', () => {
 				const newWorker = reg.installing;
 				newWorker?.addEventListener('statechange', () => {
 					if (newWorker.state === 'installed') {
 						newServiceWorker = newWorker;
+						updateQalculate();
 					}
 				});
 			});
