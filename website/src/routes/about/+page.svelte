@@ -21,7 +21,7 @@
 	...is welcome 🙂<br />
 	Via
 	{#if typeof window !== 'undefined'}
-		<a href={'mailto:' + email}>Email</a> or directly via
+		<a href={`mailto:${email}`}>Email</a> or directly via
 	{/if}
 	<a href="https://github.com/stephtr/qalculator">GitHub</a>
 </p>
