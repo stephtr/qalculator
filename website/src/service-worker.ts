@@ -14,7 +14,10 @@ worker.addEventListener('install', (event) => {
 	const preCache = async () => {
 		const cache = await caches.open(FILES);
 		await cache.addAll(toCache);
-		await worker.skipWaiting();
+		const clients = await worker.clients.matchAll();
+		clients.forEach((client) =>
+			client.postMessage({ type: 'update-available' }),
+		);
 	};
 	event.waitUntil(preCache());
 });

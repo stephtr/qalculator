@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import { readable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
 	import type { Calculation } from './calculator';
@@ -28,7 +29,16 @@
 	$: ({ calculations, historyHasEntries } = $store);
 
 	let appBanner: { link: string; imageUrl: string } | null = null;
-	if (typeof window !== 'undefined')
+
+	let showUpdateHandler = true;
+
+	function messageHandler(evt: MessageEvent<{ type: string }>) {
+		if (evt.data.type === 'update-available') {
+			showUpdateHandler = true;
+		}
+	}
+
+	if (typeof window !== 'undefined') {
 		switch (getOS()) {
 			case 'win':
 				if (typeof window !== 'undefined' && !(window as any).Windows) {
@@ -52,12 +62,28 @@
 				break;
 			default:
 		}
+
+		if (navigator.serviceWorker) {
+			navigator.serviceWorker.addEventListener('message', messageHandler);
+			onDestroy(() =>
+				navigator.serviceWorker.removeEventListener(
+					'message',
+					messageHandler,
+				),
+			);
+		}
+	}
 </script>
 
 {#if showLoadingIndicator}
 	<div transition:slide class="response">
 		<div class="loading"><span /></div>
 	</div>
+{/if}
+{#if showUpdateHandler}
+	<button on:click={() => window.location.reload()} class="response">
+		<p class="update">An update is available, click to restart Qalculator.</p>
+	</button>
 {/if}
 {#each calculations as calculation (calculation.id)}
 	<button
@@ -156,6 +182,13 @@
 
 	.response + .response {
 		margin-top: 10px;
+	}
+
+	.update {
+		color: rgba(150,180,180);
+		font-size: 0.9em;
+		text-align: center;
+		margin: 7px 0;
 	}
 
 	.message {
