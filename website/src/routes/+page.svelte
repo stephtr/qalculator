@@ -1,11 +1,16 @@
 <script lang="ts">
+	import { getContext, onDestroy } from 'svelte';
 	import { readable } from 'svelte/store';
-	import { Calculator } from '$lib/calculator';
 	import HistoryWidget from '$lib/historyWidget.svelte';
-	import CalculatorWidget from '$lib/calculatorWidget.svelte';
-	import SettingsWidget from '$lib/settingsWidget.svelte';
+	import { calculatorKey, type CalculatorContext } from '$lib/calculatorHost';
 
-	const calculator = new Calculator();
+	const {
+		calculator,
+		selectCalculation,
+		aboutToSelectCalculation,
+		submitOnBlur,
+		autofocus,
+	} = getContext<CalculatorContext>(calculatorKey);
 
 	// this mechanism is necessary for coupling Svelte to the events of `Calculator`
 	$: loadedStore = readable<boolean>(undefined, (set) => {
@@ -25,77 +30,17 @@
 	/** Whether the user already made a calculation */
 	$: madeACalculation = $calculationStore;
 
-	let selectCalculation: (calculation: string) => void;
-	let aboutToSelectCalculation: () => void;
-
-	let showSettings = false;
+	submitOnBlur.set(true);
+	autofocus.set(true);
+	onDestroy(() => {
+		submitOnBlur.set(false);
+		autofocus.set(false);
+	});
 </script>
 
-<div class="content">
-	<h1>Qalculator</h1>
-	<CalculatorWidget
-		{calculator}
-		bind:selectCalculation
-		bind:aboutToSelectCalculation
-	/>
-	{#if showSettings}
-		<SettingsWidget
-			settings={calculator.settings}
-			onback={() => (showSettings = false)}
-		/>
-	{:else}
-		<HistoryWidget
-			history={calculator.history}
-			showLoadingIndicator={!isLoaded && madeACalculation}
-			onselectcalculation={selectCalculation}
-			onabouttoselect={aboutToSelectCalculation}
-			onsettingsclick={() => (showSettings = true)}
-		/>
-	{/if}
-	<div class="disclaimer">
-		by
-		<a href="https://ufind.univie.ac.at/de/person.html?id=52302">
-			Stephan Troyer</a
-		>, powered by
-		<a href="https://github.com/Qalculate/libqalculate">libqalculate</a>
-	</div>
-</div>
-
-{@html '<scr' + 'ipt src="/calc.js" async></script>'}
-
-<style>
-	.content {
-		width: 90vw;
-		width: calc(
-			100vw - 2 *
-				max(env(safe-area-inset-right), env(safe-area-inset-left), 5vw)
-		);
-		max-width: 800px;
-		margin: 0 auto;
-		text-align: center;
-		font-size: 20px;
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		left: 5vw;
-		right: 5vw;
-		display: flex;
-		flex-direction: column;
-	}
-
-	h1 {
-		padding: 20px 0;
-		padding: max(min(20px, 2vh), env(safe-area-inset-top)) 0 min(20px, 2vh);
-		font-size: 3.5rem;
-		font-size: max(min(3.5rem, 10vh), 1.5rem);
-	}
-
-	.disclaimer {
-		font-size: 0.9rem;
-		font-size: max(min(0.9rem, 2.5vh), 0.6rem);
-		opacity: 0.5;
-		line-height: 1.25;
-		margin: 7px 10px;
-		margin: 7px 10px calc(max(7px, env(safe-area-inset-bottom)));
-	}
-</style>
+<HistoryWidget
+	history={calculator.history}
+	showLoadingIndicator={!isLoaded && madeACalculation}
+	onselectcalculation={$selectCalculation}
+	onabouttoselect={$aboutToSelectCalculation}
+/>

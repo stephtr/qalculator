@@ -1,46 +1,38 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
+	import { calculatorKey, type CalculatorContext } from './calculatorHost';
 	import type { Settings } from './settings';
 
 	export let settings: Settings;
-	export let onback: () => void;
+
+	const { updateCurrentResult } =
+		getContext<CalculatorContext>(calculatorKey);
+
+	function update() {
+		settings.save();
+		setTimeout(() => $updateCurrentResult(), 100);
+	}
 </script>
 
-<div class="host">
-	<h2>Settings</h2>
-
-	<label>
-		<input
-			type="checkbox"
-			bind:checked={settings.useUnitPrefixes}
-			on:change={() => settings.save()}
-		/>
-		Use prefixes for units
-	</label>
-
-	<button class="cleanButton" on:click={onback}> &larr; Back</button>
-</div>
+<label>
+	<input
+		type="checkbox"
+		bind:checked={settings.useUnitPrefixes}
+		on:change={update}
+	/>
+	Use prefixes for units<br />
+	{#if settings.useUnitPrefixes}
+		<span style="color:#AAFFFF">10</span>
+		<span style="color:#BBFFBB">kHz</span>
+	{:else}
+		<span style="color:#AAFFFF">10&thinsp;000</span>
+		<span style="color:#BBFFBB">Hz</span>
+	{/if}
+</label>
 
 <style>
-	.host {
-		padding-top: 20px;
-		flex: 1;
-	}
-
 	label {
 		display: block;
 		margin-bottom: 10px;
-	}
-
-	.cleanButton {
-		display: inline-block;
-		background: none;
-		font: inherit;
-		color: inherit;
-		border: none;
-		font-size: 0.9rem;
-		opacity: 0.5;
-		text-decoration: underline;
-		cursor: pointer;
-		margin: 5px auto;
 	}
 </style>

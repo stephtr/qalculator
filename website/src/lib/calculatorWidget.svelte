@@ -15,8 +15,7 @@
 
 	let currentInput = '';
 	let currentResult = '';
-	$: {
-		// let's get a fresh as-you-type result
+	export function updateCurrentResult(_: any) {
 		currentResult = '';
 		if (currentInput !== '' && calculator.isLoaded) {
 			try {
@@ -31,6 +30,8 @@
 			}
 		}
 	}
+	// let's get a fresh as-you-type result, whenever `currentInput` changes
+	$: updateCurrentResult(currentInput);
 
 	let suggestions: Suggestion[] = [];
 	let selectedSuggestion: string = '';
@@ -156,6 +157,8 @@
 	/** a history item was clicked */
 	let selectBluring = false;
 
+	export let submitOnBlur = true;
+
 	/** loads a calculation */
 	export function selectCalculation(calc: string) {
 		submitCalculationFromInput();
@@ -190,7 +193,9 @@
 		backedUpInputSelectionStart = inputElement.selectionStart;
 		setTimeout(() => {
 			if (!windowBluring && !suggestionBluring && !selectBluring) {
-				submitCalculationFromInput();
+				if (submitOnBlur) {
+					submitCalculationFromInput();
+				}
 				suggestions = [];
 				backedUpInputSelectionStart = null;
 			}
@@ -250,6 +255,7 @@
 			},
 		};
 	}
+	export let autofocus = false;
 </script>
 
 <svelte:window on:blur={windowBlur} />
@@ -261,7 +267,7 @@
 	autocapitalize="none"
 	autocorrect="off"
 	class="query"
-	autofocus
+	{autofocus}
 	spellcheck="false"
 	bind:value={currentInput}
 	bind:this={inputElement}

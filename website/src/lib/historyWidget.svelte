@@ -10,7 +10,6 @@
 	export let onselectcalculation: (input: string) => void;
 	/** this event triggers on the onMouseDownEvent */
 	export let onabouttoselect: () => void;
-	export let onsettingsclick: () => void;
 
 	// this mechanism is necessary for coupling Svelte to the events of `History`
 	$: store = readable<{
@@ -55,53 +54,50 @@
 		}
 </script>
 
-<div class="responses">
-	{#if showLoadingIndicator}
-		<div transition:slide class="response">
-			<div class="loading"><span /></div>
-		</div>
-	{/if}
-	{#each calculations as calculation (calculation.id)}
-		<button
-			on:mousedown={() => onabouttoselect()}
-			on:click={() => onselectcalculation(calculation.rawInput)}
-			transition:slide
-			class="response"
-		>
-			<div class="input">
-				{@html calculation.input}
-			</div>
-			<div class="output">
-				{@html calculation.output}
-			</div>
-			{#if calculation.messages.length > 0}
-				<div
-					class="message"
-					class:error={calculation.severity === 'error'}
-					class:warning={calculation.severity === 'warning'}
-					class:info={calculation.severity === 'info'}
-				>
-					{#each calculation.messages as message}
-						<div>{message}</div>
-					{/each}
-				</div>
-			{/if}
-		</button>
-	{/each}
-	{#if appBanner}
-		<a href={appBanner.link} class="calloutApp response">
-			<img src={appBanner.imageUrl} alt="Download app" />
-			<span> Download the free Qalculator app </span>
-		</a>
-	{/if}
-	<div>
-		{#if historyHasEntries}
-			<button class="cleanButton" on:click={() => history.clear()}>
-				Clear history
-			</button>
-		{/if}
-		<button class="cleanButton" on:click={onsettingsclick}>Settings</button>
+{#if showLoadingIndicator}
+	<div transition:slide class="response">
+		<div class="loading"><span /></div>
 	</div>
+{/if}
+{#each calculations as calculation (calculation.id)}
+	<button
+		on:mousedown={() => onabouttoselect()}
+		on:click={() => onselectcalculation(calculation.rawInput)}
+		transition:slide
+		class="response"
+	>
+		<div class="input">
+			{@html calculation.input}
+		</div>
+		<div class="output">
+			{@html calculation.output}
+		</div>
+		{#if calculation.messages.length > 0}
+			<div
+				class="message"
+				class:error={calculation.severity === 'error'}
+				class:warning={calculation.severity === 'warning'}
+				class:info={calculation.severity === 'info'}
+			>
+				{#each calculation.messages as message}
+					<div>{message}</div>
+				{/each}
+			</div>
+		{/if}
+	</button>
+{/each}
+{#if appBanner}
+	<a href={appBanner.link} class="calloutApp response">
+		<img src={appBanner.imageUrl} alt="Download app" />
+		<span> Download the free Qalculator app </span>
+	</a>
+{/if}
+<div>
+	{#if historyHasEntries}
+		<button class="cleanButton" on:mousedown={() => history.clear()}>
+			Clear history
+		</button>
+	{/if}
 </div>
 
 <style>
@@ -142,14 +138,6 @@
 		50% {
 			transform: scale(1);
 		}
-	}
-
-	.responses {
-		flex: 1;
-		overflow: auto;
-		margin: 10px auto 0;
-		width: 100%;
-		max-width: 750px;
 	}
 
 	.response {
