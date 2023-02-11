@@ -204,8 +204,14 @@
 		background: transparent;
 		cursor: pointer;
 		color: #788;
-		opacity: 0;
+		opacity: 0.3;
 		transition: opacity 0.1s;
+	}
+
+	@media (hover: hover) {
+		.mouseActions button {
+			opacity: 0;
+		}
 	}
 
 	.responseHost:hover .mouseActions button {
