@@ -14,6 +14,8 @@
 	/** this event triggers on the onMouseDownEvent */
 	export let onabouttoselect: () => void;
 
+	let hostElement: HTMLElement;
+
 	function deleteClick() {
 		history.delete(calculation.id);
 	}
@@ -34,9 +36,22 @@
 		history.renameBookmark(calculation.id, title ?? undefined);
 	}
 
+	/** filter the touch points which belong to our HistoryItem */
+	function filterTouchList(list: TouchList) {
+		const touches: Touch[] = [].slice.call(list);
+		return touches.filter((t) => {
+			let elem = t.target as HTMLElement;
+			if (elem === hostElement) return true;
+			while (elem.parentElement) {
+				elem = elem.parentElement;
+				if (elem === hostElement) return true;
+			}
+		});
+	}
+
 	/** returns the mean x-coordinates of all touch points in `list`*/
 	function getMeanXPos(list: TouchList) {
-		const touches: Touch[] = [].slice.call(list);
+		const touches = filterTouchList(list);
 		return touches.reduce((v, t) => v + t.screenX, 0) / touches.length;
 	}
 
@@ -51,7 +66,7 @@
 
 	function touchstart(evt: TouchEvent) {
 		// subtracting offsetX takes care of the shift in mean position when adding a new touch point
-		startX = getMeanXPos(evt.targetTouches) - offsetX;
+		startX = getMeanXPos(evt.touches) - offsetX;
 	}
 
 	// whether the swipe actions will get initiated when the touch points are lifted
@@ -65,7 +80,7 @@
 			// this touchmove event might result in scrolling, let's therefore abort swiping
 			shiftX = 0;
 		} else {
-			offsetX = getMeanXPos(evt.targetTouches) - startX;
+			offsetX = getMeanXPos(evt.touches) - startX;
 			const direction = Math.sign(offsetX);
 			const abs = Math.abs(offsetX);
 
@@ -96,7 +111,11 @@
 	}
 
 	function touchend(evt: TouchEvent) {
-		if (evt.targetTouches.length > 0) return;
+		if (filterTouchList(evt.touches).length > 0) {
+			// subtracting offsetX takes care of the shift in mean position when adding a new touch point
+			startX = getMeanXPos(evt.touches) - offsetX;
+			return;
+		}
 		if (deleteSwipeSelected) {
 			deleteSwipeSelected = false;
 			deleteClick();
@@ -119,16 +138,19 @@
 	}
 </script>
 
-<div class="responseHost">
+<div
+	class="responseHost"
+	bind:this={hostElement}
+	on:touchstart={touchstart}
+	on:touchmove={touchmove}
+	on:touchend={touchend}
+	on:touchcancel={touchcancel}
+>
 	<button
 		class="response"
 		on:mousedown={() => onabouttoselect()}
 		on:click={() => onselectcalculation(calculation.rawInput)}
 		style={`transform: translateX(${shiftX}px)`}
-		on:touchstart={touchstart}
-		on:touchmove={touchmove}
-		on:touchend={touchend}
-		on:touchcancel={touchcancel}
 	>
 		{#if calculation.bookmarkName}
 			<div class="name">
