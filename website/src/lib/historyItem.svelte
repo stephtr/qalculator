@@ -60,7 +60,7 @@
 	let renameSwipeSelected = false;
 	function touchmove(evt: TouchEvent) {
 		if (startX === undefined || startY === undefined) return;
-		if (evt.cancelable) {
+		if (!evt.cancelable) {
 			shiftX = 0;
 		} else {
 			offsetX = getMeanXPos(evt.targetTouches) - startX;
