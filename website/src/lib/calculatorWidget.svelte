@@ -241,7 +241,12 @@
 		suggestions = suggest;
 		if (suggest?.[0]?.match) {
 			// we have a match
-			if (suggest[0].name !== 'G' || suggest[0].matchIdenticalCasing)
+			if (
+				(suggest[0].name !== 'G' && suggest[0].name !== 'c') ||
+				suggest[0].matchIdenticalCasing
+			)
+				// if the constant is G or c, let's require matching casing
+				// to not confuse it with J (Joule) or C (Coloumb)
 				selectedSuggestion = suggest[0].name;
 		}
 	}
