@@ -15,6 +15,8 @@ export interface Calculation {
 	output: string;
 	messages: string[];
 	severity: Severity | null;
+	isBookmarked?: boolean;
+	bookmarkName?: string;
 }
 
 /** Parses the status message coming from Web Assembly */

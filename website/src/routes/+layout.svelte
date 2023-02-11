@@ -2,6 +2,8 @@
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
+	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
+	import { faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
 	import { Calculator } from '$lib/calculator';
 	import { calculatorKey, type CalculatorContext } from '$lib/calculatorHost';
 	import CalculatorWidget from '$lib/calculatorWidget.svelte';
@@ -82,6 +84,7 @@
 				transition:slide
 			>
 				<p class="update">
+					<FontAwesomeIcon icon={faArrowRotateRight} />
 					An update is available, click to restart Qalculator.
 				</p>
 			</button>

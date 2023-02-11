@@ -32,6 +32,8 @@ const tutorialCalculations: Calculation[] = [
 		output: '<span style="color:#AAFFFF">0,79989805</span> <span style="color:#BBFFBB">eV</span>',
 		messages: [],
 		severity: null,
+		isBookmarked: true,
+		bookmarkName: 'Photon energy',
 	},
 ];
 
@@ -41,13 +43,55 @@ export class History {
 	add(calculation: Calculation) {
 		this.entries = [
 			calculation,
-			...this.entries.filter((c) => c.rawInput !== calculation.rawInput),
+			...this.entries.filter(
+				(c) => c.rawInput !== calculation.rawInput || c.isBookmarked,
+			),
 		];
 		if (this.entries.length > 30) {
-			this.entries = this.entries.slice(0, 30);
+			const begin = this.entries.slice(0, 30);
+			const end = this.entries.slice(30);
+			this.entries = [...begin, ...end.filter((c) => c.isBookmarked)];
 		}
 		this.save();
 		this.notifyChangeListeners();
+	}
+
+	delete(id: string) {
+		this.entries = this.entries.filter((c) => c.id !== id);
+		this.save();
+		this.notifyChangeListeners();
+	}
+
+	private doWithEntry(
+		id: string,
+		callback: (calculation: Calculation) => void,
+	) {
+		const entry = this.entries.find((c) => c.id === id);
+		if (entry) {
+			callback(entry);
+			this.save();
+			this.notifyChangeListeners();
+		}
+	}
+
+	bookmark(id: string, name?: string) {
+		this.doWithEntry(id, (entry) => {
+			entry.isBookmarked = true;
+			entry.bookmarkName = name;
+		});
+	}
+
+	renameBookmark(id: string, name?: string) {
+		this.doWithEntry(id, (entry) => {
+			entry.bookmarkName = name;
+		});
+	}
+
+	removeBookmark(id: string) {
+		this.doWithEntry(id, (entry) => {
+			entry.isBookmarked = false;
+			delete entry.bookmarkName;
+		});
 	}
 
 	private changeListeners: Array<() => void> = [];
@@ -74,6 +118,12 @@ export class History {
 		}
 		if (savedHistory) {
 			this.entries = JSON.parse(savedHistory);
+			this.entries = [
+				...this.entries,
+				...tutorialCalculations.filter(
+					(cTut) => !this.entries.some((c) => c.id === cTut.id),
+				),
+			];
 		} else {
 			this.clear();
 		}
@@ -93,7 +143,15 @@ export class History {
 	}
 
 	clear() {
-		this.entries = [...tutorialCalculations];
+		const begin = this.entries.filter(
+			(c) => c.isBookmarked || c.id.startsWith('tut'),
+		);
+		this.entries = [
+			...begin,
+			...tutorialCalculations.filter(
+				(cTut) => !begin.some((c) => c.id === cTut.id),
+			),
+		];
 		this.save();
 		this.notifyChangeListeners();
 	}

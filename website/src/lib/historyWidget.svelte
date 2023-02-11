@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { readable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
+	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
+	import {
+		faBookmark,
+		faTrash,
+		faICursor,
+	} from '@fortawesome/free-solid-svg-icons';
 	import type { Calculation } from './calculator';
 	import type { History } from './history';
 	import LoadingIndicator from './loadingIndicator.svelte';
@@ -55,6 +61,22 @@
 			default:
 		}
 	}
+
+	function bookMarkClick(calculation: Calculation) {
+		if (calculation.isBookmarked) {
+			history.removeBookmark(calculation.id);
+		} else {
+			history.bookmark(calculation.id);
+		}
+	}
+
+	function renameClick(calculation: Calculation) {
+		const name = prompt(
+			'Enter a name for the calculation:',
+			calculation.bookmarkName,
+		);
+		history.renameBookmark(calculation.id, name ?? undefined);
+	}
 </script>
 
 {#if showLoadingIndicator}
@@ -63,50 +85,94 @@
 	</div>
 {/if}
 {#each calculations as calculation (calculation.id)}
-	<button
-		on:mousedown={() => onabouttoselect()}
-		on:click={() => onselectcalculation(calculation.rawInput)}
-		transition:slide
-		class="response"
-	>
-		<div class="input">
-			{@html calculation.input}
-		</div>
-		<div class="output">
-			{@html calculation.output}
-		</div>
-		{#if calculation.messages.length > 0}
-			<div
-				class="message"
-				class:error={calculation.severity === 'error'}
-				class:warning={calculation.severity === 'warning'}
-				class:info={calculation.severity === 'info'}
-			>
-				{#each calculation.messages as message}
-					<div>{message}</div>
-				{/each}
+	<div class="responseHost">
+		<button
+			on:mousedown={() => onabouttoselect()}
+			on:click={() => onselectcalculation(calculation.rawInput)}
+			transition:slide
+			class="response"
+		>
+			{#if calculation.bookmarkName}
+				<div class="name">
+					<FontAwesomeIcon icon={faBookmark} />
+					{calculation.bookmarkName}
+				</div>
+			{/if}
+			<div>
+				{@html calculation.input}
 			</div>
-		{/if}
-	</button>
+			<div class="output">
+				{@html calculation.output}
+			</div>
+			{#if calculation.messages.length > 0}
+				<div
+					class="message"
+					class:error={calculation.severity === 'error'}
+					class:warning={calculation.severity === 'warning'}
+					class:info={calculation.severity === 'info'}
+				>
+					{#each calculation.messages as message}
+						<div>{message}</div>
+					{/each}
+				</div>
+			{/if}
+		</button>
+		<div class="mouseActions">
+			<button
+				title="Remove"
+				class="deleteButton"
+				on:click={() => history.delete(calculation.id)}
+			>
+				<FontAwesomeIcon icon={faTrash} />
+			</button>
+			{#if calculation.isBookmarked}
+				<button
+					title="Rename"
+					class="renameButton"
+					on:click={() => renameClick(calculation)}
+				>
+					<FontAwesomeIcon icon={faICursor} />
+				</button>
+			{/if}
+			<button
+				title={calculation.isBookmarked
+					? 'Remove bookmark'
+					: 'Bookmark'}
+				class="bookmarkButton"
+				class:active={calculation.isBookmarked}
+				on:click={() => bookMarkClick(calculation)}
+			>
+				<FontAwesomeIcon icon={faBookmark} />
+			</button>
+		</div>
+	</div>
 {/each}
-<a href="examples" class="examples response">
+<a href="examples" class="examples response" transition:slide>
 	See more examples &rarr;
 </a>
 {#if appBanner}
-	<a href={appBanner.link} class="calloutApp response">
+	<a href={appBanner.link} class="calloutApp response" transition:slide>
 		<img src={appBanner.imageUrl} alt="Download app" />
-		<span> Download the free Qalculator app </span>
+		<span>Download the free Qalculator app</span>
 	</a>
 {/if}
 <div>
 	{#if historyHasEntries}
-		<button class="cleanButton" on:mousedown={() => history.clear()}>
+		<button
+			class="cleanButton"
+			on:mousedown={() => history.clear()}
+			transition:slide
+		>
 			Clear history
 		</button>
 	{/if}
 </div>
 
 <style>
+	.responseHost {
+		position: relative;
+	}
+
 	.response {
 		background: rgba(255, 255, 255, 0.1);
 		border-radius: 10px;
@@ -119,10 +185,52 @@
 		width: 100%;
 		border: none;
 		color: inherit;
+		margin-bottom: 10px;
 	}
 
-	.response + .response {
-		margin-top: 10px;
+	.mouseActions {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		padding-left: 10px;
+		cursor: default;
+	}
+
+	.mouseActions button {
+		width: 40px;
+		height: 40px;
+		padding: 0;
+		border: none;
+		background: transparent;
+		cursor: pointer;
+		color: #788;
+		opacity: 0;
+		transition: opacity 0.1s;
+	}
+
+	.responseHost:hover .mouseActions button {
+		opacity: 1;
+	}
+
+	.mouseActions button.active,
+	.mouseActions button:focus:focus-visible {
+		opacity: 0.5;
+	}
+
+	.mouseActions button:last-child {
+		border-bottom-right-radius: 10px;
+	}
+
+	.deleteButton:hover {
+		color: red;
+	}
+
+	.renameButton:hover {
+		color: lightgreen;
+	}
+
+	.bookmarkButton:hover {
+		color: orange;
 	}
 
 	.message {
@@ -148,6 +256,19 @@
 	.output {
 		margin: 20px 40px;
 		font-size: 1.1em;
+	}
+
+	.name {
+		margin-bottom: 5px;
+		color: #9aa;
+		font-size: 0.9em;
+	}
+
+	.name :global(svg) {
+		opacity: 0.6;
+		margin-right: 7px;
+		transform-origin: top left;
+		transform: translateY(-10px) scale(1.5);
 	}
 
 	.calloutApp.calloutApp {
@@ -192,6 +313,6 @@
 		opacity: 0.5;
 		text-decoration: underline;
 		cursor: pointer;
-		margin: 5px auto;
+		margin-bottom: 5px;
 	}
 </style>
