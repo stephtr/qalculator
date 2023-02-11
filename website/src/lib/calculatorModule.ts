@@ -1,8 +1,10 @@
+/* eslint-disable no-bitwise */
 import { delay, wasmVectorToArray } from './tools';
 
 export enum CalculationOptions {
 	None = 0,
-	NoUnits = 1,
+	NoUnits = 1 << 0,
+	DecimalPoint = 1 << 1,
 }
 
 export interface CalculationResult {

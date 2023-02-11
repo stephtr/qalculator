@@ -30,6 +30,20 @@
 	{/if}
 </label>
 
+<label>
+	<input
+		type="checkbox"
+		bind:checked={settings.useDecimalPoint}
+		on:change={update}
+	/>
+	Use decimal point instead of comma<br />
+	{#if settings.useDecimalPoint}
+		<span style="color:#AAFFFF">34.5</span>
+	{:else}
+		<span style="color:#AAFFFF">34,5</span>
+	{/if}
+</label>
+
 <style>
 	label {
 		display: block;

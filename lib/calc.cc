@@ -16,10 +16,23 @@ struct Calculation
 };
 
 #define OPTIONS_NO_UNIT 1
+#define OPTIONS_DECIMAL_POINT 2
+
+bool usingDecimalPoint = false;
 
 Calculation calculate(std::string calculation, int timeout = 500, int optionFlags = 0)
 {
 	calculator->clearMessages();
+
+	bool useDecimalPoint = optionFlags & OPTIONS_DECIMAL_POINT;
+	if (usingDecimalPoint != useDecimalPoint)
+	{
+		usingDecimalPoint = useDecimalPoint;
+		if (usingDecimalPoint)
+			calc.useDecimalPoint();
+		else
+			calc.useDecimalComma();
+	}
 
 	calculation = calc.unlocalizeExpression(calculation, eo.parse_options);
 	std::string parsed_str;
