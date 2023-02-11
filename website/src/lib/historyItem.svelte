@@ -71,19 +71,15 @@
 			if (calculation.isBookmarked && direction < 0) {
 				swipeSize = 2 * swipeButtonSize;
 			}
-			if (abs < swipeSize - swipeButtonSize) {
+			const expKicksInAfter = swipeSize - swipeButtonSize / 2;
+			if (abs < expKicksInAfter) {
 				shiftX = offsetX;
 			} else {
 				shiftX =
 					direction *
-					(swipeSize -
-						swipeButtonSize +
-						(1 -
-							Math.exp(
-								-(abs - swipeSize + swipeButtonSize) /
-									swipeSize,
-							)) *
-							swipeButtonSize);
+					(expKicksInAfter +
+						(1 - Math.exp(-(abs - expKicksInAfter) / swipeSize)) *
+							(swipeSize - expKicksInAfter));
 			}
 		}
 
