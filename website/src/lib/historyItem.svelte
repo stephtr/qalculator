@@ -27,51 +27,56 @@
 	}
 
 	function renameClick() {
-		const name = prompt(
-			'Enter a name for the calculation:',
+		const title = prompt(
+			'Enter a title for the calculation:',
 			calculation.bookmarkName,
 		);
-		history.renameBookmark(calculation.id, name ?? undefined);
+		history.renameBookmark(calculation.id, title ?? undefined);
 	}
 
+	/** returns the mean x-coordinates of all touch points in `list`*/
 	function getMeanXPos(list: TouchList) {
 		const touches: Touch[] = [].slice.call(list);
 		return touches.reduce((v, t) => v + t.screenX, 0) / touches.length;
 	}
 
-	function getMeanYPos(list: TouchList) {
-		const touches: Touch[] = [].slice.call(list);
-		return touches.reduce((v, t) => v + t.screenY, 0) / touches.length;
-	}
-
+	/** the x-coordinate where the last touch movement started */
 	let startX: number | undefined = undefined;
-	let startY: number | undefined = undefined;
+	/** how much the touch point got shifted along the x axis */
 	let offsetX: number = 0;
-	let offsetY: number = 0;
+	/** how much the swipeable widget should be shifted */
 	let shiftX: number = 0;
+	/** the size of a single swipeButton */
 	const swipeButtonSize = 100;
+
 	function touchstart(evt: TouchEvent) {
+		// subtracting offsetX takes care of the shift in mean position when adding a new touch point
 		startX = getMeanXPos(evt.targetTouches) - offsetX;
-		startY = getMeanYPos(evt.targetTouches) - offsetY;
 	}
 
+	// whether the swipe actions will get initiated when the touch points are lifted
 	let deleteSwipeSelected = false;
 	let bookmarkSwipeSelected = false;
 	let renameSwipeSelected = false;
+
 	function touchmove(evt: TouchEvent) {
-		if (startX === undefined || startY === undefined) return;
+		if (startX === undefined) return;
 		if (!evt.cancelable) {
+			// this touchmove event might result in scrolling, let's therefore abort swiping
 			shiftX = 0;
 		} else {
 			offsetX = getMeanXPos(evt.targetTouches) - startX;
-			offsetY = getMeanYPos(evt.targetTouches) - startY;
-
 			const direction = Math.sign(offsetX);
 			const abs = Math.abs(offsetX);
+
+			/** how far the element can be swiped */
 			let swipeSize = swipeButtonSize;
 			if (calculation.isBookmarked && direction < 0) {
 				swipeSize = 2 * swipeButtonSize;
 			}
+
+			/** close to the end of the swipable distance
+			 * let's fade swiping out with an exponential function */
 			const expKicksInAfter = swipeSize - swipeButtonSize / 2;
 			if (abs < expKicksInAfter) {
 				shiftX = offsetX;
@@ -106,14 +111,11 @@
 		}
 		shiftX = 0;
 		offsetX = 0;
-		offsetY = 0;
 	}
 
-	function touchcancel(evt: TouchEvent) {
+	function touchcancel() {
 		shiftX = 0;
 		offsetX = 0;
-		offsetY = 0;
-		console.log('cancelled');
 	}
 </script>
 
