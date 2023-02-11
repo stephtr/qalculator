@@ -60,11 +60,12 @@
 	let renameSwipeSelected = false;
 	function touchmove(evt: TouchEvent) {
 		if (startX === undefined || startY === undefined) return;
-		offsetX = getMeanXPos(evt.targetTouches) - startX;
-		offsetY = getMeanYPos(evt.targetTouches) - startY;
-		if (Math.abs(offsetY) > Math.abs(offsetX)) {
+		if (evt.cancelable) {
 			shiftX = 0;
 		} else {
+			offsetX = getMeanXPos(evt.targetTouches) - startX;
+			offsetY = getMeanYPos(evt.targetTouches) - startY;
+
 			const direction = Math.sign(offsetX);
 			const abs = Math.abs(offsetX);
 			let swipeSize = swipeButtonSize;
