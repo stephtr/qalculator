@@ -62,9 +62,15 @@
 			},
 		);
 	}
+	let isTouchScreen = false;
+	function touchstart() {
+		isTouchScreen = true;
+	}
 </script>
 
-<div class="content">
+<svelte:window on:touchstart={touchstart} />
+
+<div class="content" class:isTouchScreen={isTouchScreen}>
 	<a href="/" class="mainLink"><h1>Qalculator</h1></a>
 	<CalculatorWidget
 		{calculator}

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { slide } from 'svelte/transition';
 	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
 	import {
 		faBookmark,
@@ -15,7 +14,11 @@
 	/** this event triggers on the onMouseDownEvent */
 	export let onabouttoselect: () => void;
 
-	function bookMarkClick(calculation: Calculation) {
+	function deleteClick() {
+		history.delete(calculation.id);
+	}
+
+	function bookMarkClick() {
 		if (calculation.isBookmarked) {
 			history.removeBookmark(calculation.id);
 		} else {
@@ -23,22 +26,86 @@
 		}
 	}
 
-	function renameClick(calculation: Calculation) {
+	function renameClick() {
 		const name = prompt(
 			'Enter a name for the calculation:',
 			calculation.bookmarkName,
 		);
 		history.renameBookmark(calculation.id, name ?? undefined);
 	}
+
+	function getMeanXPos(list: TouchList) {
+		const touches: Touch[] = [].slice.call(list);
+		return touches.reduce((v, t) => v + t.screenX, 0) / touches.length;
+	}
+
+	let startX: number | undefined = undefined;
+	let shiftX: number = 0;
+	const swipeButtonSize = 100;
+	function touchstart(evt: TouchEvent) {
+		startX = getMeanXPos(evt.targetTouches);
+	}
+
+	let deleteSwipeSelected = false;
+	let bookmarkSwipeSelected = false;
+	let renameSwipeSelected = false;
+	function touchmove(evt: TouchEvent) {
+		evt.preventDefault();
+		if (startX === undefined) return;
+		const offset = getMeanXPos(evt.targetTouches) - startX;
+		const direction = Math.sign(offset);
+		const abs = Math.abs(offset);
+		let swipeSize = swipeButtonSize;
+		if (calculation.isBookmarked && direction < 0) {
+			swipeSize = 2 * swipeButtonSize;
+		}
+		if (abs < swipeSize - swipeButtonSize) {
+			shiftX = offset;
+		} else {
+			shiftX =
+				direction *
+				(swipeSize -
+					swipeButtonSize +
+					(1 -
+						Math.exp(
+							-(abs - swipeSize + swipeButtonSize) / swipeSize,
+						)) *
+						swipeButtonSize);
+		}
+
+		deleteSwipeSelected = shiftX > swipeButtonSize / 2;
+		renameSwipeSelected = shiftX < (-swipeButtonSize * 3) / 2;
+		bookmarkSwipeSelected =
+			shiftX < -swipeButtonSize / 2 && !renameSwipeSelected;
+	}
+
+	function touchend(evt: TouchEvent) {
+		if (evt.targetTouches.length > 0) return;
+		if (deleteSwipeSelected) {
+			deleteSwipeSelected = false;
+			deleteClick();
+		}
+		if (bookmarkSwipeSelected) {
+			bookmarkSwipeSelected = false;
+			bookMarkClick();
+		}
+		if (renameSwipeSelected) {
+			renameSwipeSelected = false;
+			renameClick();
+		}
+		shiftX = 0;
+	}
 </script>
 
 <div class="responseHost">
-	<div class="swipeRightContainer">Hello</div>
 	<button
+		class="response"
 		on:mousedown={() => onabouttoselect()}
 		on:click={() => onselectcalculation(calculation.rawInput)}
-		transition:slide
-		class="response"
+		on:touchstart={touchstart}
+		on:touchmove={touchmove}
+		on:touchend={touchend}
+		style={`transform: translateX(${shiftX}px)`}
 	>
 		{#if calculation.bookmarkName}
 			<div class="name">
@@ -65,20 +132,12 @@
 			</div>
 		{/if}
 	</button>
-	<div class="mouseActions">
-		<button
-			title="Remove"
-			class="deleteButton"
-			on:click={() => history.delete(calculation.id)}
-		>
+	<div class="mouseActions" style={`transform: translateX(${shiftX}px)`}>
+		<button title="Remove" class="deleteButton" on:click={deleteClick}>
 			<FontAwesomeIcon icon={faTrash} />
 		</button>
 		{#if calculation.isBookmarked}
-			<button
-				title="Rename"
-				class="renameButton"
-				on:click={() => renameClick(calculation)}
-			>
+			<button title="Rename" class="renameButton" on:click={renameClick}>
 				<FontAwesomeIcon icon={faICursor} />
 			</button>
 		{/if}
@@ -86,12 +145,32 @@
 			title={calculation.isBookmarked ? 'Remove bookmark' : 'Bookmark'}
 			class="bookmarkButton"
 			class:active={calculation.isBookmarked}
-			on:click={() => bookMarkClick(calculation)}
+			on:click={bookMarkClick}
 		>
 			<FontAwesomeIcon icon={faBookmark} />
 		</button>
 	</div>
-	<div class="swipeLeftContainer">Hello</div>
+	<div class="swipeContainer left">
+		<div class="swipeAction delete" class:selected={deleteSwipeSelected}>
+			<FontAwesomeIcon icon={faTrash} />
+		</div>
+	</div>
+	<div class="swipeContainer right">
+		{#if calculation.isBookmarked}
+			<div
+				class="swipeAction rename"
+				class:selected={renameSwipeSelected}
+			>
+				<FontAwesomeIcon icon={faICursor} />
+			</div>
+		{/if}
+		<div
+			class="swipeAction bookmark"
+			class:selected={bookmarkSwipeSelected}
+		>
+			<FontAwesomeIcon icon={faBookmark} />
+		</div>
+	</div>
 </div>
 
 <style>
@@ -109,25 +188,71 @@
 		color: inherit;
 		margin-bottom: 10px;
 		z-index: 2;
+		touch-action: pan-x;
+		will-change: transform;
 	}
 
 	.responseHost {
 		position: relative;
+		overflow: hidden;
 	}
 
-	.swipeRightContainer {
+	.swipeContainer {
 		position: absolute;
-		z-index: 1;
+		top: 1px;
+		bottom: 11px;
+		overflow: hidden;
+		display: flex;
 	}
 
-	.swipeLeftContainer {
-		position: absolute;
+	.swipeContainer.left {
+		border-radius: 10px 0 0 10px;
+		left: 1px;
+	}
+
+	.swipeContainer.right {
+		border-radius: 0 10px 10px 0;
+		right: 1px;
+	}
+
+	.swipeAction {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		width: 100px;
+		font-size: 1.5em;
+		color: rgba(255, 255, 255, 0.5);
+	}
+
+	.swipeAction :global(svg) {
+		transition: transform 0.2s;
+	}
+
+	.swipeAction.selected {
+		color: white;
+	}
+
+	.swipeAction.selected :global(svg) {
+		transform: scale(1.2);
+	}
+
+	.swipeAction.delete {
+		background: red;
+	}
+
+	.swipeAction.bookmark {
+		background: orange;
+	}
+
+	.swipeAction.rename {
+		background: lightgreen;
 	}
 
 	.mouseActions {
 		position: absolute;
 		right: 0;
-		bottom: 0;
+		bottom: 10px;
 		padding-left: 10px;
 		cursor: default;
 		z-index: 3;
@@ -149,6 +274,16 @@
 		.mouseActions button {
 			opacity: 0;
 		}
+	}
+
+	@media (hover: none) {
+		.mouseActions button:not(.active) {
+			display: none;
+		}
+	}
+
+	:global(.isTouchScreen) .mouseActions button:not(.active) {
+		display: none;
 	}
 
 	.responseHost:hover .mouseActions button {

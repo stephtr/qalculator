@@ -64,12 +64,14 @@
 	</div>
 {/if}
 {#each calculations as calculation (calculation.id)}
-	<HistoryItem
-		{calculation}
-		{history}
-		{onabouttoselect}
-		{onselectcalculation}
-	/>
+	<div transition:slide>
+		<HistoryItem
+			{calculation}
+			{history}
+			{onabouttoselect}
+			{onselectcalculation}
+		/>
+	</div>
 {/each}
 <a href="examples" class="examples response" transition:slide>
 	See more examples &rarr;
