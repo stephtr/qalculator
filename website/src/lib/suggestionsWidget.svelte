@@ -49,6 +49,7 @@
 		margin: 0 25px;
 		display: flex;
 		justify-content: center;
+		z-index: 10;
 	}
 
 	.suggestions {
@@ -60,7 +61,6 @@
 		max-height: 6em;
 		max-width: 20em;
 		max-width: min(20em, 90vw);
-		z-index: 1;
 		box-shadow: rgba(0, 0, 0, 0.5) 0 2px 10px;
 		border-radius: 5px;
 	}
