@@ -39,38 +39,52 @@
 		return touches.reduce((v, t) => v + t.screenX, 0) / touches.length;
 	}
 
+	function getMeanYPos(list: TouchList) {
+		const touches: Touch[] = [].slice.call(list);
+		return touches.reduce((v, t) => v + t.screenY, 0) / touches.length;
+	}
+
 	let startX: number | undefined = undefined;
+	let startY: number | undefined = undefined;
+	let offsetX: number = 0;
+	let offsetY: number = 0;
 	let shiftX: number = 0;
 	const swipeButtonSize = 100;
 	function touchstart(evt: TouchEvent) {
-		startX = getMeanXPos(evt.targetTouches);
+		startX = getMeanXPos(evt.targetTouches) - offsetX;
+		startY = getMeanYPos(evt.targetTouches) - offsetY;
 	}
 
 	let deleteSwipeSelected = false;
 	let bookmarkSwipeSelected = false;
 	let renameSwipeSelected = false;
 	function touchmove(evt: TouchEvent) {
-		evt.preventDefault();
-		if (startX === undefined) return;
-		const offset = getMeanXPos(evt.targetTouches) - startX;
-		const direction = Math.sign(offset);
-		const abs = Math.abs(offset);
-		let swipeSize = swipeButtonSize;
-		if (calculation.isBookmarked && direction < 0) {
-			swipeSize = 2 * swipeButtonSize;
-		}
-		if (abs < swipeSize - swipeButtonSize) {
-			shiftX = offset;
+		if (startX === undefined || startY === undefined) return;
+		offsetX = getMeanXPos(evt.targetTouches) - startX;
+		offsetY = getMeanYPos(evt.targetTouches) - startY;
+		if (Math.abs(offsetY) > Math.abs(offsetX)) {
+			shiftX = 0;
 		} else {
-			shiftX =
-				direction *
-				(swipeSize -
-					swipeButtonSize +
-					(1 -
-						Math.exp(
-							-(abs - swipeSize + swipeButtonSize) / swipeSize,
-						)) *
-						swipeButtonSize);
+			const direction = Math.sign(offsetX);
+			const abs = Math.abs(offsetX);
+			let swipeSize = swipeButtonSize;
+			if (calculation.isBookmarked && direction < 0) {
+				swipeSize = 2 * swipeButtonSize;
+			}
+			if (abs < swipeSize - swipeButtonSize) {
+				shiftX = offsetX;
+			} else {
+				shiftX =
+					direction *
+					(swipeSize -
+						swipeButtonSize +
+						(1 -
+							Math.exp(
+								-(abs - swipeSize + swipeButtonSize) /
+									swipeSize,
+							)) *
+							swipeButtonSize);
+			}
 		}
 
 		deleteSwipeSelected = shiftX > swipeButtonSize / 2;
@@ -94,6 +108,15 @@
 			renameClick();
 		}
 		shiftX = 0;
+		offsetX = 0;
+		offsetY = 0;
+	}
+
+	function touchcancel(evt: TouchEvent) {
+		shiftX = 0;
+		offsetX = 0;
+		offsetY = 0;
+		console.log('cancelled');
 	}
 </script>
 
@@ -102,10 +125,11 @@
 		class="response"
 		on:mousedown={() => onabouttoselect()}
 		on:click={() => onselectcalculation(calculation.rawInput)}
+		style={`transform: translateX(${shiftX}px)`}
 		on:touchstart={touchstart}
 		on:touchmove={touchmove}
 		on:touchend={touchend}
-		style={`transform: translateX(${shiftX}px)`}
+		on:touchcancel={touchcancel}
 	>
 		{#if calculation.bookmarkName}
 			<div class="name">
@@ -188,13 +212,13 @@
 		color: inherit;
 		margin-bottom: 10px;
 		z-index: 2;
-		touch-action: pan-x;
 		will-change: transform;
 	}
 
 	.responseHost {
 		position: relative;
 		overflow: hidden;
+		touch-action: pan-y;
 	}
 
 	.swipeContainer {
