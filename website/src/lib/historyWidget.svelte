@@ -89,6 +89,9 @@
 		{/if}
 	</button>
 {/each}
+<a href="examples" class="examples response">
+	See more examples &rarr;
+</a>
 {#if appBanner}
 	<a href={appBanner.link} class="calloutApp response">
 		<img src={appBanner.imageUrl} alt="Download app" />
@@ -171,6 +174,12 @@
 		.calloutApp.calloutApp {
 			display: none;
 		}
+	}
+
+	.examples {
+		text-decoration: none;
+		text-align: center;
+		padding: 10px;
 	}
 
 	.cleanButton {

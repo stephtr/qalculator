@@ -15,14 +15,20 @@
 
 	let currentInput = '';
 	let currentResult = '';
-	export function updateCurrentResult(_: any) {
+	export function updateCurrentResult(_: any, ensureResult = false) {
 		currentResult = '';
 		if (currentInput !== '' && calculator.isLoaded) {
 			try {
-				const result = calculator.calculate(currentInput, 20);
+				const result = calculator.calculate(
+					currentInput,
+					ensureResult ? 500 : 20,
+				);
 				// only show the result if it's not too long
 				// otherwise it could also be a product of an incomplete query
-				if (result.severity !== 'error' && result.output.length < 200) {
+				if (
+					result.severity !== 'error' &&
+					(result.output.length < 200 || ensureResult)
+				) {
 					currentResult = result.output;
 				}
 			} catch (e) {
@@ -42,8 +48,12 @@
 
 	function submitCalculationFromInput() {
 		if (currentInput === '') return; // nothing to calculate
-		calculator.submitCalculation(currentInput);
-		currentInput = '';
+		if (submitOnBlur) {
+			calculator.submitCalculation(currentInput);
+			currentInput = '';
+		} else {
+			updateCurrentResult(currentInput, true);
+		}
 	}
 
 	function keydown(ev: KeyboardEvent) {
@@ -164,6 +174,7 @@
 		submitCalculationFromInput();
 		currentInput = calc;
 		inputElement.focus();
+		setTimeout(() => updateCurrentResult(currentInput, true), 10);
 	}
 
 	/**
