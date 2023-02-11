@@ -8,6 +8,10 @@
 	import { calculatorKey, type CalculatorContext } from '$lib/calculatorHost';
 	import CalculatorWidget from '$lib/calculatorWidget.svelte';
 	import LoadingIndicator from '$lib/loadingIndicator.svelte';
+	import { config } from '@fortawesome/fontawesome-svg-core';
+	import '@fortawesome/fontawesome-svg-core/styles.css';
+
+	config.autoAddCss = false;
 
 	const calculator = new Calculator();
 
