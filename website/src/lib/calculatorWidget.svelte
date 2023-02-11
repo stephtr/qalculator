@@ -237,9 +237,12 @@
 	}
 
 	function updateSuggestions(text: string) {
-		suggestions = generateSuggestions(text);
-		if ((suggestions as MatchedSuggestion[])?.[0]?.match) {
-			selectedSuggestion = suggestions[0].name;
+		const suggest = generateSuggestions(text);
+		suggestions = suggest;
+		if (suggest?.[0]?.match) {
+			// we have a match
+			if (suggest[0].name !== 'G' || suggest[0].matchIdenticalCasing)
+				selectedSuggestion = suggest[0].name;
 		}
 	}
 
