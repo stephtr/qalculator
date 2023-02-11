@@ -44,10 +44,10 @@ git clone https://github.com/Qalculate/libqalculate.git
 cd libqalculate
 # the following command is supposed to fail, since it's also running the configure script
 ./autogen.sh
-# comment out in configure script: (run `cat configure | grep PKG_CHECK_MODULES` to get the line numbers)
-# PKG_CHECK_MODULES and defines for LIBCURL and ICU (~line 18880)
-# PKG_CHECK_MODULES for LIBXML
-# HAVE_PIPE2 (~line 18820)
+sed -i 's/PKG_CHECK_MODULES(LIBCURL, libcurl)/#PKG_CHECK_MODULES(LIBCURL, libcurl)/' configure
+sed -i 's/PKG_CHECK_MODULES(ICU, icu-uc)/#PKG_CHECK_MODULES(ICU, icu-uc)/' configure
+sed -i 's/PKG_CHECK_MODULES(LIBXML, libxml-2.0/#PKG_CHECK_MODULES(LIBXML, libxml-2.0/' configure
+sed -i 's/#define HAVE_PIPE2 1/#define HAVE_PIPE2 0/' configure
 emconfigure ./configure --prefix=${HOME}/opt CPPFLAGS=-I${HOME}/opt/include LDFLAGS="-L${HOME}/opt/lib -lxml2" --without-libcurl --enable-compiled-definitions --disable-nls
 make
 make install
