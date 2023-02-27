@@ -322,9 +322,8 @@
 	}
 
 	@media (hover: none) {
-		/* Unfortunately, this media query is still quite unreliable. Let's therefore NOT apply display: none; */
 		.mouseActions button:not(.active) {
-			opacity: 0.2;
+			/* Unfortunately, this media query is still quite unreliable. Let's therefore NOT apply display: none; */
 		}
 	}
 
