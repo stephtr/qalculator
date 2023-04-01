@@ -45,6 +45,11 @@ export function calculate(
 	return ret;
 }
 
+export function setOption(option: string): boolean {
+	if (version() < 3) return false;
+	return Module.set_option(option);
+}
+
 export function info(): string {
 	return Module.info();
 }
