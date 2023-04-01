@@ -5,8 +5,10 @@
 using namespace emscripten;
 
 Calculator calc;
-EvaluationOptions eo;
-PrintOptions po;
+EvaluationOptions evalops;
+PrintOptions printops;
+
+#include "settings.h"
 
 struct Calculation
 {
@@ -34,11 +36,11 @@ Calculation calculate(std::string calculation, int timeout = 500, int optionFlag
 			calc.useDecimalComma();
 	}
 
-	calculation = calc.unlocalizeExpression(calculation, eo.parse_options);
+	calculation = calc.unlocalizeExpression(calculation, evalops.parse_options);
 	std::string parsed_str;
 	bool resultIsComparison;
-	po.use_unit_prefixes = optionFlags & OPTIONS_NO_UNIT ? false : true;
-	auto result = calc.calculateAndPrint(calculation, timeout, eo, po, AUTOMATIC_FRACTION_AUTO, AUTOMATIC_APPROXIMATION_AUTO, &parsed_str, -1, &resultIsComparison, true, 2, TAG_TYPE_HTML);
+	printops.use_unit_prefixes = optionFlags & OPTIONS_NO_UNIT ? false : true;
+	auto result = calc.calculateAndPrint(calculation, timeout, evalops, printops, AUTOMATIC_FRACTION_AUTO, AUTOMATIC_APPROXIMATION_AUTO, &parsed_str, -1, &resultIsComparison, true, 2, TAG_TYPE_HTML);
 
 	Calculation ret;
 	ret.input = parsed_str;
@@ -96,14 +98,14 @@ int main()
 {
 	calc.loadGlobalDefinitions();
 	calc.useDecimalComma();
-	po.use_unicode_signs = true;
-	po.interval_display = INTERVAL_DISPLAY_SIGNIFICANT_DIGITS;
-	po.base_display = BASE_DISPLAY_NORMAL;
-	po.digit_grouping = DIGIT_GROUPING_STANDARD;
-	po.indicate_infinite_series = true;
-	eo.parse_options.angle_unit = ANGLE_UNIT_RADIANS;
-	eo.parse_options.unknowns_enabled = false;
-	eo.parse_options.limit_implicit_multiplication = true;
+	printops.use_unicode_signs = true;
+	printops.interval_display = INTERVAL_DISPLAY_SIGNIFICANT_DIGITS;
+	printops.base_display = BASE_DISPLAY_NORMAL;
+	printops.digit_grouping = DIGIT_GROUPING_STANDARD;
+	printops.indicate_infinite_series = true;
+	evalops.parse_options.angle_unit = ANGLE_UNIT_RADIANS;
+	evalops.parse_options.unknowns_enabled = false;
+	evalops.parse_options.limit_implicit_multiplication = true;
 	return 0;
 }
 
@@ -114,7 +116,7 @@ std::string info()
 
 int version()
 {
-	return 2;
+	return 3;
 }
 
 EMSCRIPTEN_BINDINGS(Calculator)
@@ -123,6 +125,7 @@ EMSCRIPTEN_BINDINGS(Calculator)
 	function("info", &info);
 	function("version", &version);
 	function("getVariables", &getVariables);
+	function("set_option", &set_option);
 }
 
 EMSCRIPTEN_BINDINGS(calculation)
