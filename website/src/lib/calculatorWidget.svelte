@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import type { Calculator } from './calculator';
+	import { setOption } from './calculatorModule';
 	import {
 		generateSuggestions,
 		getLastWord,
-		type MatchedSuggestion,
 		type Suggestion,
 	} from './suggestions';
 	import Suggestions from './suggestionsWidget.svelte';
@@ -16,6 +16,11 @@
 	let currentInput = '';
 	let currentResult = '';
 	export function updateCurrentResult(_: any, ensureResult = false) {
+		const isSetCommand = currentInput.startsWith('set ');
+		if (isSetCommand) {
+			currentResult = '';
+			return;
+		}
 		currentResult = '';
 		if (currentInput !== '' && calculator.isLoaded) {
 			try {
@@ -46,8 +51,18 @@
 
 	let scrollSuggestionIntoView: (suggestion: string) => void;
 
-	function submitCalculationFromInput() {
-		if (currentInput === '') return; // nothing to calculate
+	function submitCalculationFromInput(submittedByBlur: boolean) {
+		const isSetCommand = currentInput.startsWith('set ');
+		if (currentInput === '' || (isSetCommand && submittedByBlur)) return; // nothing to calculate
+		if (isSetCommand) {
+			const success = setOption(currentInput.slice(4));
+			if (success) {
+				currentInput = '';
+			} else {
+				currentResult = 'Error';
+			}
+			return;
+		}
 		if (submitOnBlur) {
 			calculator.submitCalculation(currentInput);
 			currentInput = '';
@@ -65,7 +80,7 @@
 					selectedSuggestion,
 				);
 			} else {
-				submitCalculationFromInput();
+				submitCalculationFromInput(false);
 			}
 			suggestions = [];
 		}
@@ -171,7 +186,7 @@
 
 	/** loads a calculation */
 	export function selectCalculation(calc: string) {
-		submitCalculationFromInput();
+		submitCalculationFromInput(true);
 		currentInput = calc;
 		inputElement.focus();
 		setTimeout(() => updateCurrentResult(currentInput, true), 10);
@@ -205,7 +220,7 @@
 		setTimeout(() => {
 			if (!windowBluring && !suggestionBluring && !selectBluring) {
 				if (submitOnBlur) {
-					submitCalculationFromInput();
+					submitCalculationFromInput(true);
 				}
 				suggestions = [];
 				backedUpInputSelectionStart = null;

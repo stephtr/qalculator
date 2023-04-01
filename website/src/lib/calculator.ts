@@ -2,6 +2,7 @@ import {
 	calculate,
 	CalculationOptions,
 	initializeCalculationModule,
+	setOption,
 } from './calculatorModule';
 import { History } from './history';
 import { Settings } from './settings';
@@ -111,12 +112,20 @@ export class Calculator {
 	private pendingCalculationOnceLoaded: string | null = null;
 
 	submitCalculation(input: string) {
-		this.submittedListeners.forEach((l) => l(input));
+		const isSetCommand = input.startsWith('set ');
+		if (!isSetCommand) {
+			this.submittedListeners.forEach((l) => l(input));
+		}
 		if (!this.isLoaded) {
 			this.pendingCalculationOnceLoaded = input;
 			return;
 		}
-		this.history.add(this.calculate(input));
+
+		if (isSetCommand) {
+			setOption(input.slice(4));
+		} else {
+			this.history.add(this.calculate(input));
+		}
 	}
 
 	constructor() {
