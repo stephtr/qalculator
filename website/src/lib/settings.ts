@@ -8,7 +8,7 @@ export enum AngleUnit {
 }
 
 export class Settings {
-	angleUnit = AngleUnit.None;
+	angleUnit = AngleUnit.Rad;
 
 	useUnits = true;
 
