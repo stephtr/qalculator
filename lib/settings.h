@@ -622,7 +622,7 @@ set_option_place:
 		{
 			success &= set_assumption(svalue, false);
 		}
-		if (= false)
+		if (interactive_mode)
 		{
 			string value;
 			if (CALCULATOR->defaultAssumptions()->type() != ASSUMPTION_TYPE_BOOLEAN)
@@ -1773,7 +1773,7 @@ set_option_place:
 		}
 		else if (v != sigint_action)
 		{
-			if (= false)
+			if (interactive_mode)
 			{
 				if (sigint_action == 0)
 					signal(SIGINT, sigint_handler);
