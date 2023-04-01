@@ -4,6 +4,7 @@
 		faBookmark,
 		faTrash,
 		faICursor,
+		faClone,
 	} from '@fortawesome/free-solid-svg-icons';
 	import type { Calculation } from './calculator';
 	import type { History } from './history';
@@ -15,6 +16,23 @@
 	export let onabouttoselect: () => void;
 
 	let hostElement: HTMLElement;
+
+	function decodeHTMLentities(inp: string) {
+		const el = document.createElement('div');
+		el.innerHTML = inp;
+		return el.textContent;
+	}
+
+	let copyAnimated = false;
+	function copyClick() {
+		navigator.clipboard.writeText(
+			decodeHTMLentities(calculation.output.replace(/<[^>]*>/g, '')),
+		);
+		copyAnimated = true;
+		setTimeout(() => {
+			copyAnimated = false;
+		}, 1000);
+	}
 
 	function deleteClick() {
 		history.delete(calculation.id);
@@ -46,17 +64,18 @@
 				elem = elem.parentElement;
 				if (elem === hostElement) return true;
 			}
+			return false;
 		});
 	}
 
-	/** returns the mean x-coordinates of all touch points in `list`*/
+	/** returns the mean x-coordinates of all touch points in `list` */
 	function getMeanXPos(list: TouchList) {
 		const touches = filterTouchList(list);
 		return touches.reduce((v, t) => v + t.screenX, 0) / touches.length;
 	}
 
 	/** the x-coordinate where the last touch movement started */
-	let startX: number | undefined = undefined;
+	let startX: number | undefined;
 	/** how much the touch point got shifted along the x axis */
 	let offsetX: number = 0;
 	/** how much the swipeable widget should be shifted */
@@ -70,6 +89,7 @@
 	}
 
 	// whether the swipe actions will get initiated when the touch points are lifted
+	let copySwipeSelected = false;
 	let deleteSwipeSelected = false;
 	let bookmarkSwipeSelected = false;
 	let renameSwipeSelected = false;
@@ -86,8 +106,12 @@
 
 			/** how far the element can be swiped */
 			let swipeSize = swipeButtonSize;
-			if (calculation.isBookmarked && direction < 0) {
+			if (direction > 0) {
 				swipeSize = 2 * swipeButtonSize;
+			} else if (direction < 0) {
+				if (calculation.isBookmarked) {
+					swipeSize = 2 * swipeButtonSize;
+				}
 			}
 
 			/** close to the end of the swipable distance
@@ -104,7 +128,9 @@
 			}
 		}
 
-		deleteSwipeSelected = shiftX > swipeButtonSize / 2;
+		deleteSwipeSelected = shiftX > (swipeButtonSize * 3) / 2;
+		copySwipeSelected =
+			shiftX > swipeButtonSize / 2 && !deleteSwipeSelected;
 		renameSwipeSelected = shiftX < (-swipeButtonSize * 3) / 2;
 		bookmarkSwipeSelected =
 			shiftX < -swipeButtonSize / 2 && !renameSwipeSelected;
@@ -115,6 +141,10 @@
 			// subtracting offsetX takes care of the shift in mean position when adding a new touch point
 			startX = getMeanXPos(evt.touches) - offsetX;
 			return;
+		}
+		if (copySwipeSelected) {
+			copySwipeSelected = false;
+			copyClick();
 		}
 		if (deleteSwipeSelected) {
 			deleteSwipeSelected = false;
@@ -178,6 +208,9 @@
 		{/if}
 	</button>
 	<div class="mouseActions" style={`transform: translateX(${shiftX}px)`}>
+		<button title="Copy result" class="copyButton" class:animated={copyAnimated} on:click={copyClick}>
+			<FontAwesomeIcon icon={faClone} />
+		</button>
 		<button title="Remove" class="deleteButton" on:click={deleteClick}>
 			<FontAwesomeIcon icon={faTrash} />
 		</button>
@@ -196,6 +229,9 @@
 		</button>
 	</div>
 	<div class="swipeContainer left">
+		<div class="swipeAction copy" class:selected={copySwipeSelected}>
+			<FontAwesomeIcon icon={faClone} />
+		</div>
 		<div class="swipeAction delete" class:selected={deleteSwipeSelected}>
 			<FontAwesomeIcon icon={faTrash} />
 		</div>
@@ -282,6 +318,10 @@
 		transform: scale(1.2);
 	}
 
+	.swipeAction.copy {
+		background: lightskyblue;
+	}
+
 	.swipeAction.delete {
 		background: red;
 	}
@@ -342,6 +382,26 @@
 
 	.mouseActions button:last-child {
 		border-bottom-right-radius: 10px;
+	}
+
+	.copyButton:hover {
+		color: lightskyblue;
+	}
+
+	.copyButton.animated {
+		animation: copyButtonAnimation 0.3s;
+	}
+
+	@keyframes copyButtonAnimation {
+		0% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.5);
+		}
+		100% {
+			transform: scale(1);
+		}
 	}
 
 	.deleteButton:hover {
