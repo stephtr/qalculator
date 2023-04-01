@@ -5,6 +5,7 @@
 	import { setOption } from './calculatorModule';
 	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
 	import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+	import { slide } from 'svelte/transition';
 
 	export let settings: Settings;
 
@@ -90,18 +91,34 @@
 <label>
 	<input
 		type="checkbox"
-		bind:checked={settings.useUnitPrefixes}
+		bind:checked={settings.useUnits}
 		on:change={() => update()}
 	/>
-	Use prefixes for units<br />
-	{#if settings.useUnitPrefixes}
-		<span style="color:#AAFFFF">10</span>
-		<span style="color:#BBFFBB">kHz</span>
+	Use units<br />
+	{#if settings.useUnits}
+	<span style="color:#BBFFBB">c</span> = <span style="color:#AAFFFF">299 792 458</span> <span style="color:#BBFFBB">m ∕ s</span>
 	{:else}
-		<span style="color:#AAFFFF">10 000</span>
-		<span style="color:#BBFFBB">Hz</span>
+	<span style="color:#BBFFBB">c</span> = <span style="color:#AAFFFF">299 792 458</span>
 	{/if}
 </label>
+
+{#if settings.useUnits}
+	<label transition:slide>
+		<input
+			type="checkbox"
+			bind:checked={settings.useUnitPrefixes}
+			on:change={() => update()}
+		/>
+		Use prefixes for units<br />
+		{#if settings.useUnitPrefixes}
+			<span style="color:#AAFFFF">10</span>
+			<span style="color:#BBFFBB">kHz</span>
+		{:else}
+			<span style="color:#AAFFFF">10 000</span>
+			<span style="color:#BBFFBB">Hz</span>
+		{/if}
+	</label>
+{/if}
 
 <label>
 	<input
@@ -138,19 +155,20 @@
 	label,
 	.setting {
 		display: block;
-		margin: 20px 0;
+		padding: 10px 0;
 	}
 
 	.optionList {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 10px;
+		gap: 20px;
+		row-gap: 5px;
 		justify-content: center;
-		margin: 10px 0 20px;
+		margin: 5px 0 0;
 	}
 
 	.optionList label {
-		margin: 0;
+		padding: 0;
 	}
 
 	textarea {

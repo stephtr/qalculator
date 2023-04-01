@@ -10,6 +10,8 @@ export enum AngleUnit {
 export class Settings {
 	angleUnit = AngleUnit.None;
 
+	useUnits = true;
+
 	useUnitPrefixes = true;
 
 	useDecimalPoint = false;
@@ -34,6 +36,7 @@ export class Settings {
 		} else {
 			this.angleUnit = +settings.angleUnit;
 		}
+		this.useUnits = settings.useUnits ?? true;
 		this.useUnitPrefixes = settings.useUnitPrefixes ?? true;
 		this.useDecimalPoint = settings.useDecimalPoint ?? false;
 		this.additionalOptions = settings.additionalOptions ?? false;
@@ -72,6 +75,8 @@ export class Settings {
 		);
 
 		setOption(`angle ${+this.angleUnit}`);
+		setOption(`units ${this.useUnits ? 'on' : 'off'}`);
+		setOption(`varunits ${this.useUnits ? 'on' : 'off'}`);
 	}
 
 	constructor() {
