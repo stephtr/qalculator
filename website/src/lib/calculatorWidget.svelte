@@ -282,7 +282,7 @@
 <input
 	type="text"
 	placeholder="Your calculation"
-	autocomplete="off"
+	autocomplete="calculation-input"
 	autocapitalize="none"
 	autocorrect="off"
 	class="query"
