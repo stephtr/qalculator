@@ -70,6 +70,9 @@ importers:
       '@fortawesome/fontawesome-svg-core':
         specifier: ^6.3.0
         version: 6.3.0
+      '@fortawesome/free-regular-svg-icons':
+        specifier: ^6.3.0
+        version: 6.3.0
       '@fortawesome/free-solid-svg-icons':
         specifier: ^6.3.0
         version: 6.3.0
@@ -350,6 +353,14 @@ packages:
 
   /@fortawesome/fontawesome-svg-core@6.3.0:
     resolution: {integrity: sha512-uz9YifyKlixV6AcKlOX8WNdtF7l6nakGyLYxYaCa823bEBqyj/U2ssqtctO38itNEwXb8/lMzjdoJ+aaJuOdrw==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.3.0
+    dev: false
+
+  /@fortawesome/free-regular-svg-icons@6.3.0:
+    resolution: {integrity: sha512-cZnwiVHZ51SVzWHOaNCIA+u9wevZjCuAGSvSYpNlm6A4H4Vhwh8481Bf/5rwheIC3fFKlgXxLKaw8Xeroz8Ntg==}
     engines: {node: '>=6'}
     requiresBuild: true
     dependencies:

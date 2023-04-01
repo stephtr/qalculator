@@ -125,6 +125,8 @@ export class Calculator {
 			initializeCalculationModule().then(() => {
 				this.#isLoaded = true;
 
+				this.settings.apply();
+
 				if (this.pendingCalculationOnceLoaded) {
 					this.submitCalculation(this.pendingCalculationOnceLoaded);
 					this.pendingCalculationOnceLoaded = null;
