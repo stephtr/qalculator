@@ -7,6 +7,10 @@ export enum AngleUnit {
 	Grad = 3,
 }
 
+function getLocaleDecimalPoint() {
+	return (1.1).toLocaleString().substring(1, 2);
+}
+
 export class Settings {
 	angleUnit = AngleUnit.Rad;
 
@@ -38,7 +42,8 @@ export class Settings {
 		}
 		this.useUnits = settings.useUnits ?? true;
 		this.useUnitPrefixes = settings.useUnitPrefixes ?? true;
-		this.useDecimalPoint = settings.useDecimalPoint ?? false;
+		this.useDecimalPoint =
+			settings.useDecimalPoint ?? getLocaleDecimalPoint() === '.';
 		this.additionalOptions = settings.additionalOptions ?? false;
 	}
 
@@ -77,6 +82,8 @@ export class Settings {
 		setOption(`angle ${+this.angleUnit}`);
 		setOption(`units ${this.useUnits ? 'on' : 'off'}`);
 		setOption(`varunits ${this.useUnits ? 'on' : 'off'}`);
+		setOption(`decimal comma ${this.useDecimalPoint ? 'off' : 'on'}`);
+		setOption(`prefix ${this.useUnitPrefixes ? 'on' : 'off'}`);
 	}
 
 	constructor() {

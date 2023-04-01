@@ -17,29 +17,13 @@ struct Calculation
 	std::string messages;
 };
 
-#define OPTIONS_NO_UNIT 1
-#define OPTIONS_DECIMAL_POINT 2
-
-bool usingDecimalPoint = false;
-
 Calculation calculate(std::string calculation, int timeout = 500, int optionFlags = 0)
 {
 	calculator->clearMessages();
 
-	bool useDecimalPoint = optionFlags & OPTIONS_DECIMAL_POINT;
-	if (usingDecimalPoint != useDecimalPoint)
-	{
-		usingDecimalPoint = useDecimalPoint;
-		if (usingDecimalPoint)
-			calc.useDecimalPoint();
-		else
-			calc.useDecimalComma();
-	}
-
 	calculation = calc.unlocalizeExpression(calculation, evalops.parse_options);
 	std::string parsed_str;
 	bool resultIsComparison;
-	printops.use_unit_prefixes = optionFlags & OPTIONS_NO_UNIT ? false : true;
 	auto result = calc.calculateAndPrint(calculation, timeout, evalops, printops, AUTOMATIC_FRACTION_AUTO, AUTOMATIC_APPROXIMATION_AUTO, &parsed_str, -1, &resultIsComparison, true, 2, TAG_TYPE_HTML);
 
 	Calculation ret;
@@ -97,7 +81,6 @@ std::vector<VariableInfo> getVariables()
 int main()
 {
 	calc.loadGlobalDefinitions();
-	calc.useDecimalComma();
 	printops.use_unicode_signs = true;
 	printops.interval_display = INTERVAL_DISPLAY_SIGNIFICANT_DIGITS;
 	printops.base_display = BASE_DISPLAY_NORMAL;

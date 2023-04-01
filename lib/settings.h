@@ -1,3 +1,5 @@
+// most of this code is taken from https://github.com/Qalculate/libqalculate/blob/master/src/qalc.cc in order to support the set commands
+
 #include <libqalculate/qalculate.h>
 
 using std::string;
@@ -193,9 +195,7 @@ string result_text, parsed_text, original_expression;
 vector<string> alt_results;
 bool load_global_defs, fetch_exchange_rates_at_startup, first_time, save_mode_on_exit, save_defs_on_exit, clear_history_on_exit, load_defaults = false;
 int auto_update_exchange_rates;
-// PrintOptions printops, saved_printops;
 bool complex_angle_form = false, saved_caf = false;
-// EvaluationOptions evalops, saved_evalops;
 bool dot_question_asked = false, implicit_question_asked = false;
 Number saved_custom_output_base, saved_custom_input_base;
 AssumptionType saved_assumption_type;
@@ -238,23 +238,6 @@ bool simplified_percentage = true;
 int defs_edited = 0;
 bool use_duo_syms = false;
 int enable_unicode = -1;
-
-// void setResult(Prefix *prefix = NULL, bool update_parse = false, bool goto_input = true, size_t stack_index = 0, bool register_moved = false, bool noprint = false);
-// void execute_expression(bool goto_input = true, bool do_mathoperation = false, MathOperation op = OPERATION_ADD, MathFunction *f = NULL, bool do_stack = false, size_t stack_index = 0, bool check_exrates = true);
-// void execute_command(int command_type, bool show_result = true);
-// void load_preferences();
-// bool save_preferences(bool mode = false);
-// bool save_mode();
-// void set_saved_mode();
-// bool save_defs();
-// void result_display_updated();
-// void result_format_updated();
-// void result_action_executed();
-// void result_prefix_changed(Prefix *prefix = NULL);
-// void expression_format_updated(bool reparse);
-// void expression_calculation_updated();
-bool display_errors(bool goto_input = false, int cols = 0, bool *implicit_warning = NULL);
-void replace_result_cis(string &resstr);
 
 #define result_display_updated() 0
 #define result_format_updated() 0

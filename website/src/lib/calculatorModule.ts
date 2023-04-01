@@ -1,10 +1,7 @@
-/* eslint-disable no-bitwise */
 import { delay, wasmVectorToArray } from './tools';
 
 export enum CalculationOptions {
 	None = 0,
-	NoUnits = 1 << 0,
-	DecimalPoint = 1 << 1,
 }
 
 export interface CalculationResult {
@@ -28,7 +25,7 @@ export function version(): number {
 export function calculate(
 	calculation: string,
 	timeoutMs: number,
-	options: CalculationOptions,
+	options: CalculationOptions = CalculationOptions.None,
 ) {
 	let result: CalculationResult & { delete: () => void };
 	if (version() < 2) {

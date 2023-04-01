@@ -1,6 +1,5 @@
 import {
 	calculate,
-	CalculationOptions,
 	initializeCalculationModule,
 	setOption,
 } from './calculatorModule';
@@ -82,17 +81,11 @@ export class Calculator {
 	}
 
 	calculate(textInput: string, timeoutMs: number = 500): Calculation {
-		const options =
-			// eslint-disable-next-line no-bitwise
-			(this.settings.useUnitPrefixes ? 0 : CalculationOptions.NoUnits) |
-			(this.settings.useDecimalPoint
-				? CalculationOptions.DecimalPoint
-				: 0);
 		let {
 			input,
 			output,
 			messages: rawMessages,
-		} = calculate(textInput, timeoutMs, options);
+		} = calculate(textInput, timeoutMs);
 		let { messages, severity } = parseCalculationMessages(rawMessages);
 		if (output === 'timed out') {
 			messages = ['Calculation timed out'];
