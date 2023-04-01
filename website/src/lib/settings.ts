@@ -25,6 +25,7 @@ export class Settings {
 		const settings = JSON.parse(savedSettings);
 
 		if (
+			settings.angleUnit === undefined ||
 			Number.isNaN(+settings.angleUnit) ||
 			+settings.angleUnit < 0 ||
 			+settings.angleUnit > 3
