@@ -32,7 +32,7 @@
 	{#if typeof window !== 'undefined'}
 		{email}<br />
 	{/if}
-	Prägraten
+	Prägraten, Austria
 </p>
 <HomeLink />
 
