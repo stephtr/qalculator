@@ -1,3 +1,4 @@
+import { trackEvent } from '../routes/tracking';
 import type { Calculation } from './calculator';
 
 const tutorialCalculations: Calculation[] = [
@@ -60,6 +61,7 @@ export class History {
 		this.entries = this.entries.filter((c) => c.id !== id);
 		this.save();
 		this.notifyChangeListeners();
+		trackEvent('history', 'delete');
 	}
 
 	private doWithEntry(
@@ -79,12 +81,14 @@ export class History {
 			entry.isBookmarked = true;
 			entry.bookmarkName = name;
 		});
+		trackEvent('history', 'bookmark');
 	}
 
 	renameBookmark(id: string, name?: string) {
 		this.doWithEntry(id, (entry) => {
 			entry.bookmarkName = name;
 		});
+		trackEvent('history', 'renameBookmark');
 	}
 
 	removeBookmark(id: string) {
@@ -154,6 +158,7 @@ export class History {
 		];
 		this.save();
 		this.notifyChangeListeners();
+		trackEvent('history', 'clear');
 	}
 
 	isEmpty() {

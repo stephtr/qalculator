@@ -13,10 +13,8 @@
 	import LoadingIndicator from '$lib/loadingIndicator.svelte';
 	import { config } from '@fortawesome/fontawesome-svg-core';
 	import '@fortawesome/fontawesome-svg-core/styles.css';
-	import {
-		addNewsReadLister,
-		newsAvailable,
-	} from './news/version';
+	import { addNewsReadLister, newsAvailable } from './news/version';
+	import { setupTracking } from './tracking';
 
 	config.autoAddCss = false;
 
@@ -80,6 +78,8 @@
 	addNewsReadLister(() => {
 		newsUpdateAvailable = false;
 	});
+
+	setupTracking(calculator.settings.sendUsageStatistics);
 </script>
 
 <svelte:window on:touchstart={touchstart} />

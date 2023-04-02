@@ -22,6 +22,8 @@ export class Settings {
 
 	additionalOptions = '';
 
+	sendUsageStatistics = true;
+
 	load() {
 		if (typeof window === 'undefined') return;
 		const savedSettings = window.localStorage?.getItem(
@@ -45,6 +47,7 @@ export class Settings {
 		this.useDecimalPoint =
 			settings.useDecimalPoint ?? getLocaleDecimalPoint() === '.';
 		this.additionalOptions = settings.additionalOptions ?? false;
+		this.sendUsageStatistics = settings.sendUsageStatistics ?? true;
 	}
 
 	save() {
@@ -56,6 +59,7 @@ export class Settings {
 				useUnitPrefixes: this.useUnitPrefixes,
 				useDecimalPoint: this.useDecimalPoint,
 				additionalOptions: this.additionalOptions,
+				sendUsageStatistics: this.sendUsageStatistics,
 			}),
 		);
 	}

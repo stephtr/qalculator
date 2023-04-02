@@ -8,6 +8,7 @@
 	} from '@fortawesome/free-solid-svg-icons';
 	import type { Calculation } from './calculator';
 	import type { History } from './history';
+	import { trackEvent } from '../routes/tracking';
 
 	export let calculation: Calculation;
 	export let history: History;
@@ -26,12 +27,13 @@
 	let copyAnimated = false;
 	function copyClick() {
 		navigator.clipboard.writeText(
-			decodeHTMLentities(calculation.output.replace(/<[^>]*>/g, '')),
+			decodeHTMLentities(calculation.output.replace(/<[^>]*>/g, ''))!,
 		);
 		copyAnimated = true;
 		setTimeout(() => {
 			copyAnimated = false;
 		}, 1000);
+		trackEvent('history', 'copy');
 	}
 
 	function deleteClick() {
@@ -179,7 +181,10 @@
 	<button
 		class="response"
 		on:mousedown={() => onabouttoselect()}
-		on:click={() => onselectcalculation(calculation.rawInput)}
+		on:click={() => {
+			onselectcalculation(calculation.rawInput);
+			trackEvent('history', 'select');
+		}}
 		style={`transform: translateX(${shiftX}px)`}
 	>
 		{#if calculation.bookmarkName}
@@ -208,7 +213,12 @@
 		{/if}
 	</button>
 	<div class="mouseActions" style={`transform: translateX(${shiftX}px)`}>
-		<button title="Copy result" class="copyButton" class:animated={copyAnimated} on:click={copyClick}>
+		<button
+			title="Copy result"
+			class="copyButton"
+			class:animated={copyAnimated}
+			on:click={copyClick}
+		>
 			<FontAwesomeIcon icon={faClone} />
 		</button>
 		<button title="Remove" class="deleteButton" on:click={deleteClick}>

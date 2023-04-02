@@ -151,6 +151,15 @@
 	/>
 </div>
 
+<label>
+	<input
+		type="checkbox"
+		bind:checked={settings.sendUsageStatistics}
+	/>
+	Send anonymous usage statistics<br />
+	<span class="damped">(We don't record your calculations)</span>
+</label>
+
 <style>
 	label,
 	.setting {
@@ -184,5 +193,10 @@
 
 	.furtherInfoLink {
 		font-size: 0.9em;
+	}
+
+	.damped {
+		font-size: 0.8em;
+		opacity: 0.8;
 	}
 </style>

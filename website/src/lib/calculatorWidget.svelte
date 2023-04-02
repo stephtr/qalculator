@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
+	import { trackEvent } from '../routes/tracking';
 	import type { Calculator } from './calculator';
 	import { setOption } from './calculatorModule';
 	import {
@@ -63,6 +64,7 @@
 			}
 			return;
 		}
+		trackEvent('calculator', 'submit', submittedByBlur ? 'by blur' : 'by enter');
 		if (submitOnBlur) {
 			calculator.submitCalculation(currentInput);
 			currentInput = '';
