@@ -50,3 +50,9 @@ export function trackEvent(
 	}
 	_paq.push(['trackEvent', ...eventArgs]);
 }
+
+export function updateTrackingEnabled(enable: boolean) {
+	if (process.env.NODE_ENV !== 'development') {
+		trackingEnabled &&= enable;
+	}
+}

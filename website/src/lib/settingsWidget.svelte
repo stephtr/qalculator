@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
-	import { calculatorKey, type CalculatorContext } from './calculatorHost';
-	import { AngleUnit, type Settings } from './settings';
-	import { calculate, setOption } from './calculatorModule';
 	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
 	import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 	import { slide } from 'svelte/transition';
+	import { calculatorKey, type CalculatorContext } from './calculatorHost';
+	import { AngleUnit, type Settings } from './settings';
+	import { calculate, setOption } from './calculatorModule';
+	import { updateTrackingEnabled } from '../routes/tracking';
 
 	export let settings: Settings;
 
@@ -17,6 +18,7 @@
 		if (applySettings) {
 			settings.apply();
 		}
+		updateTrackingEnabled(settings.sendUsageStatistics);
 		setTimeout(() => $updateCurrentResult(), 100);
 	}
 
@@ -166,7 +168,7 @@
 	<input
 		type="checkbox"
 		bind:checked={settings.sendUsageStatistics}
-		on:change={() => settings.save()}
+		on:change={() => update()}
 	/>
 	Send anonymous usage statistics<br />
 	<span class="damped">(We don't record your calculations)</span>
