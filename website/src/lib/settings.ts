@@ -56,6 +56,7 @@ export class Settings {
 			'qalculator-settings',
 			JSON.stringify({
 				angleUnit: this.angleUnit,
+				useUnits: this.useUnits,
 				useUnitPrefixes: this.useUnitPrefixes,
 				useDecimalPoint: this.useDecimalPoint,
 				additionalOptions: this.additionalOptions,

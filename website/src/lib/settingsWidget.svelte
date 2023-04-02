@@ -96,9 +96,12 @@
 	/>
 	Use units<br />
 	{#if settings.useUnits}
-	<span style="color:#BBFFBB">c</span> = <span style="color:#AAFFFF">299 792 458</span> <span style="color:#BBFFBB">m ∕ s</span>
+		<span style="color:#BBFFBB">c</span> =
+		<span style="color:#AAFFFF">299 792 458</span>
+		<span style="color:#BBFFBB">m ∕ s</span>
 	{:else}
-	<span style="color:#BBFFBB">c</span> = <span style="color:#AAFFFF">299 792 458</span>
+		<span style="color:#BBFFBB">c</span> =
+		<span style="color:#AAFFFF">299 792 458</span>
 	{/if}
 </label>
 
@@ -155,6 +158,7 @@
 	<input
 		type="checkbox"
 		bind:checked={settings.sendUsageStatistics}
+		on:change={() => settings.save()}
 	/>
 	Send anonymous usage statistics<br />
 	<span class="damped">(We don't record your calculations)</span>
