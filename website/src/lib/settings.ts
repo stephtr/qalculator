@@ -1,4 +1,4 @@
-import { setOption } from './calculatorModule';
+import { calculate, setOption } from './calculatorModule';
 
 export enum AngleUnit {
 	None = 0,
@@ -80,9 +80,13 @@ export class Settings {
 	}
 
 	apply() {
-		this.getCleanedAdditionalOptions().forEach((option) =>
-			setOption(option),
-		);
+		this.getCleanedAdditionalOptions().forEach((option) => {
+			if (option.includes(':=')) {
+				calculate(option, 500);
+			} else {
+				setOption(option);
+			}
+		});
 
 		setOption(`angle ${+this.angleUnit}`);
 		setOption(`units ${this.useUnits ? 'on' : 'off'}`);

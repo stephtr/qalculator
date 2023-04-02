@@ -2,7 +2,7 @@
 	import { getContext } from 'svelte';
 	import { calculatorKey, type CalculatorContext } from './calculatorHost';
 	import { AngleUnit, type Settings } from './settings';
-	import { setOption } from './calculatorModule';
+	import { calculate, setOption } from './calculatorModule';
 	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
 	import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 	import { slide } from 'svelte/transition';
@@ -27,7 +27,12 @@
 		localAdditionalOptions = settings
 			.getCleanedAdditionalOptions()
 			.map((option) => {
-				const success = setOption(option);
+				let success = true;
+				if (option.includes(':=')) {
+					calculate(option, 500);
+				} else {
+					success = setOption(option);
+				}
 				return `${option}${success ? '' : ' ✗'}`;
 			})
 			.join('\n');
@@ -148,6 +153,9 @@
 	>
 		<FontAwesomeIcon icon={faCircleInfo} />
 	</a><br />
+	<span class="damped">
+		e.g. "base hex" or "customConstant := 1.2345"
+	</span><br />
 	<textarea
 		bind:value={localAdditionalOptions}
 		on:blur={updateAdditionalOptions}
@@ -201,6 +209,7 @@
 
 	.damped {
 		font-size: 0.8em;
+		line-height: 1.1;
 		opacity: 0.8;
 	}
 </style>

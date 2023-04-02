@@ -17,8 +17,10 @@
 		Additional settings using the <a
 			href="https://qalculate.github.io/manual/qalc.html#SETTINGS"
 			target="_blank"
-			rel="noreferrer">qalc syntax</a
-		> are now supported
+			rel="noreferrer"
+		>
+			qalc syntax
+		</a> are now supported. Additionally, custom variables can be defined.
 	</li>
 </ul>
 <p>To try them out, switch to the <a href="/settings">settings</a> page.</p>
