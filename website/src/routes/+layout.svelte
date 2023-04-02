@@ -3,13 +3,20 @@
 	import { writable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
 	import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
-	import { faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
+	import {
+		faArrowRotateRight,
+		faStar,
+	} from '@fortawesome/free-solid-svg-icons';
 	import { Calculator } from '$lib/calculator';
 	import { calculatorKey, type CalculatorContext } from '$lib/calculatorHost';
 	import CalculatorWidget from '$lib/calculatorWidget.svelte';
 	import LoadingIndicator from '$lib/loadingIndicator.svelte';
 	import { config } from '@fortawesome/fontawesome-svg-core';
 	import '@fortawesome/fontawesome-svg-core/styles.css';
+	import {
+		addNewsReadLister,
+		newsAvailable,
+	} from './news/version';
 
 	config.autoAddCss = false;
 
@@ -40,6 +47,8 @@
 		});
 	}
 
+	let newsUpdateAvailable = false;
+
 	if (typeof window !== 'undefined') {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		navigator.serviceWorker?.ready?.then((reg) => {
@@ -66,11 +75,16 @@
 	function touchstart() {
 		isTouchScreen = true;
 	}
+
+	newsUpdateAvailable = newsAvailable();
+	addNewsReadLister(() => {
+		newsUpdateAvailable = false;
+	});
 </script>
 
 <svelte:window on:touchstart={touchstart} />
 
-<div class="content" class:isTouchScreen={isTouchScreen}>
+<div class="content" class:isTouchScreen>
 	<a href="/" class="mainLink"><h1>Qalculator</h1></a>
 	<CalculatorWidget
 		{calculator}
@@ -102,6 +116,14 @@
 		<slot />
 	</div>
 	<footer>
+		<a href="/news">
+			News
+			{#if newsUpdateAvailable}
+				<span class="highlight">
+					<FontAwesomeIcon icon={faStar} />
+				</span>
+			{/if}
+		</a>
 		<a href="/about">About &amp; Imprint</a>
 		<a href="/settings">Settings</a>
 	</footer>
@@ -158,7 +180,7 @@
 		flex-wrap: wrap;
 		gap: 1em;
 		font-size: 1rem;
-		opacity: 0.5;
+		color: #768181;
 		line-height: 1.25;
 		margin: 7px 10px 10px;
 		margin: 7px 10px calc(max(10px, env(safe-area-inset-bottom)));
@@ -179,5 +201,13 @@
 		color: rgba(150, 180, 180);
 		font-size: 0.9em;
 		text-align: center;
+	}
+
+	.highlight {
+		font-size: 0.8em;
+		display: inline-block;
+		transform: translateY(-5px);
+		color: orange;
+		opacity: 0.75;
 	}
 </style>
