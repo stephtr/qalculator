@@ -117,17 +117,25 @@ export class History {
 
 	load() {
 		let savedHistory: string | null = null;
+		let savedHistoryVersion = 0;
 		if (typeof window !== 'undefined') {
-			savedHistory = window.localStorage?.getItem('qalculator-history');
+			savedHistory = window.localStorage.getItem('qalculator-history');
+			const version = window.localStorage.getItem(
+				'qalculator-history-version',
+			);
+			if (version != null) savedHistoryVersion = +version;
 		}
 		if (savedHistory) {
 			this.entries = JSON.parse(savedHistory);
-			this.entries = [
-				...this.entries,
-				...tutorialCalculations.filter(
-					(cTut) => !this.entries.some((c) => c.id === cTut.id),
-				),
-			];
+			if (savedHistoryVersion < 1) {
+				// fill up the history with new tutorial calculations
+				this.entries = [
+					...this.entries,
+					...tutorialCalculations.filter(
+						(cTut) => !this.entries.some((c) => c.id === cTut.id),
+					),
+				];
+			}
 		} else {
 			this.clear();
 		}
@@ -136,7 +144,7 @@ export class History {
 
 	save() {
 		if (typeof window === 'undefined') return;
-		window.localStorage?.setItem(
+		window.localStorage.setItem(
 			'qalculator-history',
 			JSON.stringify(
 				this.entries
@@ -144,6 +152,7 @@ export class History {
 					.map((e) => ({ ...e, severity: null, messages: [] })),
 			),
 		);
+		window.localStorage.setItem('qalculator-history-version', '1');
 	}
 
 	clear() {
