@@ -18,7 +18,9 @@
 	let currentResult = '';
 	export function updateCurrentResult(_: any, ensureResult = false) {
 		const isSetCommand = currentInput.startsWith('set ');
-		if (isSetCommand) {
+		const isAssignment =
+			currentInput.includes(':=') || /^\s*\w+\s*=/.test(currentInput);
+		if (isSetCommand || isAssignment) {
 			currentResult = '';
 			return;
 		}
@@ -27,7 +29,7 @@
 			try {
 				const result = calculator.calculate(
 					currentInput,
-					ensureResult ? 500 : 20,
+					ensureResult ? 500 : 50,
 				);
 				// only show the result if it's not too long
 				// otherwise it could also be a product of an incomplete query
@@ -64,7 +66,11 @@
 			}
 			return;
 		}
-		trackEvent('calculator', 'submit', submittedByBlur ? 'by blur' : 'by enter');
+		trackEvent(
+			'calculator',
+			'submit',
+			submittedByBlur ? 'by blur' : 'by enter',
+		);
 		if (submitOnBlur) {
 			calculator.submitCalculation(currentInput);
 			currentInput = '';
