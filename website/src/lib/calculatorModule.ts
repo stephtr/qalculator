@@ -75,7 +75,8 @@ let Variables: VariableDefinition[] = [];
 export const getVariables = () => Variables;
 
 function getLoadingState(): Promise<void> {
-	if (Module?.calculate) return Promise.resolve();
+	if (typeof Module !== 'undefined' && Module?.calculate)
+		return Promise.resolve();
 	return new Promise((resolve) => {
 		const onLoaded = async () => {
 			// It takes a bit longer for the `calculate` routine to be ready than
