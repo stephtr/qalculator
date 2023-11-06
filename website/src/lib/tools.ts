@@ -17,7 +17,7 @@ export function getOS():
 	if (navigator.userAgent.includes('Linux')) return 'linux';
 }
 
-export function wasmVectorToArray(vector: any) {
+export function wasmVectorToArray<T>(vector: any): T[] {
 	const array = [];
 	for (let i = 0; i < vector.size(); i++) {
 		array.push(vector.get(i));

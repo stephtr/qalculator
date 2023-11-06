@@ -16,6 +16,11 @@ export interface VariableDefinition {
 	aliases: string[];
 }
 
+export interface CurrencyDataset {
+	name: string;
+	value: number;
+}
+
 let Version: number | undefined;
 export function version(): number {
 	if (!Version) Version = Module.version?.() ?? 1;
@@ -45,6 +50,21 @@ export function calculate(
 export function setOption(option: string): boolean {
 	if (version() < 3) return false;
 	return Module.set_option(option);
+}
+
+export function updateCurrencyValues(
+	data: CurrencyDataset[],
+	baseCurrency: string,
+	updateDate: Date,
+): boolean {
+	if (version() < 4) return false;
+	return (
+		Module.updateCurrencyValues(
+			data,
+			baseCurrency,
+			+new Date() - +new Date(updateDate) > 7 * 24 * 3600 * 1000, // 7 days
+		) === 0
+	);
 }
 
 export function info(): string {
@@ -86,14 +106,29 @@ export async function initializeCalculationModule() {
 
 	if (Module.getVariables) {
 		// parse the variables supported by libqalculate
-		const vars = Module.getVariables();
-		Variables = wasmVectorToArray(vars)
-			.map((v: any) => ({
-				name: v.name as string,
-				description: v.description as string,
-				aliases: (v.aliases as string).split('\t'),
-			}))
-			.filter((v) => !['true', 'false', 'undefined'].includes(v.name));
-		vars.delete();
+		const vars = Module.getVariables() as Array<{
+			name: string;
+			description: string;
+			aliases: string[];
+		}>;
+		if (version() < 4) {
+			Variables = wasmVectorToArray<any>(vars)
+				.map((v: any) => ({
+					name: v.name,
+					description: v.description,
+					aliases: v.aliases.split('\t'),
+				}))
+				.filter(
+					(v) =>
+						!['true', 'false', 'undefined'].includes(
+							v.name as string,
+						),
+				);
+			(vars as any).delete();
+		} else {
+			Variables = vars.filter(
+				(v) => !['true', 'false', 'undefined'].includes(v.name),
+			);
+		}
 	}
 }

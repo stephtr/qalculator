@@ -4,10 +4,12 @@
 // eslint-disable-next-line import/no-unresolved
 import { build, files, version } from '$service-worker';
 
+const currencyDataApiUrl = '/api/getCurrencyData';
+
 const worker = self as unknown as ServiceWorkerGlobalScope;
 const FILES = `cache-${version}`;
 
-const toCache = build.concat(files).concat(['/']);
+const toCache = build.concat(files).concat(['/', currencyDataApiUrl]);
 const staticAssets = new Set(toCache);
 
 self.addEventListener('message', async (evt) => {
@@ -68,14 +70,37 @@ worker.addEventListener('fetch', (event) => {
 		url.host === self.location.host && staticAssets.has(url.pathname);
 	const skipBecauseUncached =
 		event.request.cache === 'only-if-cached' && !isStaticAsset;
+	const isCurrencyDataRequest = url.pathname === currencyDataApiUrl;
 
 	if (isHttp && !isDevServerRequest && !skipBecauseUncached) {
-		const cacheOrFetch = async () => {
-			const cachedAsset =
-				isStaticAsset && (await caches.match(event.request));
+		const cachedAssetPromise = isStaticAsset && caches.match(event.request);
 
-			return cachedAsset || fetchAndCache(event.request);
-		};
+		if (isCurrencyDataRequest) {
+			const cacheAndFetchCurrencies = async () => {
+				const fetchedAssetPromise = fetchAndCache(event.request);
+				const cachedAsset = await cachedAssetPromise;
+				if (cachedAsset) {
+					// eslint-disable-next-line @typescript-eslint/no-floating-promises
+					fetchedAssetPromise.then(async (response) => {
+						const currencyData = await response.json();
+						const clients = await worker.clients.matchAll();
+						clients.forEach((client) =>
+							client.postMessage({
+								type: 'updateCurrencyData',
+								data: currencyData,
+							}),
+						);
+					});
+					return cachedAsset;
+				}
+				return fetchedAssetPromise;
+			};
+			event.respondWith(cacheAndFetchCurrencies());
+			return;
+		}
+
+		const cacheOrFetch = async () =>
+			(await cachedAssetPromise) || fetchAndCache(event.request);
 		event.respondWith(cacheOrFetch());
 	}
 });

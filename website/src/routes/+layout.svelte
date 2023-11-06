@@ -60,13 +60,20 @@
 				});
 			});
 		});
+
 		navigator.serviceWorker?.addEventListener(
 			'message',
-			(event: MessageEvent<{ type: string }>) => {
-				if (event.data?.type === 'reload') {
-					window.location.reload();
+			(event: MessageEvent<{ type: string, data?: any }>) => {
+				switch (event.data?.type) {
+					case 'reload': window.location.reload(); break;
+					case 'updateCurrencyData': calculator.updateCurrencyData(event.data?.data); break;
+					default: throw new Error(`Unknown message ${event.data?.type}`);
 				}
 			},
+		);
+
+		fetch('/api/getCurrencyData').then(async (response) =>
+			calculator.updateCurrencyData(await response.json())
 		);
 	}
 	let isTouchScreen = false;
@@ -85,7 +92,7 @@
 <svelte:window on:touchstart={touchstart} />
 
 <div class="content" class:isTouchScreen>
-	<a href="/" class="mainLink"><h1>Qalculator</h1></a>
+	<a href="/" class="mainLink"><h1>Qalculator.xyz</h1></a>
 	<CalculatorWidget
 		{calculator}
 		bind:selectCalculation={$selectCalculation}
@@ -109,7 +116,7 @@
 			>
 				<p class="update">
 					<FontAwesomeIcon icon={faArrowRotateRight} />
-					An update is available, click to restart Qalculator.
+					An update is available, click to restart Qalculator.xyz.
 				</p>
 			</button>
 		{/if}

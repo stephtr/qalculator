@@ -2,6 +2,7 @@ import {
 	calculate,
 	initializeCalculationModule,
 	setOption,
+	updateCurrencyValues,
 } from './calculatorModule';
 import { History } from './history';
 import { Settings } from './settings';
@@ -17,6 +18,12 @@ export interface Calculation {
 	severity: Severity | null;
 	isBookmarked?: boolean;
 	bookmarkName?: string;
+}
+
+export interface CurrencyData {
+	base: string;
+	date: string;
+	rates: Record<string, string>;
 }
 
 /** Parses the status message coming from Web Assembly */
@@ -102,7 +109,7 @@ export class Calculator {
 		};
 	}
 
-	private pendingCalculationOnceLoaded: string | null = null;
+	#pendingCalculationOnceLoaded: string | null = null;
 
 	submitCalculation(input: string) {
 		const isSetCommand = input.startsWith('set ');
@@ -110,7 +117,7 @@ export class Calculator {
 			this.submittedListeners.forEach((l) => l(input));
 		}
 		if (!this.isLoaded) {
-			this.pendingCalculationOnceLoaded = input;
+			this.#pendingCalculationOnceLoaded = input;
 			return;
 		}
 
@@ -121,6 +128,23 @@ export class Calculator {
 		}
 	}
 
+	#pendingCurrencyData: CurrencyData | null = null;
+
+	updateCurrencyData(data: CurrencyData) {
+		if (!this.isLoaded) {
+			this.#pendingCurrencyData = data;
+			return;
+		}
+		updateCurrencyValues(
+			Object.entries(data.rates).map(([name, value]) => ({
+				name,
+				value,
+			})),
+			data.base,
+			new Date(data.date),
+		);
+	}
+
 	constructor() {
 		if (typeof window !== 'undefined') {
 			// eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -129,9 +153,14 @@ export class Calculator {
 
 				this.settings.apply();
 
-				if (this.pendingCalculationOnceLoaded) {
-					this.submitCalculation(this.pendingCalculationOnceLoaded);
-					this.pendingCalculationOnceLoaded = null;
+				if (this.#pendingCurrencyData) {
+					this.updateCurrencyData(this.#pendingCurrencyData);
+					this.#pendingCurrencyData = null;
+				}
+
+				if (this.#pendingCalculationOnceLoaded) {
+					this.submitCalculation(this.#pendingCalculationOnceLoaded);
+					this.#pendingCalculationOnceLoaded = null;
 				}
 				this.loadedListeners.forEach((l) => l());
 			});

@@ -41,41 +41,73 @@ Calculation calculate(std::string calculation, int timeout = 500, int optionFlag
 	return ret;
 }
 
-struct VariableInfo
+val getVariables()
 {
-	std::string name;
-	std::string description;
-	std::string aliases;
-};
-
-std::vector<VariableInfo> getVariables()
-{
-	std::vector<VariableInfo> variables;
+	auto variables = val::array();
 	for (auto &variable : calc.variables)
 	{
 		if (!variable->isKnown() || variable->isHidden())
 			continue;
 
-		VariableInfo info;
-		info.name = variable->preferredDisplayName(true, true).name;
-		info.description = variable->title(false, true);
+		auto info = val::object();
+		info.set("name", variable->preferredDisplayName(true, true).name);
+		info.set("description", variable->title(false, true));
 		auto nameCount = variable->countNames();
+		auto aliases = val::array();
 		if (nameCount < 1)
 		{
-			info.aliases = variable->preferredDisplayName(true, true).name;
+			aliases.call<void>("push", variable->preferredDisplayName(true, true).name);
 		}
 		else
 		{
 			for (size_t i = 1; i <= nameCount; i++)
 			{
-				info.aliases += variable->getName(i).name;
-				if (i < nameCount)
-					info.aliases += "\t";
+				aliases.call<void>("push", variable->getName(i).name);
 			}
 		}
-		variables.push_back(info);
+		info.set("aliases", aliases);
+		variables.call<void>("push", info);
 	}
 	return variables;
+}
+
+int updateCurrencyValues(const val &currencyData, std::string baseCurrency, bool showWarning)
+{
+	int errorCode = 0;
+
+	auto u1 = CALCULATOR->getActiveUnit(baseCurrency);
+	if (u1 != calc.u_euro)
+	{
+		return 1;
+	}
+
+	for (int i = 0; i < currencyData["length"].as<int>(); i++)
+	{
+		emscripten::val data = currencyData[i];
+		auto name = data["name"].as<std::string>();
+		auto value = data["value"].as<std::string>();
+		auto u2 = calculator->getActiveUnit(name);
+		if (!u2)
+		{
+			u2 = calc.addUnit(new AliasUnit(_("Currency"), name, "", "", "", calc.u_euro, "1", 1, "", false, true));
+		}
+		else if (!u2->isCurrency())
+		{
+			errorCode = 2;
+			continue;
+		}
+
+		((AliasUnit *)u2)->setBaseUnit(u1);
+		((AliasUnit *)u2)->setExpression(value);
+		u2->setApproximate();
+		u2->setPrecision(-2);
+		u2->setChanged(false);
+	}
+
+	calc.setExchangeRatesWarningEnabled(showWarning);
+	calc.loadGlobalCurrencies();
+
+	return errorCode;
 }
 
 int main()
@@ -94,12 +126,12 @@ int main()
 
 std::string info()
 {
-	return "libqalculate by Hanna Knutsson, compiled by Stephan Troyer";
+	return "libqalculate by Hanna Knutsson, wrapped & compiled by Stephan Troyer";
 }
 
 int version()
 {
-	return 3;
+	return 4;
 }
 
 EMSCRIPTEN_BINDINGS(Calculator)
@@ -109,6 +141,7 @@ EMSCRIPTEN_BINDINGS(Calculator)
 	function("version", &version);
 	function("getVariables", &getVariables);
 	function("set_option", &set_option);
+	function("updateCurrencyValues", &updateCurrencyValues);
 }
 
 EMSCRIPTEN_BINDINGS(calculation)
@@ -118,14 +151,4 @@ EMSCRIPTEN_BINDINGS(calculation)
 		.property("input", &Calculation::input)
 		.property("output", &Calculation::output)
 		.property("messages", &Calculation::messages);
-}
-
-EMSCRIPTEN_BINDINGS(variableInfo)
-{
-	class_<VariableInfo>("VariableInfo")
-		.constructor<>()
-		.property("name", &VariableInfo::name)
-		.property("description", &VariableInfo::description)
-		.property("aliases", &VariableInfo::aliases);
-	register_vector<VariableInfo>("vector<VariableInfo>");
 }

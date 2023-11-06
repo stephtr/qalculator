@@ -8,6 +8,12 @@
 
 <h2>News</h2>
 
+<h3>2023-11-05 Currency translation</h3>
+<ul>
+	<li>Currency translations are now supported.</li>
+	<li><a href="https://github.com/Qalculate/libqalculate/">libqalculate</a> (the library behind this app) got updated</li>
+</ul>
+
 <h3>2023-04-02 Additional settings</h3>
 <ul>
 	<li>
