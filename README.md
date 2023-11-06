@@ -1,4 +1,4 @@
-# Qalculator
+# Qalculator.xyz
 
 <a href="https://www.microsoft.com/store/productId/9P4866X24PD3">
 	<img src="website/static/badge-microsoft-store.svg" alt="Get it from Microsoft" height="50" />

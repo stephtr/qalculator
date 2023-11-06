@@ -6,7 +6,7 @@
 		.replace('DELETE', '');
 </script>
 
-<h2>About Qalculator</h2>
+<h2>About Qalculator.xyz</h2>
 <p>by Stephan Troyer</p>
 <img src="/logo.png" alt="" width="150" />
 

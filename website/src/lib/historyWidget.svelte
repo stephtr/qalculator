@@ -79,7 +79,7 @@
 {#if appBanner}
 	<a href={appBanner.link} class="calloutApp response" transition:slide>
 		<img src={appBanner.imageUrl} alt="Download app" />
-		<span>Download the free Qalculator app</span>
+		<span>Download the free Qalculator.xyz app</span>
 	</a>
 {/if}
 <div>
