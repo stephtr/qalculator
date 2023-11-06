@@ -48,6 +48,7 @@ function parseCalculationMessages(messagesString: string): {
 
 export class Calculator {
 	history = new History();
+
 	settings = new Settings();
 
 	#isLoaded = false;
