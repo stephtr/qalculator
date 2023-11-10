@@ -170,7 +170,7 @@
 		padding: 20px 0;
 		padding: max(min(20px, 2vh), env(safe-area-inset-top)) 0 min(20px, 2vh);
 		font-size: 3.2rem;
-		font-size: max(min(3.2rem, min(8vh, 12vw)), 1.5rem);
+		font-size: max(min(3.2rem, min(8vh, 10vw)), 1.5rem);
 	}
 
 	.slot {
