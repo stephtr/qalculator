@@ -178,23 +178,26 @@
 		offsetX = 0;
 	}
 
+	function swipeCopyClicked() {
+		shiftX = 0;
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		copyClick();
+	}
+
 	function touchcancel() {
 		shiftX = 0;
 		offsetX = 0;
 	}
 </script>
 
-<div
-	class="responseHost"
-	bind:this={hostElement}
-	on:touchstart={touchstart}
-	on:touchmove={touchmove}
-	on:touchend={touchend}
-	on:touchcancel={touchcancel}
->
+<div class="responseHost" bind:this={hostElement}>
 	<button
 		class="response"
 		on:mousedown={() => onabouttoselect()}
+		on:touchstart={touchstart}
+		on:touchmove={touchmove}
+		on:touchend={touchend}
+		on:touchcancel={touchcancel}
 		on:click={() => {
 			onselectcalculation(calculation.rawInput);
 			trackEvent('history', 'select');
@@ -256,7 +259,8 @@
 		<div
 			class="swipeAction copy"
 			class:selected={copySwipeSelected}
-			on:touchstart={() => onabouttoselect()}
+			on:touchstart|preventDefault={() => {}}
+			on:touchend={swipeCopyClicked}
 		>
 			<FontAwesomeIcon icon={faClone} />
 		</div>
