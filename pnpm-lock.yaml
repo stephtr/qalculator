@@ -96,6 +96,9 @@ importers:
       '@sveltejs/kit':
         specifier: ^1.3.10
         version: 1.5.0(svelte@3.55.1)(vite@4.1.1)
+      '@vitejs/plugin-basic-ssl':
+        specifier: ^1.0.2
+        version: 1.0.2(vite@4.1.1)
       svelte-check:
         specifier: ^3.0.3
         version: 3.0.3(svelte@3.55.1)
@@ -864,6 +867,15 @@ packages:
     dependencies:
       '@typescript-eslint/types': 5.51.0
       eslint-visitor-keys: 3.3.0
+    dev: true
+
+  /@vitejs/plugin-basic-ssl@1.0.2(vite@4.1.1):
+    resolution: {integrity: sha512-DKHKVtpI+eA5fvObVgQ3QtTGU70CcCnedalzqmGSR050AzKZMdUzgC8KmlOneHWH8dF2hJ3wkC9+8FDVAaDRCw==}
+    engines: {node: '>=14.6.0'}
+    peerDependencies:
+      vite: ^3.0.0 || ^4.0.0 || ^5.0.0
+    dependencies:
+      vite: 4.1.1
     dev: true
 
   /@vscode/emmet-helper@2.8.6:

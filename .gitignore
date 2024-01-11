@@ -12,3 +12,4 @@ dist/
 build/
 .svelte-kit/
 *.local
+.DS_Store
