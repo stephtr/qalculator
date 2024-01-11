@@ -256,7 +256,7 @@
 		<div
 			class="swipeAction copy"
 			class:selected={copySwipeSelected}
-			on:mousedown={() => onabouttoselect()}
+			on:touchstart={() => onabouttoselect()}
 		>
 			<FontAwesomeIcon icon={faClone} />
 		</div>
