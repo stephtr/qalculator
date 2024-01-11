@@ -1,4 +1,4 @@
-const newsVersion = '2023-11-05';
+const newsVersion = '2024-01-11';
 
 let newsReadListener: Array<() => void> = [];
 

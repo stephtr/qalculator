@@ -8,6 +8,11 @@
 
 <h2>News</h2>
 
+<h3>2024-01-11 iOS: Slide-to-copy</h3>
+<ul>
+	<li>Slide-to-copy is now working on iOS, with an additional click though.<br /><i>Thanks to Maria!</i></li>
+</ul>
+
 <h3>2023-11-05 Currency translation</h3>
 <ul>
 	<li>Currency translations are now supported.</li>

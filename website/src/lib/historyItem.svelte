@@ -25,15 +25,21 @@
 	}
 
 	let copyAnimated = false;
-	function copyClick() {
-		navigator.clipboard.writeText(
-			decodeHTMLentities(calculation.output.replace(/<[^>]*>/g, ''))!,
-		);
+	async function copyClick() {
+		const textForClipboard = decodeHTMLentities(
+			calculation.output.replace(/<[^>]*>/g, ''),
+		)!;
+		try {
+			await navigator.clipboard.writeText(textForClipboard);
+		} catch (e) {
+			return false;
+		}
 		copyAnimated = true;
 		setTimeout(() => {
 			copyAnimated = false;
 		}, 1000);
 		trackEvent('history', 'copy');
+		return true;
 	}
 
 	function deleteClick() {
@@ -49,6 +55,7 @@
 	}
 
 	function renameClick() {
+		// eslint-disable-next-line no-alert
 		const title = prompt(
 			'Enter a title for the calculation:',
 			calculation.bookmarkName,
@@ -138,15 +145,22 @@
 			shiftX < -swipeButtonSize / 2 && !renameSwipeSelected;
 	}
 
-	function touchend(evt: TouchEvent) {
+	async function touchend(evt: TouchEvent) {
 		if (filterTouchList(evt.touches).length > 0) {
 			// subtracting offsetX takes care of the shift in mean position when adding a new touch point
 			startX = getMeanXPos(evt.touches) - offsetX;
 			return;
 		}
 		if (copySwipeSelected) {
+			const success = await copyClick();
+			if (!success) {
+				// Unfortunately, Safari on iOS doesn't allow swipe-to-copy.
+				// In this case, let's therefore leave the swipe menu open
+				// for an additional click on the copy button.
+				shiftX = swipeButtonSize;
+				return;
+			}
 			copySwipeSelected = false;
-			copyClick();
 		}
 		if (deleteSwipeSelected) {
 			deleteSwipeSelected = false;
@@ -239,7 +253,11 @@
 		</button>
 	</div>
 	<div class="swipeContainer left">
-		<div class="swipeAction copy" class:selected={copySwipeSelected}>
+		<div
+			class="swipeAction copy"
+			class:selected={copySwipeSelected}
+			on:mousedown={() => onabouttoselect()}
+		>
 			<FontAwesomeIcon icon={faClone} />
 		</div>
 		<div class="swipeAction delete" class:selected={deleteSwipeSelected}>
