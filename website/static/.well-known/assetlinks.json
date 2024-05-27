@@ -1,8 +1,12 @@
-[{
-	"relation": ["delegate_permission/common.handle_all_urls"],
-	"target": {
-	  "namespace": "android_app",
-	  "package_name": "xyz.qalculator.twa",
-	  "sha256_cert_fingerprints": ["2F:36:ED:4F:3A:3D:1A:96:49:26:65:4E:24:0E:A1:E2:22:26:15:AB:6A:23:C9:93:C5:D7:65:96:01:AB:A6:40"]
+[
+	{
+		"relation": ["delegate_permission/common.handle_all_urls"],
+		"target": {
+			"namespace": "android_app",
+			"package_name": "xyz.qalculator.twa",
+			"sha256_cert_fingerprints": [
+				"1F:CD:D4:6F:5B:35:34:68:4F:44:55:3B:60:C3:D2:22:20:6D:0E:0E:DB:80:31:92:CE:F7:E3:35:3D:29:CF:7B"
+			]
+		}
 	}
-  }]
+]
