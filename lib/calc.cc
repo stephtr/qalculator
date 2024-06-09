@@ -120,7 +120,6 @@ int main()
 	printops.indicate_infinite_series = true;
 	evalops.parse_options.angle_unit = ANGLE_UNIT_RADIANS;
 	evalops.parse_options.unknowns_enabled = false;
-	evalops.parse_options.limit_implicit_multiplication = true;
 	return 0;
 }
 

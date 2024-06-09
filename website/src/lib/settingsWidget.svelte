@@ -144,6 +144,19 @@
 	{/if}
 </label>
 
+<label>
+	<input
+		type="checkbox"
+		bind:checked={settings.limitImplicitMultiplications}
+		on:change={() => update()}
+	/>
+	Limit implicit multiplication<br />
+	<span class="damped">
+		Disables implicit multiplication, as used in units like
+	</span>
+	<span style="color:#BBFFBB">kWh</span>
+</label>
+
 <div class="setting">
 	Additional settings (one per line)
 	<a

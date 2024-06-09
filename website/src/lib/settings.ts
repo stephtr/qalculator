@@ -20,6 +20,8 @@ export class Settings {
 
 	useDecimalPoint = false;
 
+	limitImplicitMultiplications = false;
+
 	additionalOptions = '';
 
 	sendUsageStatistics = true;
@@ -46,6 +48,8 @@ export class Settings {
 		this.useUnitPrefixes = settings.useUnitPrefixes ?? true;
 		this.useDecimalPoint =
 			settings.useDecimalPoint ?? getLocaleDecimalPoint() === '.';
+		this.limitImplicitMultiplications =
+			settings.limitImplicitMultiplications ?? false;
 		this.additionalOptions = settings.additionalOptions ?? false;
 		this.sendUsageStatistics = settings.sendUsageStatistics ?? true;
 	}
@@ -59,6 +63,7 @@ export class Settings {
 				useUnits: this.useUnits,
 				useUnitPrefixes: this.useUnitPrefixes,
 				useDecimalPoint: this.useDecimalPoint,
+				limitImplicitMultiplications: this.limitImplicitMultiplications,
 				additionalOptions: this.additionalOptions,
 				sendUsageStatistics: this.sendUsageStatistics,
 			}),
@@ -93,6 +98,11 @@ export class Settings {
 		setOption(`varunits ${this.useUnits ? 'on' : 'off'}`);
 		setOption(`decimal comma ${this.useDecimalPoint ? 'off' : 'on'}`);
 		setOption(`prefix ${this.useUnitPrefixes ? 'on' : 'off'}`);
+		setOption(
+			`limit implicit multiplication ${
+				this.limitImplicitMultiplications ? 'on' : 'off'
+			}`,
+		);
 	}
 
 	constructor() {
