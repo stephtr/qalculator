@@ -7,8 +7,9 @@ export async function GET({ platform }): Promise<Response> {
 	}
 
 	if (platform?.env.CACHE) {
-		const cachedEntry = await platform.env.CACHE.get('currencyData');
-		console.log(`found cache entry from ${cachedEntry.timestamp}`);
+		const cachedEntry = JSON.parse(
+			(await platform.env.CACHE.get('currencyData')) as string,
+		);
 		if (cachedEntry.timestamp > Date.now() - 12 * 3600 * 1000) {
 			return new Response(JSON.stringify(cachedEntry.data), {
 				headers: {
@@ -18,8 +19,6 @@ export async function GET({ platform }): Promise<Response> {
 				},
 			});
 		}
-	} else {
-		console.log('no cache available');
 	}
 
 	const resp = await fetch(
@@ -47,10 +46,13 @@ export async function GET({ platform }): Promise<Response> {
 	} as CurrencyData;
 
 	if (platform?.env.CACHE) {
-		await platform.env.CACHE.put('currencyData', {
-			timestamp: Date.now(),
-			data: body,
-		});
+		await platform.env.CACHE.put(
+			'currencyData',
+			JSON.stringify({
+				timestamp: Date.now(),
+				data: body,
+			}),
+		);
 	}
 
 	return new Response(JSON.stringify(body), {
