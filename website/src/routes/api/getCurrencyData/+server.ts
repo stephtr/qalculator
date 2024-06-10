@@ -1,15 +1,23 @@
 import type { CurrencyData } from '$lib/calculator';
 import { EXCHANGERATE_KEY } from '$env/static/private';
 
-export async function GET(): Promise<Response> {
+interface Platform {
+	env: {
+		CACHE: any | null;
+	};
+}
+
+export async function GET({
+	platform,
+}: {
+	platform: Platform;
+}): Promise<Response> {
 	if (!EXCHANGERATE_KEY) {
 		throw new Error('EXCHANGERATE_KEY not set');
 	}
 
-	if (process.env.CACHE) {
-		const cachedEntry = await (process.env.CACHE as any).get(
-			'currencyData',
-		);
+	if (platform.env.CACHE) {
+		const cachedEntry = await platform.env.CACHE.get('currencyData');
 		if (cachedEntry.timestamp > Date.now() - 12 * 3600 * 1000) {
 			return new Response(JSON.stringify(cachedEntry.data), {
 				headers: {
@@ -45,8 +53,8 @@ export async function GET(): Promise<Response> {
 		),
 	} as CurrencyData;
 
-	if (process.env.CACHE) {
-		await (process.env.CACHE as any).put('currencyData', {
+	if (platform.env.CACHE) {
+		await platform.env.CACHE.put('currencyData', {
 			timestamp: Date.now(),
 			data: body,
 		});
