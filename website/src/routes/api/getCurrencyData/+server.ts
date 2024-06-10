@@ -8,6 +8,7 @@ export async function GET(): Promise<Response> {
 
 	const resp = await fetch(
 		`http://api.exchangerate.host/live?source=EUR&access_key=${EXCHANGERATE_KEY}`,
+		{ cache: 'force-cache', next: { revalidate: 12 * 3600 } },
 	);
 	if (!resp.ok)
 		throw new Error(`error fetching currency data: ${resp.statusText}`);
@@ -15,7 +16,9 @@ export async function GET(): Promise<Response> {
 	const data = await resp.json();
 
 	const body = {
-		date: new Date(data.timestamp * 1000 - 10*24*3600*1000).toISOString().split('T')[0],
+		date: new Date(data.timestamp * 1000 - 10 * 24 * 3600 * 1000)
+			.toISOString()
+			.split('T')[0],
 		base: data.source,
 		rates: Object.fromEntries<string>(
 			Object.entries(data.quotes as Record<string, string>).map(
