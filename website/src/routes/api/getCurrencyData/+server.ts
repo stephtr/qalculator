@@ -1,23 +1,14 @@
 import type { CurrencyData } from '$lib/calculator';
 import { EXCHANGERATE_KEY } from '$env/static/private';
 
-interface Platform {
-	env: {
-		CACHE: any | null;
-	};
-}
-
-export async function GET({
-	platform,
-}: {
-	platform: Platform;
-}): Promise<Response> {
+export async function GET({ platform }): Promise<Response> {
 	if (!EXCHANGERATE_KEY) {
 		throw new Error('EXCHANGERATE_KEY not set');
 	}
 
-	if (platform.env.CACHE) {
+	if (platform?.env.CACHE) {
 		const cachedEntry = await platform.env.CACHE.get('currencyData');
+		console.log(`found cache entry from ${cachedEntry.timestamp}`);
 		if (cachedEntry.timestamp > Date.now() - 12 * 3600 * 1000) {
 			return new Response(JSON.stringify(cachedEntry.data), {
 				headers: {
@@ -27,6 +18,8 @@ export async function GET({
 				},
 			});
 		}
+	} else {
+		console.log('no cache available');
 	}
 
 	const resp = await fetch(
@@ -53,7 +46,7 @@ export async function GET({
 		),
 	} as CurrencyData;
 
-	if (platform.env.CACHE) {
+	if (platform?.env.CACHE) {
 		await platform.env.CACHE.put('currencyData', {
 			timestamp: Date.now(),
 			data: body,
