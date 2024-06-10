@@ -8,7 +8,8 @@ export async function GET(): Promise<Response> {
 
 	const resp = await fetch(
 		`http://api.exchangerate.host/live?source=EUR&access_key=${EXCHANGERATE_KEY}`,
-		{ cache: 'force-cache', next: { revalidate: 12 * 3600 } },
+		// 'force-cache' is not yet supported for Cloudflare Pages
+		{ /* cache: 'force-cache', */ next: { revalidate: 12 * 3600 } },
 	);
 	if (!resp.ok)
 		throw new Error(`error fetching currency data: ${resp.statusText}`);
