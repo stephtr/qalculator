@@ -78,8 +78,8 @@ worker.addEventListener('fetch', (event) => {
 
 	if (isCurrencyDataRequest) {
 		const cacheAndFetchCurrencies = async () => {
-			const cachedAsset = await cachedAssetPromise;
 			const fetchedAssetPromise = fetchAndCache(event.request);
+			const cachedAsset = await cachedAssetPromise;
 			if (!cachedAsset) return fetchedAssetPromise;
 			// eslint-disable-next-line @typescript-eslint/no-floating-promises
 			fetchedAssetPromise.then(async (response) => {
