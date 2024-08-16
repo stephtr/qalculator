@@ -2,10 +2,6 @@ import type { CurrencyData } from '$lib/calculator';
 import { EXCHANGERATE_KEY } from '$env/static/private';
 
 export async function GET({ platform }): Promise<Response> {
-	if (!EXCHANGERATE_KEY) {
-		throw new Error('EXCHANGERATE_KEY not set');
-	}
-
 	if (platform?.env.CACHE) {
 		const cachedEntry = JSON.parse(
 			(await platform.env.CACHE.get('currencyData')) as string,
@@ -21,29 +17,41 @@ export async function GET({ platform }): Promise<Response> {
 		}
 	}
 
-	const resp = await fetch(
-		`http://api.exchangerate.host/live?source=EUR&access_key=${EXCHANGERATE_KEY}`,
-	);
-	if (!resp.ok)
-		throw new Error(`error fetching currency data: ${resp.statusText}`);
+	let body: CurrencyData = {
+		date: new Date().toISOString(),
+		base: 'EUR',
+		rates: {},
+	};
 
-	const data = await resp.json();
+	if (!EXCHANGERATE_KEY) {
+		// eslint-disable-next-line no-console
+		console.warn('Warning: No EXCHANGERATE_KEY defined');
+	} else {
+		const resp = await fetch(
+			`http://api.exchangerate.host/live?source=EUR&access_key=${EXCHANGERATE_KEY}`,
+		);
+		if (!resp.ok)
+			throw new Error(`error fetching currency data: ${resp.statusText}`);
 
-	if (!data.success) {
-		throw new Error(data.error.info as string);
-	}
+		const data = await resp.json();
 
-	const body = {
-		date: new Date(data.timestamp * 1000 - 10 * 24 * 3600 * 1000)
-			.toISOString()
-			.split('T')[0],
-		base: data.source,
-		rates: Object.fromEntries<string>(
-			Object.entries(data.quotes as Record<string, string>).map(
-				([name, value]) => [name.substring(3), (1 / +value).toString()],
+		if (!data.success) {
+			throw new Error(data.error.info as string);
+		}
+
+		body = {
+			date: new Date(data.timestamp * 1000).toISOString(),
+			base: data.source,
+			rates: Object.fromEntries<string>(
+				Object.entries(data.quotes as Record<string, string>).map(
+					([name, value]) => [
+						name.substring(3),
+						(1 / +value).toString(),
+					],
+				),
 			),
-		),
-	} as CurrencyData;
+		};
+	}
 
 	if (platform?.env.CACHE) {
 		await platform.env.CACHE.put(

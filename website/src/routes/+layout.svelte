@@ -63,18 +63,36 @@
 
 		navigator.serviceWorker?.addEventListener(
 			'message',
-			(event: MessageEvent<{ type: string, data?: any }>) => {
+			(event: MessageEvent<{ type: string; data?: any }>) => {
 				switch (event.data?.type) {
-					case 'reload': window.location.reload(); break;
-					case 'updateCurrencyData': calculator.updateCurrencyData(event.data?.data); break;
-					default: throw new Error(`Unknown message ${event.data?.type}`);
+					case 'reload':
+						window.location.reload();
+						break;
+					case 'updateCurrencyData':
+						if (!event.data) return;
+						const timeDiff =
+							Date.now() - +new Date(event.data.data.date);
+						console.log(
+							`Updating currency rates from message ${
+								timeDiff / 1000
+							} s ago`,
+						);
+						calculator.updateCurrencyData(event.data?.data);
+						break;
+					default:
+						throw new Error(`Unknown message ${event.data?.type}`);
 				}
 			},
 		);
 
-		fetch('/api/getCurrencyData').then(async (response) =>
-			calculator.updateCurrencyData(await response.json())
-		);
+		fetch('/api/getCurrencyData').then(async (response) => {
+			const json = await response.json();
+			const timeDiff = Date.now() - +new Date(json.date);
+			console.log(
+				`Updating currency rates from fetch ${timeDiff / 1000} s ago`,
+			);
+			calculator.updateCurrencyData(json);
+		});
 	}
 	let isTouchScreen = false;
 	function touchstart() {
