@@ -130,7 +130,13 @@ export class Calculator {
 
 	#pendingCurrencyData: CurrencyData | null = null;
 
+	#lastCurrencyUpdateDate: number = 0;
+
 	updateCurrencyData(data: CurrencyData) {
+		const newDate = +new Date(data.date);
+		if (this.#lastCurrencyUpdateDate >= newDate) return;
+		this.#lastCurrencyUpdateDate = newDate;
+
 		if (!this.isLoaded) {
 			this.#pendingCurrencyData = data;
 			return;
