@@ -47,7 +47,7 @@ jobs:
 
             - name: Setup dependencies
               run: |
-                  sudo apt install build-essential lzip binutils autoconf intltool libtool automake lbzip2 lzip
+                  sudo apt install -y build-essential lzip binutils autoconf intltool libtool automake lbzip2 lzip
                   mkdir -p ~/opt/src
                   cd ~/opt/src
 
@@ -81,7 +81,9 @@ jobs:
                   tar xf libqalculate-${LIBQALCULATE_VERSION}.tar.gz
                   cd libqalculate-${LIBQALCULATE_VERSION}
                   # the following command is supposed to fail, since it's also running the configure script
-                  ./autogen.sh || true
+                  set +e
+                  ./autogen.sh
+                  set -e
                   sed -i 's/PKG_CHECK_MODULES(LIBCURL, libcurl)/#PKG_CHECK_MODULES(LIBCURL, libcurl)/' configure
                   sed -i 's/PKG_CHECK_MODULES(ICU, icu-uc)/#PKG_CHECK_MODULES(ICU, icu-uc)/' configure
                   sed -i 's/PKG_CHECK_MODULES(LIBXML, libxml-2.0/#PKG_CHECK_MODULES(LIBXML, libxml-2.0/' configure
