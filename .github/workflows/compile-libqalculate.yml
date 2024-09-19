@@ -23,19 +23,6 @@ jobs:
             - name: Checkout 🛎
               uses: actions/checkout@v4
 
-            - name: Setup emsdk cache
-              id: cache-system-libraries
-              uses: actions/cache@v2
-              with:
-                  path: ${{env.EM_CACHE_FOLDER}}
-                  key: ${{env.EM_VERSION}}-${{ runner.os }}
-
-            - name: Setup emsdk
-              uses: mymindstorm/setup-emsdk@v14
-              with:
-                  version: ${{env.EM_VERSION}}
-                  actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
-
             - name: Setup dependency cache
               id: cache-dependencies
               uses: actions/cache@v2
@@ -43,7 +30,22 @@ jobs:
                   path: |
                       ~/opt/lib
                       ~/opt/include
-                  key: ${{env.LIBQALCULATE_VERSION}}-gmp${{env.GMP_VERSION}}-mpfr${{env.MPFR_VERSION}}-libxml2${{env.LIBXML2_VERSION}}-em${{env.EM_VERSION}}-${{ runner.os }}
+                  key: a${{env.LIBQALCULATE_VERSION}}-gmp${{env.GMP_VERSION}}-mpfr${{env.MPFR_VERSION}}-libxml2${{env.LIBXML2_VERSION}}-em${{env.EM_VERSION}}-${{ runner.os }}
+
+            - name: Setup emsdk cache
+              if: steps.cache-dependencies.outputs.cache-hit != 'true'
+              id: cache-system-libraries
+              uses: actions/cache@v2
+              with:
+                  path: ${{env.EM_CACHE_FOLDER}}
+                  key: ${{env.EM_VERSION}}-${{ runner.os }}
+
+            - name: Setup emsdk
+              if: steps.cache-dependencies.outputs.cache-hit != 'true'
+              uses: mymindstorm/setup-emsdk@v14
+              with:
+                  version: ${{env.EM_VERSION}}
+                  actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
 
             - name: Setup dependencies
               if: steps.cache-dependencies.outputs.cache-hit != 'true'
