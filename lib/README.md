@@ -42,7 +42,7 @@ cd ..
 
 git clone https://github.com/Qalculate/libqalculate.git
 cd libqalculate
-# the following command is supposed to fail, since it's also running the configure script
+export NOCONFIGURE=1
 ./autogen.sh
 
 sed -i 's/PKG_CHECK_MODULES(LIBCURL, libcurl)/#PKG_CHECK_MODULES(LIBCURL, libcurl)/' configure
