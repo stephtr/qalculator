@@ -8,6 +8,10 @@ on:
             - libqalculate-compile
 
 env:
+    GMP_VERSION: 6.3.0
+    MPFR_VERSION: 4.2.1
+    LIBXML2_VERSION: 2.9.12
+    LIBQALCULATE_VERSION: 5.2.0
     EM_VERSION: 3.1.67
     EM_CACHE_FOLDER: 'emsdk-cache'
 
@@ -32,47 +36,43 @@ jobs:
                   version: ${{env.EM_VERSION}}
                   actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
 
-            - name: Install dependencies
-              uses: awalsh128/cache-apt-pkgs-action@latest
-              with:
-                  packages: build-essential lzip binutils autoconf intltool libtool automake lbzip2 lzip
-                  version: 1.0
-
             - name: Setup dependencies
               run: |
+                  sudo apt install build-essential lzip binutils autoconf intltool libtool automake lbzip2 lzip
                   mkdir -p ~/opt/src
                   cd ~/opt/src
 
-                  wget https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.lz
-                  tar xf gmp-6.3.0.tar.lz
-                  cd gmp-6.3.0
+                  wget https://ftp.gnu.org/gnu/gmp/gmp-${GMP_VERSION}.tar.lz -O gmp.tar.lz
+                  tar xf gmp.tar.lz
+                  cd gmp
                   emconfigure ./configure --disable-assembly --host none --enable-cxx --prefix=${HOME}/opt # no, the "none" host is not obsolete.
                   make
                   make install
                   cd ..
 
-                  wget https://ftp.gnu.org/gnu/mpfr/mpfr-4.2.1.tar.xz # if not found, use a newer version
+                  wget https://ftp.gnu.org/gnu/mpfr/mpfr-${MPFR_VERSION}.tar.xz -O mpfr.tar.xz
                   # wget https://www.mpfr.org/mpfr-current/allpatches # if available
-                  tar xf mpfr-4.2.1.tar.xz
-                  cd mpfr-4.2.1
+                  tar xf mpfr.tar.xz
+                  cd mpfr
                   emconfigure ./configure --prefix=${HOME}/opt --with-gmp=${HOME}/opt
                   make
                   make install
                   cd ..
 
-                  wget ftp://xmlsoft.org/libxml2/libxml2-git-snapshot.tar.gz
-                  tar xf libxml2-git-snapshot.tar.gz 
-                  cd libxml2-2.9.13/ # or whichever version is up to date
+                  wget http://xmlsoft.org/download/libxml2-${LIBXML2_VERSION}.tar.gz -O libxml2.tar.gz
+                  tar xf libxml2.tar.gz 
+                  cd libxml2
                   emconfigure ./configure --prefix=${HOME}/opt --disable-shared
                   make
                   make install
                   ln -s ${HOME}/opt/include/libxml2/libxml ${HOME}/opt/include/libxml
                   cd ..
 
-                  git clone https://github.com/Qalculate/libqalculate.git
+                  wget https://github.com/Qalculate/libqalculate/archive/refs/tags/v5.2.0.tar.gz -O libqalculate.tar.gz
+                  tar xf libqalculate.tar.gz
                   cd libqalculate
                   # the following command is supposed to fail, since it's also running the configure script
-                  ./autogen.sh
+                  ./autogen.sh || true
                   sed -i 's/PKG_CHECK_MODULES(LIBCURL, libcurl)/#PKG_CHECK_MODULES(LIBCURL, libcurl)/' configure
                   sed -i 's/PKG_CHECK_MODULES(ICU, icu-uc)/#PKG_CHECK_MODULES(ICU, icu-uc)/' configure
                   sed -i 's/PKG_CHECK_MODULES(LIBXML, libxml-2.0/#PKG_CHECK_MODULES(LIBXML, libxml-2.0/' configure
