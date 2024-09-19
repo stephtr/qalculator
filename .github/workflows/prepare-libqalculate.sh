@@ -13,7 +13,7 @@ export NO_AUTOMAKE=1
 ./autogen.sh
 export LIBXML_LIBS="-L${HOME}/opt/lib -lxml2"
 export LIBXML_CFLAGS="-I${HOME}/opt/include"
-emconfigure ./configure --prefix=${HOME}/opt CPPFLAGS=-I${HOME}/opt/include LDFLAGS="-L${HOME}/opt/lib -lxml2" --without-libcurl --without-icu --enable-compiled-definitions --disable-nls --disable-shared
+emconfigure ./configure --prefix=${HOME}/opt --without-libcurl --without-icu --enable-compiled-definitions --disable-nls --disable-shared
 make
 make install
 cd ..
