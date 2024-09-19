@@ -5,6 +5,7 @@ on:
     push:
         branches:
             - main
+            - libqalculate-compile
 
 env:
     EM_VERSION: 3.1.67
@@ -37,6 +38,7 @@ jobs:
                   cd ~/opt/src
 
                   wget https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.lz
+                  ls
                   tar xf gmp-6.3.0.tar.lz
                   cd gmp-6.3.0
                   emconfigure ./configure --disable-assembly --host none --enable-cxx --prefix=${HOME}/opt # no, the "none" host is not obsolete.
