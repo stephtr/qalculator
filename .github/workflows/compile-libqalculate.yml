@@ -23,14 +23,14 @@ jobs:
             - name: Checkout 🛎
               uses: actions/checkout@v4
 
-            - name: Setup dependency cache
-              id: cache-dependencies
-              uses: actions/cache@v2
-              with:
-                  path: |
-                      ~/opt/lib
-                      ~/opt/include
-                  key: b${{env.LIBQALCULATE_VERSION}}-gmp${{env.GMP_VERSION}}-mpfr${{env.MPFR_VERSION}}-libxml2${{env.LIBXML2_VERSION}}-em${{env.EM_VERSION}}-${{ runner.os }}
+#            - name: Setup dependency cache
+#              id: cache-dependencies
+#              uses: actions/cache@v2
+#              with:
+#                  path: |
+#                      ~/opt/lib
+#                      ~/opt/include
+#                  key: ${{env.LIBQALCULATE_VERSION}}-gmp${{env.GMP_VERSION}}-mpfr${{env.MPFR_VERSION}}-libxml2${{env.LIBXML2_VERSION}}-em${{env.EM_VERSION}}-${{ runner.os }}
 
             - name: Setup emsdk cache
               if: steps.cache-dependencies.outputs.cache-hit != 'true'

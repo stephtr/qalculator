@@ -1,4 +1,6 @@
-sudo apt install -y build-essential lzip binutils autoconf intltool libtool automake lbzip2 lzip libxml2
+#!/bin/bash
+
+sudo apt install -y build-essential lzip binutils autoconf intltool libtool automake lbzip2 lzip
 mkdir -p ~/opt/src
 cd ~/opt/src
 
