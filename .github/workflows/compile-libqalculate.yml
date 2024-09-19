@@ -83,7 +83,6 @@ jobs:
                   cd libqalculate-${LIBQALCULATE_VERSION}
                   export NOCONFIGURE=1
                   export NO_AUTOMAKE=1
-                  sed -i '/^[[:space:]]*autoconf/d' autogen.sh
                   ./autogen.sh --without-icu --without-libcurl --disable-nls --disable-shared
                   sed -i 's/PKG_CHECK_MODULES(LIBCURL, libcurl)/#PKG_CHECK_MODULES(LIBCURL, libcurl)/' configure
                   sed -i 's/PKG_CHECK_MODULES(ICU, icu-uc)/#PKG_CHECK_MODULES(ICU, icu-uc)/' configure
