@@ -32,13 +32,18 @@ jobs:
                   version: ${{env.EM_VERSION}}
                   actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
 
+            - name: Install dependencies
+              uses: awalsh128/cache-apt-pkgs-action@latest
+              with:
+                  packages: build-essential lzip binutils autoconf intltool libtool automake lbzip2 lzip
+                  version: 1.0
+
             - name: Setup dependencies
               run: |
                   mkdir -p ~/opt/src
                   cd ~/opt/src
 
                   wget https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.lz
-                  ls
                   tar xf gmp-6.3.0.tar.lz
                   cd gmp-6.3.0
                   emconfigure ./configure --disable-assembly --host none --enable-cxx --prefix=${HOME}/opt # no, the "none" host is not obsolete.
