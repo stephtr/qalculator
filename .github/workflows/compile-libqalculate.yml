@@ -48,5 +48,5 @@ jobs:
             - name: Setup dependencies
               if: steps.cache-dependencies.outputs.cache-hit != 'true'
               run: |
-                  chmod +x ./github/workflows/prepare-libqalculate.sh
-                  ./github/workflows/prepare-libqalculate.sh
+                  chmod +x ./.github/workflows/prepare-libqalculate.sh
+                  ./.github/workflows/prepare-libqalculate.sh
