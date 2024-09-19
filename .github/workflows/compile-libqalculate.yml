@@ -46,6 +46,7 @@ jobs:
                   key: ${{env.LIBQALCULATE_VERSION}}-gmp${{env.GMP_VERSION}}-mpfr${{env.MPFR_VERSION}}-libxml2${{env.LIBXML2_VERSION}}-em${{env.EM_VERSION}}-${{ runner.os }}
 
             - name: Setup dependencies
+              if: steps.cache-dependencies.outputs.cache-hit != 'true'
               run: |
                   sudo apt install -y build-essential lzip binutils autoconf intltool libtool automake lbzip2 lzip
                   mkdir -p ~/opt/src
@@ -81,6 +82,7 @@ jobs:
                   tar xf libqalculate-${LIBQALCULATE_VERSION}.tar.gz
                   cd libqalculate-${LIBQALCULATE_VERSION}
                   export NOCONFIGURE=1
+                  export NO_AUTOMAKE=1
                   ./autogen.sh
                   sed -i 's/PKG_CHECK_MODULES(LIBCURL, libcurl)/#PKG_CHECK_MODULES(LIBCURL, libcurl)/' configure
                   sed -i 's/PKG_CHECK_MODULES(ICU, icu-uc)/#PKG_CHECK_MODULES(ICU, icu-uc)/' configure
