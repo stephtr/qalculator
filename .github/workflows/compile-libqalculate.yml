@@ -23,7 +23,7 @@ jobs:
             - name: Checkout 🛎
               uses: actions/checkout@v4
 
-            - name: Setup cache
+            - name: Setup emsdk cache
               id: cache-system-libraries
               uses: actions/cache@v2
               with:
@@ -35,6 +35,15 @@ jobs:
               with:
                   version: ${{env.EM_VERSION}}
                   actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
+
+            - name: Setup dependency cache
+              id: cache-dependencies
+              uses: actions/cache@v2
+              with:
+                  path: |
+                      ~/opt/lib
+                      ~/opt/include
+                  key: ${{env.LIBQALCULATE_VERSION}}-gmp${{env.GMP_VERSION}}-mpfr${{env.MPFR_VERSION}}-libxml2${{env.LIBXML2_VERSION}}-em${{env.EM_VERSION}}-${{ runner.os }}
 
             - name: Setup dependencies
               run: |
@@ -59,7 +68,7 @@ jobs:
                   make install
                   cd ..
 
-                  wget http://xmlsoft.org/download/libxml2-${LIBXML2_VERSION}.tar.gz -O libxml2.tar.gz
+                  wget http://xmlsoft.org/download/libxml2-${LIBXML2_VERSION}.tar.gz -O libxml2-${LIBXML2_VERSION}.tar.gz
                   tar xf libxml2-${LIBXML2_VERSION}.tar.gz 
                   cd libxml2-${LIBXML2_VERSION}
                   emconfigure ./configure --prefix=${HOME}/opt --disable-shared
