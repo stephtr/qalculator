@@ -46,4 +46,5 @@ echo "configuring via emsdk"
 emconfigure ./configure --prefix=${HOME}/opt CPPFLAGS=-I${HOME}/opt/include LDFLAGS="-L${HOME}/opt/lib -lxml2" --without-libcurl --without-icu --enable-compiled-definitions --disable-nls --disable-shared
 make
 make install
+cat ./configure
 cd ..
