@@ -71,7 +71,7 @@ jobs:
                   wget http://xmlsoft.org/download/libxml2-${LIBXML2_VERSION}.tar.gz -O libxml2-${LIBXML2_VERSION}.tar.gz
                   tar xf libxml2-${LIBXML2_VERSION}.tar.gz 
                   cd libxml2-${LIBXML2_VERSION}
-                  emconfigure ./configure --prefix=${HOME}/opt --disable-shared
+                  emconfigure ./configure --prefix=${HOME}/opt --disable-shared --without-python
                   make
                   make install
                   ln -s ${HOME}/opt/include/libxml2/libxml ${HOME}/opt/include/libxml
