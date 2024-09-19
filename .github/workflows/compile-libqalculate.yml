@@ -36,7 +36,7 @@ jobs:
                   mkdir -p ~/opt/src
                   cd ~/opt/src
 
-                  wget https://gmplib.org/download/gmp/gmp-6.3.0.tar.lz
+                  wget https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.lz
                   tar xf gmp-6.3.0.tar.lz
                   cd gmp-6.3.0
                   emconfigure ./configure --disable-assembly --host none --enable-cxx --prefix=${HOME}/opt # no, the "none" host is not obsolete.
@@ -44,7 +44,7 @@ jobs:
                   make install
                   cd ..
 
-                  wget https://www.mpfr.org/mpfr-current/mpfr-4.2.1.tar.xz # if not found, use a newer version
+                  wget https://ftp.gnu.org/gnu/mpfr/mpfr-4.2.1.tar.xz # if not found, use a newer version
                   # wget https://www.mpfr.org/mpfr-current/allpatches # if available
                   tar xf mpfr-4.2.1.tar.xz
                   cd mpfr-4.2.1
