@@ -1,4 +1,4 @@
-sudo apt install -y build-essential lzip binutils autoconf intltool libtool automake lbzip2 lzip
+sudo apt install -y build-essential lzip binutils autoconf intltool libtool automake lbzip2 lzip libxml2-dev
 mkdir -p ~/opt/src
 cd ~/opt/src
 
@@ -33,13 +33,14 @@ tar xf libqalculate-${LIBQALCULATE_VERSION}.tar.gz
 cd libqalculate-${LIBQALCULATE_VERSION}
 export NOCONFIGURE=1
 export NO_AUTOMAKE=1
-./autogen.sh --without-icu --without-libcurl --disable-nls --disable-shared || true
+./autogen.sh || true
 sed -i 's/PKG_CHECK_MODULES(LIBCURL, libcurl)/#PKG_CHECK_MODULES(LIBCURL, libcurl)/' configure
 sed -i 's/PKG_CHECK_MODULES(ICU, icu-uc)/#PKG_CHECK_MODULES(ICU, icu-uc)/' configure
 sed -i 's/PKG_CHECK_MODULES(LIBXML, libxml-2.0/#PKG_CHECK_MODULES(LIBXML, libxml-2.0/' configure
 sed -i 's/#define HAVE_LIBCURL 1//' configure
 sed -i 's/#define HAVE_ICU 1//' configure
 sed -i 's/#define HAVE_PIPE2 1/#define HAVE_PIPE2 0/' configure
+echo "configuring via emsdk"
 emconfigure ./configure --prefix=${HOME}/opt CPPFLAGS=-I${HOME}/opt/include LDFLAGS="-L${HOME}/opt/lib -lxml2" --without-libcurl --without-icu --enable-compiled-definitions --disable-nls --disable-shared
 make
 make install
