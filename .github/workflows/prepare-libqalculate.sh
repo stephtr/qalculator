@@ -6,8 +6,6 @@ cd ~/opt/src
 wget https://github.com/Qalculate/libqalculate/archive/refs/tags/v${LIBQALCULATE_VERSION}.tar.gz -O libqalculate-${LIBQALCULATE_VERSION}.tar.gz
 tar xf libqalculate-${LIBQALCULATE_VERSION}.tar.gz
 cd libqalculate-${LIBQALCULATE_VERSION}
-export NOCONFIGURE=1
-export NO_AUTOMAKE=1
 ./autogen.sh || true
 sed -i 's/PKG_CHECK_MODULES(LIBCURL, libcurl)/#PKG_CHECK_MODULES(LIBCURL, libcurl)/' configure
 sed -i 's/PKG_CHECK_MODULES(ICU, icu-uc)/#PKG_CHECK_MODULES(ICU, icu-uc)/' configure
