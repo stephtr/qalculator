@@ -1,0 +1,6 @@
+{
+  "$schema": "https://www.partykit.io/schema.json",
+  "name": "qalculator",
+  "main": "server.ts",
+  "compatibilityDate": "2024-09-29"
+}

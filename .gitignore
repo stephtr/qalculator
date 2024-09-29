@@ -1,6 +1,8 @@
 /public/libqalculate.wasm
 /public/mathlive-fonts/*.woff2
 
+/.partykit/state
+
 # dependencies
 /node_modules
 /.pnp

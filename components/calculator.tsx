@@ -21,12 +21,7 @@ if (typeof window !== 'undefined') {
 }
 
 const libqalculatePromise = typeof window !== 'undefined' ? loadLibqalculate({
-    locateFile: function (path: string, prefix: string) {
-        if (path.endsWith('.wasm')) {
-            return '/' + path;  // Absolute URL
-        }
-        return prefix + path;
-    }
+    locateFile: (path: string) => `/${path}`, // Absolute URL
 }) : Promise.resolve(null);
 
 function processPlotData({ commands: commandsString, data }: { commands: string; data: Record<string, string> }) {
