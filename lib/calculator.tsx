@@ -5,6 +5,9 @@ import loadLibqalculate from 'libqalculate-wasm';
 import { Chart } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { Chart as ChartJS, Colors } from 'chart.js';
+import { MathInput } from './MathInput';
+
+import { convertLatexToAsciiMath, convertAsciiMathToLatex } from 'mathlive/ssr';
 
 const activeZoomPlugin = false;
 
@@ -47,13 +50,21 @@ function processPlotData({ commands: commandsString, data }: { commands: string;
 
 export function Calculator() {
     const [input, setInput] = useState('');
+    const [latexInput, setLatexInput] = useState('');
     const libqalculate = use(libqalculatePromise);
 
-    // if (libqalculate == null) return null;
     const calculation = input ? libqalculate?.calculate(input, 0, 0) : null;
     const plotDataset = calculation?.plotData ? processPlotData(calculation.plotData) : null;
     return <div>
-        <input title="Calculation" className="border-white border-2" style={{ border: '2px solid white' }} value={input} onChange={(e) => setInput(e.currentTarget.value)} />
+        <MathInput
+            onInput={evt => { setLatexInput(evt.currentTarget.value); setInput(convertLatexToAsciiMath(evt.currentTarget.value)) }}
+            disableLatexMode
+            removeExtraneousParentheses
+            style={{ minWidth: '25em', border: '1px solid #999' }}
+        >
+            {latexInput}
+        </MathInput>
+        <div><input title="Calculation" className="border-white border-2" style={{ border: '2px solid #999' }} value={input} onChange={(e) => { setInput(e.currentTarget.value); setLatexInput(convertAsciiMathToLatex(e.currentTarget.value)); }} /></div>
         {calculation && !plotDataset && <div><span dangerouslySetInnerHTML={{ __html: calculation.input }} /> = <span dangerouslySetInnerHTML={{ __html: calculation.output }} /></div>}
         {plotDataset && (
             <Chart
