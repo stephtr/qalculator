@@ -6,14 +6,10 @@ import { Chart } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { Chart as ChartJS, Colors } from 'chart.js';
 
-const activeZoomPlugin = false;
-
 if (typeof window !== 'undefined') {
-    if (activeZoomPlugin) {
-        // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
-        const zoomPlugin = require('chartjs-plugin-zoom').default;
-        ChartJS.register(zoomPlugin);
-    }
+    // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+    const zoomPlugin = require('chartjs-plugin-zoom').default;
+    ChartJS.register(zoomPlugin);
     ChartJS.register(Colors);
 }
 
