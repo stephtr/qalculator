@@ -6,10 +6,14 @@ import { Chart } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { Chart as ChartJS, Colors } from 'chart.js';
 
+const activeZoomPlugin = false;
+
 if (typeof window !== 'undefined') {
-    // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
-    const zoomPlugin = require('chartjs-plugin-zoom').default;
-    ChartJS.register(zoomPlugin);
+    if (activeZoomPlugin) {
+        // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+        const zoomPlugin = require('chartjs-plugin-zoom').default;
+        ChartJS.register(zoomPlugin);
+    }
     ChartJS.register(Colors);
 }
 
@@ -69,27 +73,29 @@ export function Calculator() {
                         colors: {
                             forceOverride: true
                         },
-                        zoom: {
-                            pan: {
-                                enabled: true,
-                                mode: 'x',
-                                // onPan: onPanOrZoom,
-                            },
+                        ...{
                             zoom: {
-                                wheel: {
+                                pan: {
                                     enabled: true,
+                                    mode: 'x',
+                                    // onPan: onPanOrZoom,
                                 },
-                                mode: 'x',
-                                // onZoom: onPanOrZoom,
-                            },
-                            limits: {
-                                x: {
-                                    min: plotDataset.datasets[0].data[0].x,
-                                    max: plotDataset.datasets[0].data[plotDataset.datasets[0].data.length - 1].x,
+                                zoom: {
+                                    wheel: {
+                                        enabled: true,
+                                    },
+                                    mode: 'x',
+                                    // onZoom: onPanOrZoom,
                                 },
-                            },
-                        }
-                    }
+                                limits: {
+                                    x: {
+                                        min: plotDataset.datasets[0].data[0].x,
+                                        max: plotDataset.datasets[0].data[plotDataset.datasets[0].data.length - 1].x,
+                                    },
+                                },
+                            }
+                        } as any
+                    },
                 }}
                 width={600}
                 height={600}
