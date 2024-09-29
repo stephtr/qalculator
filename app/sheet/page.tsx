@@ -9,7 +9,7 @@ const libqalculatePromise = typeof window !== 'undefined' ? loadLibqalculate({
     locateFile: (path: string) => `/${path}`, // Absolute URL
 }) : Promise.resolve(null);
 
-const partykitUrl = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:1999' : 'https://realtime.qalculator.xyz/';
+const partykitUrl = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:1999' : 'https://realtime.qalculator.xyz';
 
 interface Cell {
     id: string;
