@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   mathlive:
-    hash: e7ofsyigvfohgxzosem7caajqq
+    hash: pia3pstioayp35qhsxqpnilaxu
     path: patches/mathlive.patch
 
 importers:
@@ -23,8 +23,8 @@ importers:
         specifier: 0.0.2
         version: 0.0.2
       mathlive:
-        specifier: ^0.101.0
-        version: 0.101.0(patch_hash=e7ofsyigvfohgxzosem7caajqq)
+        specifier: 0.101.0
+        version: 0.101.0(patch_hash=pia3pstioayp35qhsxqpnilaxu)
       next:
         specifier: 15.0.0-canary.136
         version: 15.0.0-canary.136(react-dom@19.0.0-rc-e56f4ae3-20240830(react@19.0.0-rc-e56f4ae3-20240830))(react@19.0.0-rc-e56f4ae3-20240830)
@@ -3012,7 +3012,7 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
-  mathlive@0.101.0(patch_hash=e7ofsyigvfohgxzosem7caajqq):
+  mathlive@0.101.0(patch_hash=pia3pstioayp35qhsxqpnilaxu):
     dependencies:
       '@cortex-js/compute-engine': 0.24.1
 
