@@ -17,7 +17,14 @@ if (typeof window !== 'undefined') {
     ChartJS.register(Colors);
 }
 
-const libqalculatePromise = typeof window !== 'undefined' ? loadLibqalculate() : Promise.resolve(null);
+const libqalculatePromise = typeof window !== 'undefined' ? loadLibqalculate({
+    locateFile: function (path: string, prefix: string) {
+        if (path.endsWith('.wasm')) {
+            return '/' + path;  // Absolute URL
+        }
+        return prefix + path;
+    }
+}) : Promise.resolve(null);
 
 function processPlotData({ commands: commandsString, data }: { commands: string; data: Record<string, string> }) {
     const commands = commandsString.split('\n');
@@ -94,7 +101,7 @@ export function Calculator() {
                                     },
                                 },
                             }
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         } as any
                     },
                 }}

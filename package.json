@@ -12,7 +12,7 @@
   "dependencies": {
     "chart.js": "^4.4.4",
     "chartjs-plugin-zoom": "^2.0.1",
-    "libqalculate-wasm": "0.0.1",
+    "libqalculate-wasm": "0.0.2",
     "next": "15.0.0-canary.136",
     "react": "19.0.0-rc-e56f4ae3-20240830",
     "react-chartjs-2": "^5.2.0",
