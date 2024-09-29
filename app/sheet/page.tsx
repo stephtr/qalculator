@@ -79,8 +79,8 @@ export default function CalculationSheetPage() {
     return <div className="p-4">
         <h2>Warning: this sheet is shared across all users worldwide :D</h2>
         {cells.map(cell => {
-            return <div key={cell.id}>
-                <input title="Rechnung" type="text" value={cell.input} onChange={(e) => handleInputChange(cell.id, e.currentTarget.value)} onKeyUp={(e) => handleKeyUp(cell.id, e)} /> = <span dangerouslySetInnerHTML={{ __html: cell.output }} />
+            return <div key={cell.id} className="mt-2">
+                <input title="Rechnung" type="text" className="border-2 border-gray-700 px-2" value={cell.input} onChange={(e) => handleInputChange(cell.id, e.currentTarget.value)} onKeyUp={(e) => handleKeyUp(cell.id, e)} /> = <span dangerouslySetInnerHTML={{ __html: cell.output }} />
             </div>;
         })}
     </div>;
