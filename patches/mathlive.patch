@@ -1,16 +1,27 @@
 diff --git a/package.json b/package.json
-index 0947a9d73517f725cc47543800810d74d2dfed7b..6ef05b56ad8259c58d247dfdc8e0475a403ee927 100644
+index 0947a9d73517f725cc47543800810d74d2dfed7b..0719d94927602c5a49dd46b5a97f6965e4168ee5 100644
 --- a/package.json
 +++ b/package.json
-@@ -37,7 +37,10 @@
+@@ -37,14 +37,17 @@
          "require": "./dist/mathlive.min.js"
        }
      },
 -    "./ssr": "./dist/mathlive-ssr.min.mjs",
 +    "./ssr": {
-+      "import": "./dist/mathlive-ssr.min.mjs",
-+      "types": "./dist/types/mathlive-ssr.d.ts"
++      "types": "./dist/types/mathlive-ssr.d.ts",
++      "import": "./dist/mathlive-ssr.min.mjs"
 +    },
      "./vue": "./dist/vue-mathlive.mjs",
      "./fonts.css": "./dist/mathlive-fonts.css",
      "./static.css": "./dist/mathlive-static.css",
+-    "./fonts/*": "./dist/fonts/*",
+-    "./sounds/*": "./dist/sounds/*",
+-    "./fonts/": "./dist/fonts/*",
+-    "./sounds/": "./dist/sounds/*"
++    "./fonts/*": "./dist/fonts/",
++    "./sounds/*": "./dist/sounds/",
++    "./fonts/": "./dist/fonts/",
++    "./sounds/": "./dist/sounds/"
+   },
+   "repository": {
+     "type": "git",

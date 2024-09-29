@@ -60,11 +60,11 @@ export function Calculator() {
             onInput={evt => { setLatexInput(evt.currentTarget.value); setInput(convertLatexToAsciiMath(evt.currentTarget.value)) }}
             disableLatexMode
             removeExtraneousParentheses
-            style={{ minWidth: '25em', border: '1px solid #999' }}
+            className="min-w-80 border-gray-400 border-2 mb-2"
         >
             {latexInput}
         </MathInput>
-        <div><input title="Calculation" className="border-white border-2" style={{ border: '2px solid #999' }} value={input} onChange={(e) => { setInput(e.currentTarget.value); setLatexInput(convertAsciiMathToLatex(e.currentTarget.value)); }} /></div>
+        <div><input title="Calculation" className="border-gray-600 border-2" value={input} onChange={(e) => { setInput(e.currentTarget.value); setLatexInput(convertAsciiMathToLatex(e.currentTarget.value)); }} /></div>
         {calculation && !plotDataset && <div><span dangerouslySetInnerHTML={{ __html: calculation.input }} /> = <span dangerouslySetInnerHTML={{ __html: calculation.output }} /></div>}
         {plotDataset && (
             <Chart
