@@ -51,10 +51,10 @@ export class Calculator {
 
 	settings = new Settings();
 
-	#isLoaded = false;
+	private _isLoaded = false;
 
 	get isLoaded() {
-		return this.#isLoaded;
+		return this._isLoaded;
 	}
 
 	private loadedListeners: Array<() => void> = [];
@@ -109,7 +109,7 @@ export class Calculator {
 		};
 	}
 
-	#pendingCalculationOnceLoaded: string | null = null;
+	private pendingCalculationOnceLoaded: string | null = null;
 
 	submitCalculation(input: string) {
 		const isSetCommand = input.startsWith('set ');
@@ -117,7 +117,7 @@ export class Calculator {
 			this.submittedListeners.forEach((l) => l(input));
 		}
 		if (!this.isLoaded) {
-			this.#pendingCalculationOnceLoaded = input;
+			this.pendingCalculationOnceLoaded = input;
 			return;
 		}
 
@@ -128,17 +128,17 @@ export class Calculator {
 		}
 	}
 
-	#pendingCurrencyData: CurrencyData | null = null;
+	private pendingCurrencyData: CurrencyData | null = null;
 
-	#lastCurrencyUpdateDate: number = 0;
+	private lastCurrencyUpdateDate: number = 0;
 
 	updateCurrencyData(data: CurrencyData) {
 		const newDate = +new Date(data.date);
-		if (this.#lastCurrencyUpdateDate >= newDate) return;
-		this.#lastCurrencyUpdateDate = newDate;
+		if (this.lastCurrencyUpdateDate >= newDate) return;
+		this.lastCurrencyUpdateDate = newDate;
 
 		if (!this.isLoaded) {
-			this.#pendingCurrencyData = data;
+			this.pendingCurrencyData = data;
 			return;
 		}
 		updateCurrencyValues(
@@ -155,18 +155,18 @@ export class Calculator {
 		if (typeof window !== 'undefined') {
 			// eslint-disable-next-line @typescript-eslint/no-floating-promises
 			initializeCalculationModule().then(() => {
-				this.#isLoaded = true;
+				this._isLoaded = true;
 
 				this.settings.apply();
 
-				if (this.#pendingCurrencyData) {
-					this.updateCurrencyData(this.#pendingCurrencyData);
-					this.#pendingCurrencyData = null;
+				if (this.pendingCurrencyData) {
+					this.updateCurrencyData(this.pendingCurrencyData);
+					this.pendingCurrencyData = null;
 				}
 
-				if (this.#pendingCalculationOnceLoaded) {
-					this.submitCalculation(this.#pendingCalculationOnceLoaded);
-					this.#pendingCalculationOnceLoaded = null;
+				if (this.pendingCalculationOnceLoaded) {
+					this.submitCalculation(this.pendingCalculationOnceLoaded);
+					this.pendingCalculationOnceLoaded = null;
 				}
 				this.loadedListeners.forEach((l) => l());
 			});
