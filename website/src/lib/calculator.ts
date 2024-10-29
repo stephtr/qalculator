@@ -135,8 +135,7 @@ export class Calculator {
 	updateCurrencyData(data: CurrencyData) {
 		const newDate = +new Date(data.date);
 		if (this.lastCurrencyUpdateDate >= newDate) return;
-		this.lastCurrencyUpdateDate = newDate;
-
+		
 		if (!this.isLoaded) {
 			this.pendingCurrencyData = data;
 			return;
@@ -149,6 +148,7 @@ export class Calculator {
 			data.base,
 			new Date(data.date),
 		);
+		this.lastCurrencyUpdateDate = newDate;
 	}
 
 	constructor() {
