@@ -70,13 +70,6 @@
 						break;
 					case 'updateCurrencyData':
 						if (!event.data) return;
-						const timeDiff =
-							Date.now() - +new Date(event.data.data.date);
-						console.log(
-							`Updating currency rates from message ${
-								timeDiff / 1000
-							} s ago`,
-						);
 						calculator.updateCurrencyData(event.data?.data);
 						break;
 					default:
@@ -87,10 +80,6 @@
 
 		fetch('/api/getCurrencyData').then(async (response) => {
 			const json = await response.json();
-			const timeDiff = Date.now() - +new Date(json.date);
-			console.log(
-				`Updating currency rates from fetch ${timeDiff / 1000} s ago`,
-			);
 			calculator.updateCurrencyData(json);
 		});
 	}
