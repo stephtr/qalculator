@@ -10,6 +10,8 @@ PrintOptions printops;
 
 #include "settings.h"
 
+val lastPlotData;
+
 struct Calculation
 {
 	std::string input;
@@ -131,6 +133,26 @@ std::string info()
 int version()
 {
 	return 4;
+}
+
+std::string qalc_gnuplot_data_dir()
+{
+	return "";
+}
+bool qalc_invoke_gnuplot(
+	std::vector<std::pair<std::string, std::string>> data_files,
+	std::string commands, std::string extra, bool persist)
+{
+	val plot = val::object();
+	val data = val::object();
+	plot.set("data", data);
+	plot.set("commands", commands);
+	for (auto file : data_files)
+	{
+		data.set(file.first, file.second);
+	}
+	lastPlotData = plot;
+	return true;
 }
 
 EMSCRIPTEN_BINDINGS(Calculator)
