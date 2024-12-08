@@ -1,11 +1,10 @@
 'use client';
 
-import { MathfieldElement } from 'mathlive';
+import type { MathfieldElement } from 'mathlive';
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 if (typeof window !== 'undefined') {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { MathfieldElement: _MathfieldElement } = require('mathlive');
+    const { MathfieldElement: _MathfieldElement } = await import('mathlive');
     _MathfieldElement.fontsDirectory = "/mathlive-fonts";
 }
 
@@ -17,9 +16,12 @@ export function MathInput({ disableLatexMode = false, onKeyDown, children, remov
 
     useEffect(() => {
         if (!ref.current) return;
-        console.log('setting to', removeExtraneousParentheses)
         ref.current.removeExtraneousParentheses = removeExtraneousParentheses;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        ref.current.inlineShortcuts = {
+            ...ref.current.inlineShortcuts,
+            plot: '\\operatorname{plot}'
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ref.current, removeExtraneousParentheses]);
 
     const onKeyDownHandler = useCallback((ev: KeyboardEvent<MathfieldElement>) => {
@@ -36,5 +38,16 @@ export function MathInput({ disableLatexMode = false, onKeyDown, children, remov
         if (onKeyDown) onKeyDown(ev);
     }, [disableLatexMode, onKeyDown]);
 
-    return isShown ? <math-field ref={ref} onKeyDownCapture={onKeyDownHandler} {...props}>{children}</math-field> : null;
+    if (!isShown) return null;
+    return (
+        <math-field
+            ref={ref}
+            onKeyDownCapture={onKeyDownHandler}
+            mathModeSpace="\:"
+            feedback={false}
+            {...props}
+        >
+            {children}
+        </math-field>
+    );
 }

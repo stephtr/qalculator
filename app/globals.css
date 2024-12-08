@@ -3,25 +3,76 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  color-scheme: dark;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: system-ui, sans-serif;
+  background: #091111;
+  background: linear-gradient(to right, #091111, #131919);
+  color: #dee;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+math-field {
+  --contains-highlight-background-color: darkblue;
+}
+
+
+h1,
+h2,
+h3 {
+  margin: 1.62rem 0 0.25rem;
+  font-weight: lighter;
+}
+
+h1 {
+  font-size: 3.5rem;
+}
+
+h2 {
+  font-size: 2.2rem;
+}
+
+h3 {
+  font-size: 1.62rem;
+}
+
+small {
+  font-size: 0.8rem;
+}
+
+p {
+  margin: 1em 0;
+}
+
+p:first-child,
+h1:first-child,
+h2:first-child,
+h3:first-child {
+  margin-top: 0;
+}
+
+p:last-child,
+h1:last-child,
+h2:last-child,
+h3:last-child {
+  margin-bottom: 0;
+}
+
+h1 + p,
+h2 + p,
+h3 + p {
+  margin-top: 0;
+}
+
+h1,
+h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.25;
 }

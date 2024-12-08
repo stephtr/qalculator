@@ -46,21 +46,43 @@ function processPlotData({ commands: commandsString, data }: { commands: string;
 export function Calculator() {
     const [input, setInput] = useState('');
     const [latexInput, setLatexInput] = useState('');
+    const [usingNewInput, setUsingNewInput] = useState(true);
     const libqalculate = use(libqalculatePromise);
 
     const calculation = input ? libqalculate?.calculate(input, 0, 0) : null;
     const plotDataset = calculation?.plotData ? processPlotData(calculation.plotData) : null;
     return <div>
-        <MathInput
-            onInput={evt => { setLatexInput(evt.currentTarget.value); setInput(convertLatexToAsciiMath(evt.currentTarget.value)) }}
-            disableLatexMode
-            removeExtraneousParentheses
-            className="min-w-80 border-gray-400 border-2 mb-2"
-        >
-            {latexInput}
-        </MathInput>
-        <div><input title="Calculation" className="border-gray-600 border-2" value={input} onChange={(e) => { setInput(e.currentTarget.value); setLatexInput(convertAsciiMathToLatex(e.currentTarget.value)); }} /></div>
-        {calculation && !plotDataset && <div><span dangerouslySetInnerHTML={{ __html: calculation.input }} /> = <span dangerouslySetInnerHTML={{ __html: calculation.output }} /></div>}
+        <div className="text-right pr-5">
+            <button className="bg-transparent border-none underline mb-1" onClick={() => setUsingNewInput(!usingNewInput)}>
+                {usingNewInput ? 'Switch to old input' : 'Switch to new input'}
+            </button>
+        </div>
+        <div className="mb-3">
+            {usingNewInput && (
+                <MathInput
+                    onInput={evt => { setLatexInput(evt.currentTarget.value); setInput(convertLatexToAsciiMath(evt.currentTarget.value)) }}
+                    disableLatexMode
+                    removeExtraneousParentheses
+                    className="w-full border-none rounded-3xl text-2xl relative text-center bg-[#344] text-[#eff] px-5 [&::part(content)]:min-h-12 [&::part(content)]:justify-center [&::part(menu-toggle)]:hidden [&::part(virtual-keyboard-toggle)]:absolute [&::part(virtual-keyboard-toggle)]:right-3"
+
+                >
+                    {latexInput}
+                </MathInput>
+            )}
+            {!usingNewInput && (
+                <input
+                    title="Calculation"
+                    className="w-full border-none rounded-3xl h-12 relative text-center bg-[#344] text-[#eff] px-5"
+                    value={input}
+                    onChange={(e) => { setInput(e.currentTarget.value); setLatexInput(convertAsciiMathToLatex(e.currentTarget.value)); }}
+                />
+            )}
+        </div>
+        {calculation && !plotDataset && (
+            <div>
+                = <span dangerouslySetInnerHTML={{ __html: calculation.output }} />
+            </div>
+        )}
         {plotDataset && (
             <Chart
                 type="line"

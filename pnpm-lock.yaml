@@ -4,58 +4,47 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-patchedDependencies:
-  mathlive:
-    hash: jb5di4ge6xk2y6j4h3ytr45rvq
-    path: patches/mathlive.patch
-
 importers:
 
   .:
     dependencies:
       chart.js:
-        specifier: ^4.4.4
-        version: 4.4.4
+        specifier: ^4.4.7
+        version: 4.4.7
       chartjs-plugin-zoom:
-        specifier: ^2.0.1
-        version: 2.0.1(chart.js@4.4.4)
+        specifier: ^2.2.0
+        version: 2.2.0(chart.js@4.4.7)
       libqalculate-wasm:
-        specifier: 0.0.2
-        version: 0.0.2
+        specifier: 0.0.6
+        version: 0.0.6
       mathlive:
-        specifier: 0.101.0
-        version: 0.101.0(patch_hash=jb5di4ge6xk2y6j4h3ytr45rvq)
+        specifier: 0.102.0
+        version: 0.102.0
       next:
-        specifier: 15.0.0-canary.136
-        version: 15.0.0-canary.136(react-dom@19.0.0-rc-e56f4ae3-20240830(react@19.0.0-rc-e56f4ae3-20240830))(react@19.0.0-rc-e56f4ae3-20240830)
+        specifier: 15.0.4
+        version: 15.0.4(react-dom@19.0.0-rc-e56f4ae3-20240830(react@19.0.0-rc-e56f4ae3-20240830))(react@19.0.0-rc-e56f4ae3-20240830)
       partysocket:
-        specifier: ^1.0.2
+        specifier: 1.0.2
         version: 1.0.2
-      react:
-        specifier: 19.0.0-rc-e56f4ae3-20240830
-        version: 19.0.0-rc-e56f4ae3-20240830
       react-chartjs-2:
         specifier: ^5.2.0
-        version: 5.2.0(chart.js@4.4.4)(react@19.0.0-rc-e56f4ae3-20240830)
-      react-dom:
-        specifier: 19.0.0-rc-e56f4ae3-20240830
-        version: 19.0.0-rc-e56f4ae3-20240830(react@19.0.0-rc-e56f4ae3-20240830)
+        version: 5.2.0(chart.js@4.4.7)(react@19.0.0-rc-e56f4ae3-20240830)
       y-partykit:
         specifier: ^0.0.32
-        version: 0.0.32(react@19.0.0-rc-e56f4ae3-20240830)(y-protocols@1.0.6(yjs@13.6.19))(yjs@13.6.19)
+        version: 0.0.32(react@19.0.0-rc-e56f4ae3-20240830)(y-protocols@1.0.6(yjs@13.6.20))(yjs@13.6.20)
       yjs:
-        specifier: ^13.6.19
-        version: 13.6.19
+        specifier: ^13.6.20
+        version: 13.6.20
     devDependencies:
       '@types/node':
         specifier: ^20
         version: 20.16.9
       '@types/react':
-        specifier: ^18
-        version: 18.3.9
+        specifier: ^19
+        version: 19.0.1
       '@types/react-dom':
-        specifier: ^18
-        version: 18.3.0
+        specifier: ^19
+        version: 19.0.1
       eslint:
         specifier: ^8
         version: 8.57.1
@@ -431,62 +420,56 @@ packages:
   '@kurkle/color@0.3.2':
     resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
 
-  '@next/env@15.0.0-canary.136':
-    resolution: {integrity: sha512-OEVUUIqxjHIPfkbdlc7d054f/iorlQD9+NmK25KPrvJuPQXDsCJImyiwmNL29i5zDPVV1ze+zsz7hbb2WcdaqQ==}
+  '@next/env@15.0.4':
+    resolution: {integrity: sha512-WNRvtgnRVDD4oM8gbUcRc27IAhaL4eXQ/2ovGbgLnPGUvdyDr8UdXP4Q/IBDdAdojnD2eScryIDirv0YUCjUVw==}
 
   '@next/eslint-plugin-next@14.2.13':
     resolution: {integrity: sha512-z8Mk0VljxhIzsSiZUSdt3wp+t2lKd+jk5a9Jsvh3zDGkItgDMfjv/ZbET6HsxEl/fSihVoHGsXV6VLyDH0lfTQ==}
 
-  '@next/swc-darwin-arm64@15.0.0-canary.136':
-    resolution: {integrity: sha512-mYlc3wersn8nQ5b1YHOgmSE+LQ1wYSpb8hiww+BfDguaGnRNYCAZT9Wibje80HxCBCSMOZuZs0+kHUef92bvRA==}
+  '@next/swc-darwin-arm64@15.0.4':
+    resolution: {integrity: sha512-QecQXPD0yRHxSXWL5Ff80nD+A56sUXZG9koUsjWJwA2Z0ZgVQfuy7gd0/otjxoOovPVHR2eVEvPMHbtZP+pf9w==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
 
-  '@next/swc-darwin-x64@15.0.0-canary.136':
-    resolution: {integrity: sha512-wqX1IELtPMyYpZ0TIjo3eHU47tztc3ocd8NNFo29HfhN24e2EG0UHMxKJVYzcZ8KkEMHL3YB5jQpWjKRhWdrbA==}
+  '@next/swc-darwin-x64@15.0.4':
+    resolution: {integrity: sha512-pb7Bye3y1Og3PlCtnz2oO4z+/b3pH2/HSYkLbL0hbVuTGil7fPen8/3pyyLjdiTLcFJ+ymeU3bck5hd4IPFFCA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
 
-  '@next/swc-linux-arm64-gnu@15.0.0-canary.136':
-    resolution: {integrity: sha512-Xlt848giedVDQELBD58NRyOWWITcap3+WehkcYb6GPfdUq8Nel7fw+DvgRARvaZ4QVIrtOuxUV7LGHXX0idRRw==}
+  '@next/swc-linux-arm64-gnu@15.0.4':
+    resolution: {integrity: sha512-12oSaBFjGpB227VHzoXF3gJoK2SlVGmFJMaBJSu5rbpaoT5OjP5OuCLuR9/jnyBF1BAWMs/boa6mLMoJPRriMA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
 
-  '@next/swc-linux-arm64-musl@15.0.0-canary.136':
-    resolution: {integrity: sha512-QiAt/H6rZG92NSWpKg4F5w2AUdZytQc7t2pGQyvUuQfx0qdhK4Y1+O8UVkhhkI7a5NpKWdiKh1Fph7jRsJ8PFA==}
+  '@next/swc-linux-arm64-musl@15.0.4':
+    resolution: {integrity: sha512-QARO88fR/a+wg+OFC3dGytJVVviiYFEyjc/Zzkjn/HevUuJ7qGUUAUYy5PGVWY1YgTzeRYz78akQrVQ8r+sMjw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
 
-  '@next/swc-linux-x64-gnu@15.0.0-canary.136':
-    resolution: {integrity: sha512-/luVRBmNpdG9KRMEureWfSq8rgHpf2mMpB0Zf9QysoBEoSBo1DZwiM+sHiwWK6XZ5BxVD9U3fNuc74ZrGhn6Ew==}
+  '@next/swc-linux-x64-gnu@15.0.4':
+    resolution: {integrity: sha512-Z50b0gvYiUU1vLzfAMiChV8Y+6u/T2mdfpXPHraqpypP7yIT2UV9YBBhcwYkxujmCvGEcRTVWOj3EP7XW/wUnw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
 
-  '@next/swc-linux-x64-musl@15.0.0-canary.136':
-    resolution: {integrity: sha512-ghg3ztLAslISdBADBtQaLh6HQLiFu4aoGucghfdmC0cqntids2N7LWrziFh4pFmkZreMuuPp7UvNJXp4JYGuiA==}
+  '@next/swc-linux-x64-musl@15.0.4':
+    resolution: {integrity: sha512-7H9C4FAsrTAbA/ENzvFWsVytqRYhaJYKa2B3fyQcv96TkOGVMcvyS6s+sj4jZlacxxTcn7ygaMXUPkEk7b78zw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
 
-  '@next/swc-win32-arm64-msvc@15.0.0-canary.136':
-    resolution: {integrity: sha512-gZIbj7D9BijZ1L2jwK+P9ezCcNsqLjAqGK0UwrznkDpHuWPeUJXJvANncRBxz+96ITF85eVUSAzJ1lXhiaCz7A==}
+  '@next/swc-win32-arm64-msvc@15.0.4':
+    resolution: {integrity: sha512-Z/v3WV5xRaeWlgJzN9r4PydWD8sXV35ywc28W63i37G2jnUgScA4OOgS8hQdiXLxE3gqfSuHTicUhr7931OXPQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
 
-  '@next/swc-win32-ia32-msvc@15.0.0-canary.136':
-    resolution: {integrity: sha512-3lo5RKwOOszwhbR7oeGzI8PykO7RIPc+X3GEBmZpK10mV+NdhgW0Rr1CzAvT+b5VmaqjH4q9o/UfV8bEJ9KkGQ==}
-    engines: {node: '>= 10'}
-    cpu: [ia32]
-    os: [win32]
-
-  '@next/swc-win32-x64-msvc@15.0.0-canary.136':
-    resolution: {integrity: sha512-29yr7useNsh8DZNOx9fCjAXb177RfXQTKFYMSFKIZR7i69lTmQjBVH/clfk6exDt+fbnmrTpEppA9Hxqg4VXxg==}
+  '@next/swc-win32-x64-msvc@15.0.4':
+    resolution: {integrity: sha512-NGLchGruagh8lQpDr98bHLyWJXOBSmkEAfK980OiNBa7vNm6PsNoPvzTfstT78WyOeMRQphEQ455rggd7Eo+Dw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -520,8 +503,11 @@ packages:
   '@swc/counter@0.1.3':
     resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
 
-  '@swc/helpers@0.5.12':
-    resolution: {integrity: sha512-KMZNXiGibsW9kvZAO1Pam2JPTDBm+KSHMMHWdsyI/1DbIZjT2A6Gy3hblVXUMEDvUAKq+e0vL0X0o54owWji7g==}
+  '@swc/helpers@0.5.13':
+    resolution: {integrity: sha512-UoKGxQ3r5kYI9dALKJapMmuK+1zWM/H17Z1+iwnNmzcJRnfFuevZs375TA5rW31pu4BS4NoSy1fRsexDXfWn5w==}
+
+  '@types/hammerjs@2.0.46':
+    resolution: {integrity: sha512-ynRvcq6wvqexJ9brDMS4BnBLzmr0e14d6ZJTEShTBWKymQiHwlAyGu0ZPEFI2Fh1U53F7tN9ufClWM5KvqkKOw==}
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
@@ -529,14 +515,11 @@ packages:
   '@types/node@20.16.9':
     resolution: {integrity: sha512-rkvIVJxsOfBejxK7I0FO5sa2WxFmJCzoDwcd88+fq/CUfynNywTo/1/T6hyFz22CyztsnLS9nVlHOnTI36RH5w==}
 
-  '@types/prop-types@15.7.13':
-    resolution: {integrity: sha512-hCZTSvwbzWGvhqxp/RqVqwU999pBf2vp7hzIjiYOsl8wqOmUxkQ6ddw1cV3l8811+kdUFus/q4d1Y3E3SyEifA==}
+  '@types/react-dom@19.0.1':
+    resolution: {integrity: sha512-hljHij7MpWPKF6u5vojuyfV0YA4YURsQG7KT6SzV0Zs2BXAtgdTxG6A229Ub/xiWV4w/7JL8fi6aAyjshH4meA==}
 
-  '@types/react-dom@18.3.0':
-    resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
-
-  '@types/react@18.3.9':
-    resolution: {integrity: sha512-+BpAVyTpJkNWWSSnaLBk6ePpHLOGJKnEQNbINNovPWzvEUyAe3e+/d494QdEh71RekM/qV7lw6jzf1HGrJyAtQ==}
+  '@types/react@19.0.1':
+    resolution: {integrity: sha512-YW6614BDhqbpR5KtUYzTA+zlA7nayzJRA9ljz9CQoxthR0sDisYZLuvSMsil36t4EH/uAt8T52Xb4sVw17G+SQ==}
 
   '@typescript-eslint/eslint-plugin@8.7.0':
     resolution: {integrity: sha512-RIHOoznhA3CCfSTFiB6kBGLQtB/sox+pJ6jeFu6FxJvqL8qRxq/FfGO/UhsGgQM9oGdXkV4xUgli+dt26biB6A==}
@@ -740,12 +723,12 @@ packages:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
 
-  chart.js@4.4.4:
-    resolution: {integrity: sha512-emICKGBABnxhMjUjlYRR12PmOXhJ2eJjEHL2/dZlWjxRAZT1D8xplLFq5M0tMQK8ja+wBS/tuVEJB5C6r7VxJA==}
+  chart.js@4.4.7:
+    resolution: {integrity: sha512-pwkcKfdzTMAU/+jNosKhNL2bHtJc/sSmYgVbuGTEDhzkrhmyihmP7vUc/5ZK9WopidMDHNe3Wm7jOd/WhuHWuw==}
     engines: {pnpm: '>=8'}
 
-  chartjs-plugin-zoom@2.0.1:
-    resolution: {integrity: sha512-ogOmLu6e+Q7E1XWOCOz9YwybMslz9qNfGV2a+qjfmqJYpsw5ZMoRHZBUyW+NGhkpQ5PwwPA/+rikHpBZb7PZuA==}
+  chartjs-plugin-zoom@2.2.0:
+    resolution: {integrity: sha512-in6kcdiTlP6npIVLMd4zXZ08PDUXC52gZ4FAy5oyjk1zX3gKarXMAof7B9eFiisf9WOC3bh2saHg+J5WtLXZeA==}
     peerDependencies:
       chart.js: '>=3.2.0'
 
@@ -1429,8 +1412,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  libqalculate-wasm@0.0.2:
-    resolution: {integrity: sha512-ciG9yR6GSbjD8ET6kTHGFTQznW+TVt+LDKQIdec5ExK/XaoGoPn1ClNUViJ1+ASBtX8x5EXSa+jduDnj8ZoZ6w==}
+  libqalculate-wasm@0.0.6:
+    resolution: {integrity: sha512-J5zDEWJeeWovTcUXOFzTKg/3NVcz87kO5dKCfhhljApCDUaqzSlSiOOidp7oP3YEDYaXbwfUhLQjmJD8GmBGZA==}
 
   lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
@@ -1460,8 +1443,8 @@ packages:
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
-  mathlive@0.101.0:
-    resolution: {integrity: sha512-/4pXiqttFhThEQ2oxEZjTFyMuVLc0cEe3GjczncaH/bP9ZYhkmlFIWNzyU9zYXzS8YugczAL7trENdCXukXBgA==}
+  mathlive@0.102.0:
+    resolution: {integrity: sha512-tQ6Jtuqe+23BDJXl0B0THWJdvskx6yUPkXLIMaE445hXTlcS9j9Kb+tP+z1MOLvRSKRoZ8nh15vSJbunNJZsFw==}
     engines: {node: '>=16.14.2', npm: '>=8.5.0'}
 
   merge-stream@2.0.0:
@@ -1516,16 +1499,16 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  next@15.0.0-canary.136:
-    resolution: {integrity: sha512-u6ANP1MzUyzU72ygPvjmK4garUdvo+Z2bGREObEYxRbjN/6nde9A+/T4haOkoeV+kwy0u+G+Hlb7SOp+RN83HA==}
-    engines: {node: '>=18.18.0'}
+  next@15.0.4:
+    resolution: {integrity: sha512-nuy8FH6M1FG0lktGotamQDCXhh5hZ19Vo0ht1AOIQWrYJLP598TIUagKtvJrfJ5AGwB/WmDqkKaKhMpVifvGPA==}
+    engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
     hasBin: true
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
       '@playwright/test': ^1.41.2
       babel-plugin-react-compiler: '*'
-      react: 19.0.0-rc-7771d3a7-20240827
-      react-dom: 19.0.0-rc-7771d3a7-20240827
+      react: ^18.2.0 || 19.0.0-rc-66855b96-20241106 || ^19.0.0
+      react-dom: ^18.2.0 || 19.0.0-rc-66855b96-20241106 || ^19.0.0
       sass: ^1.3.0
     peerDependenciesMeta:
       '@opentelemetry/api':
@@ -2091,8 +2074,8 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
 
-  yjs@13.6.19:
-    resolution: {integrity: sha512-GNKw4mEUn5yWU2QPHRx8jppxmCm9KzbBhB4qJLUJFiiYD0g/tDVgXQ7aPkyh01YO28kbs2J/BEbWBagjuWyejw==}
+  yjs@13.6.20:
+    resolution: {integrity: sha512-Z2YZI+SYqK7XdWlloI3lhMiKnCdFCVC4PchpdO+mCYwtiTwncjUbnRK9R1JmkNfdmHyDXuWN3ibJAt0wsqTbLQ==}
     engines: {node: '>=16.0.0', npm: '>=8.0.0'}
 
   yocto-queue@0.1.0:
@@ -2357,37 +2340,34 @@ snapshots:
 
   '@kurkle/color@0.3.2': {}
 
-  '@next/env@15.0.0-canary.136': {}
+  '@next/env@15.0.4': {}
 
   '@next/eslint-plugin-next@14.2.13':
     dependencies:
       glob: 10.3.10
 
-  '@next/swc-darwin-arm64@15.0.0-canary.136':
+  '@next/swc-darwin-arm64@15.0.4':
     optional: true
 
-  '@next/swc-darwin-x64@15.0.0-canary.136':
+  '@next/swc-darwin-x64@15.0.4':
     optional: true
 
-  '@next/swc-linux-arm64-gnu@15.0.0-canary.136':
+  '@next/swc-linux-arm64-gnu@15.0.4':
     optional: true
 
-  '@next/swc-linux-arm64-musl@15.0.0-canary.136':
+  '@next/swc-linux-arm64-musl@15.0.4':
     optional: true
 
-  '@next/swc-linux-x64-gnu@15.0.0-canary.136':
+  '@next/swc-linux-x64-gnu@15.0.4':
     optional: true
 
-  '@next/swc-linux-x64-musl@15.0.0-canary.136':
+  '@next/swc-linux-x64-musl@15.0.4':
     optional: true
 
-  '@next/swc-win32-arm64-msvc@15.0.0-canary.136':
+  '@next/swc-win32-arm64-msvc@15.0.4':
     optional: true
 
-  '@next/swc-win32-ia32-msvc@15.0.0-canary.136':
-    optional: true
-
-  '@next/swc-win32-x64-msvc@15.0.0-canary.136':
+  '@next/swc-win32-x64-msvc@15.0.4':
     optional: true
 
   '@nodelib/fs.scandir@2.1.5':
@@ -2413,9 +2393,11 @@ snapshots:
 
   '@swc/counter@0.1.3': {}
 
-  '@swc/helpers@0.5.12':
+  '@swc/helpers@0.5.13':
     dependencies:
       tslib: 2.7.0
+
+  '@types/hammerjs@2.0.46': {}
 
   '@types/json5@0.0.29': {}
 
@@ -2423,15 +2405,12 @@ snapshots:
     dependencies:
       undici-types: 6.19.8
 
-  '@types/prop-types@15.7.13': {}
-
-  '@types/react-dom@18.3.0':
+  '@types/react-dom@19.0.1':
     dependencies:
-      '@types/react': 18.3.9
+      '@types/react': 19.0.1
 
-  '@types/react@18.3.9':
+  '@types/react@19.0.1':
     dependencies:
-      '@types/prop-types': 15.7.13
       csstype: 3.1.3
 
   '@typescript-eslint/eslint-plugin@8.7.0(@typescript-eslint/parser@8.7.0(eslint@8.57.1)(typescript@5.6.2))(eslint@8.57.1)(typescript@5.6.2)':
@@ -2685,13 +2664,14 @@ snapshots:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
 
-  chart.js@4.4.4:
+  chart.js@4.4.7:
     dependencies:
       '@kurkle/color': 0.3.2
 
-  chartjs-plugin-zoom@2.0.1(chart.js@4.4.4):
+  chartjs-plugin-zoom@2.2.0(chart.js@4.4.7):
     dependencies:
-      chart.js: 4.4.4
+      '@types/hammerjs': 2.0.46
+      chart.js: 4.4.7
       hammerjs: 2.0.8
 
   chokidar@3.6.0:
@@ -3009,7 +2989,7 @@ snapshots:
       debug: 4.3.7
       enhanced-resolve: 5.17.1
       eslint: 8.57.1
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.7.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.7.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.30.0)(eslint@8.57.1))(eslint@8.57.1)
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.7.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1)
       fast-glob: 3.3.2
       get-tsconfig: 4.8.1
       is-bun-module: 1.2.1
@@ -3022,7 +3002,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@8.7.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.7.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.30.0)(eslint@8.57.1))(eslint@8.57.1):
+  eslint-module-utils@2.12.0(@typescript-eslint/parser@8.7.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -3044,7 +3024,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.7.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.7.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.30.0)(eslint@8.57.1))(eslint@8.57.1)
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.7.0(eslint@8.57.1)(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.1)
       hasown: 2.0.2
       is-core-module: 2.15.1
       is-glob: 4.0.3
@@ -3575,7 +3555,7 @@ snapshots:
     dependencies:
       isomorphic.js: 0.2.5
 
-  libqalculate-wasm@0.0.2: {}
+  libqalculate-wasm@0.0.6: {}
 
   lilconfig@2.1.0: {}
 
@@ -3597,7 +3577,7 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
-  mathlive@0.101.0(patch_hash=jb5di4ge6xk2y6j4h3ytr45rvq):
+  mathlive@0.102.0:
     dependencies:
       '@cortex-js/compute-engine': 0.24.1
 
@@ -3657,28 +3637,26 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  next@15.0.0-canary.136(react-dom@19.0.0-rc-e56f4ae3-20240830(react@19.0.0-rc-e56f4ae3-20240830))(react@19.0.0-rc-e56f4ae3-20240830):
+  next@15.0.4(react-dom@19.0.0-rc-e56f4ae3-20240830(react@19.0.0-rc-e56f4ae3-20240830))(react@19.0.0-rc-e56f4ae3-20240830):
     dependencies:
-      '@next/env': 15.0.0-canary.136
+      '@next/env': 15.0.4
       '@swc/counter': 0.1.3
-      '@swc/helpers': 0.5.12
+      '@swc/helpers': 0.5.13
       busboy: 1.6.0
       caniuse-lite: 1.0.30001664
-      graceful-fs: 4.2.11
       postcss: 8.4.31
       react: 19.0.0-rc-e56f4ae3-20240830
       react-dom: 19.0.0-rc-e56f4ae3-20240830(react@19.0.0-rc-e56f4ae3-20240830)
       styled-jsx: 5.1.6(react@19.0.0-rc-e56f4ae3-20240830)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 15.0.0-canary.136
-      '@next/swc-darwin-x64': 15.0.0-canary.136
-      '@next/swc-linux-arm64-gnu': 15.0.0-canary.136
-      '@next/swc-linux-arm64-musl': 15.0.0-canary.136
-      '@next/swc-linux-x64-gnu': 15.0.0-canary.136
-      '@next/swc-linux-x64-musl': 15.0.0-canary.136
-      '@next/swc-win32-arm64-msvc': 15.0.0-canary.136
-      '@next/swc-win32-ia32-msvc': 15.0.0-canary.136
-      '@next/swc-win32-x64-msvc': 15.0.0-canary.136
+      '@next/swc-darwin-arm64': 15.0.4
+      '@next/swc-darwin-x64': 15.0.4
+      '@next/swc-linux-arm64-gnu': 15.0.4
+      '@next/swc-linux-arm64-musl': 15.0.4
+      '@next/swc-linux-x64-gnu': 15.0.4
+      '@next/swc-linux-x64-musl': 15.0.4
+      '@next/swc-win32-arm64-msvc': 15.0.4
+      '@next/swc-win32-x64-msvc': 15.0.4
       sharp: 0.33.5
     transitivePeerDependencies:
       - '@babel/core'
@@ -3866,9 +3844,9 @@ snapshots:
 
   queue-microtask@1.2.3: {}
 
-  react-chartjs-2@5.2.0(chart.js@4.4.4)(react@19.0.0-rc-e56f4ae3-20240830):
+  react-chartjs-2@5.2.0(chart.js@4.4.7)(react@19.0.0-rc-e56f4ae3-20240830):
     dependencies:
-      chart.js: 4.4.4
+      chart.js: 4.4.7
       react: 19.0.0-rc-e56f4ae3-20240830
 
   react-dom@19.0.0-rc-e56f4ae3-20240830(react@19.0.0-rc-e56f4ae3-20240830):
@@ -4308,23 +4286,23 @@ snapshots:
 
   ws@8.18.0: {}
 
-  y-partykit@0.0.32(react@19.0.0-rc-e56f4ae3-20240830)(y-protocols@1.0.6(yjs@13.6.19))(yjs@13.6.19):
+  y-partykit@0.0.32(react@19.0.0-rc-e56f4ae3-20240830)(y-protocols@1.0.6(yjs@13.6.20))(yjs@13.6.20):
     dependencies:
       lib0: 0.2.98
       lodash.debounce: 4.0.8
-      y-protocols: 1.0.6(yjs@13.6.19)
-      yjs: 13.6.19
+      y-protocols: 1.0.6(yjs@13.6.20)
+      yjs: 13.6.20
     optionalDependencies:
       react: 19.0.0-rc-e56f4ae3-20240830
 
-  y-protocols@1.0.6(yjs@13.6.19):
+  y-protocols@1.0.6(yjs@13.6.20):
     dependencies:
       lib0: 0.2.98
-      yjs: 13.6.19
+      yjs: 13.6.20
 
   yaml@2.5.1: {}
 
-  yjs@13.6.19:
+  yjs@13.6.20:
     dependencies:
       lib0: 0.2.98
 
