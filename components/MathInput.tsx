@@ -4,8 +4,10 @@ import type { MathfieldElement } from 'mathlive';
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 if (typeof window !== 'undefined') {
-    const { MathfieldElement: _MathfieldElement } = await import('mathlive');
-    _MathfieldElement.fontsDirectory = "/mathlive-fonts";
+    (async () => {
+        const { MathfieldElement: _MathfieldElement } = await import('mathlive');
+        _MathfieldElement.fontsDirectory = "/mathlive-fonts";
+    })();
 }
 
 export function MathInput({ disableLatexMode = false, onKeyDown, children, removeExtraneousParentheses = false, ...props }: React.HTMLAttributes<MathfieldElement> & { disableLatexMode?: boolean, removeExtraneousParentheses?: boolean }) {

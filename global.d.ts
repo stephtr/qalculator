@@ -1,9 +1,9 @@
 import { type MathfieldElement } from 'mathlive';
 
 declare global {
-    namespace JSX {
+    namespace React.JSX {
         interface IntrinsicElements {
-            'math-field': React.DetailedHTMLProps<React.HTMLAttributes<MathfieldElement>, MathfieldElement>;
+            'math-field': React.DetailedHTMLProps<MathfieldElement & MathfieldElement<MathfieldElement>, MathfieldElement>;
         }
     }
 }
