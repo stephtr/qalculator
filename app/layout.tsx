@@ -23,7 +23,7 @@ export default function RootLayout({
       <body>
         <div className="w-[90vw] max-w-4xl text-xl mx-auto text-center flex flex-col w-[calc(100vw_-_2_*_max(env(safe-area-inset-right),env(safe-area-inset-left),5vw))]">
           <Link href="/">
-            <h1 className="pt-[max(min(20px,2vh),env(safe-area-inset-top))] pb-[min(20px,2vh)]">
+            <h1 className="pt-[max(min(20px,2vh),env(safe-area-inset-top))] pb-[min(20px,2vh)] text-[3.2rem] text-[max(min(3.2rem,min(8vh,10vw)),1.5rem)]">
               Qalculator.xyz
             </h1>
           </Link>
