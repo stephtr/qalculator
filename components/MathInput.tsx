@@ -10,7 +10,7 @@ if (typeof window !== 'undefined') {
     })();
 }
 
-export function MathInput({ disableLatexMode = false, onKeyDown, children, removeExtraneousParentheses = false, ...props }: React.HTMLAttributes<MathfieldElement> & { disableLatexMode?: boolean, removeExtraneousParentheses?: boolean }) {
+export function MathInput({ disableLatexMode = false, onKeyDown, children, removeExtraneousParentheses = false, ...props }: React.HTMLAttributes<MathfieldElement> & { disableLatexMode?: boolean, removeExtraneousParentheses?: boolean, placeholder?: string }) {
     const [isShown, setIsShown] = useState(false);
     useEffect(() => setIsShown(true), []);
 

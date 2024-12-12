@@ -51,19 +51,20 @@ export function Calculator() {
 
     const calculation = input ? libqalculate?.calculate(input, 0, 0) : null;
     const plotDataset = calculation?.plotData ? processPlotData(calculation.plotData) : null;
-    return <div>
-        <div className="text-right pr-5">
-            <button className="bg-transparent border-none underline mb-1" onClick={() => setUsingNewInput(!usingNewInput)}>
+    return <>
+        <div className="text-right pr-5 -mt-8">
+            <button className="bg-transparent border-none underline mb-1 text-base" onClick={() => setUsingNewInput(!usingNewInput)}>
                 {usingNewInput ? 'Switch to old input' : 'Switch to new input'}
             </button>
         </div>
         <div className="mb-3">
             {usingNewInput && (
                 <MathInput
+                    placeholder="\textrm{Your calculation}"
                     onInput={evt => { setLatexInput(evt.currentTarget.value); setInput(convertLatexToAsciiMath(evt.currentTarget.value)) }}
                     disableLatexMode
                     removeExtraneousParentheses
-                    className="w-full border-none rounded-3xl text-2xl relative text-center bg-[#344] text-[#eff] px-5 [&::part(content)]:min-h-12 [&::part(content)]:justify-center [&::part(menu-toggle)]:hidden [&::part(virtual-keyboard-toggle)]:absolute [&::part(virtual-keyboard-toggle)]:right-3"
+                    className="w-full border-none rounded-3xl text-2xl relative cursor-text bg-[#344] text-[#eff] px-5 [&::part(content)]:min-h-12 [&::part(content)]:justify-center [&::part(menu-toggle)]:hidden [&::part(virtual-keyboard-toggle)]:absolute [&::part(virtual-keyboard-toggle)]:right-3"
 
                 >
                     {latexInput}
@@ -72,6 +73,7 @@ export function Calculator() {
             {!usingNewInput && (
                 <input
                     title="Calculation"
+                    placeholder="Your calculation"
                     className="w-full border-none rounded-3xl h-12 relative text-center bg-[#344] text-[#eff] px-5"
                     value={input}
                     onChange={(e) => { setInput(e.currentTarget.value); setLatexInput(convertAsciiMathToLatex(e.currentTarget.value)); }}
@@ -85,6 +87,7 @@ export function Calculator() {
         )}
         {plotDataset && (
             <Chart
+                className="!h-[50vh] self-center max"
                 type="line"
                 data={plotDataset}
                 options={{
@@ -94,13 +97,12 @@ export function Calculator() {
                             position: 'bottom',
                             title: {
                                 display: true,
-                                text: 'X Axis'
+                                text: 'x'
                             }
                         },
                         y: {
                             title: {
                                 display: true,
-                                text: 'Y Axis'
                             }
                         }
                     },
@@ -133,9 +135,7 @@ export function Calculator() {
                         } as any
                     },
                 }}
-                width={600}
-                height={600}
             />
         )}
-    </div>;
+    </>;
 }
