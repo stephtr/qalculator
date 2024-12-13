@@ -37,5 +37,10 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },
-  "packageManager": "pnpm@9.7.1"
+  "packageManager": "pnpm@9.7.1",
+  "pnpm": {
+    "patchedDependencies": {
+      "@serwist/next": "patches/@serwist__next.patch"
+    }
+  }
 }

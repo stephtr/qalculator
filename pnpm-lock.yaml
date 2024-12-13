@@ -4,13 +4,18 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@serwist/next':
+    hash: j7holcakmb4vtk64nbke7s3boi
+    path: patches/@serwist__next.patch
+
 importers:
 
   .:
     dependencies:
       '@serwist/next':
         specifier: ^9.0.11
-        version: 9.0.11(next@15.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.6.2)
+        version: 9.0.11(patch_hash=j7holcakmb4vtk64nbke7s3boi)(next@15.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.6.2)
       chart.js:
         specifier: ^4.4.7
         version: 4.4.7
@@ -2501,7 +2506,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.2
 
-  '@serwist/next@9.0.11(next@15.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.6.2)':
+  '@serwist/next@9.0.11(patch_hash=j7holcakmb4vtk64nbke7s3boi)(next@15.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.6.2)':
     dependencies:
       '@serwist/build': 9.0.11(typescript@5.6.2)
       '@serwist/webpack-plugin': 9.0.11(typescript@5.6.2)

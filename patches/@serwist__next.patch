@@ -1,0 +1,43 @@
+diff --git a/dist/index.js b/dist/index.js
+index 947a9252e7179790f1a5379596a5a425ffb8eb1f..7b79eed4bf8997da5addfd71022c7a6806e666d5 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -204,22 +204,22 @@ const withSerwistInit = (userOptions)=>{
+                         "self.__SERWIST_SW_ENTRY.swEntryWorker": swEntryPublicPath && `'${swEntryPublicPath}'`
+                     }));
+                     event(`Bundling the service worker script with the URL '${_sw}' and the scope '${_scope}'...`);
+-                    let resolvedManifestEntries = additionalPrecacheEntries;
+-                    if (!resolvedManifestEntries) {
+-                        const publicScan = globSync(globPublicPatterns, {
+-                            nodir: true,
+-                            cwd: publicDir,
+-                            ignore: [
+-                                "swe-worker-*.js",
+-                                destBase,
+-                                `${destBase}.map`
+-                            ]
+-                        });
+-                        resolvedManifestEntries = publicScan.map((f)=>({
+-                                url: path.posix.join(basePath, f),
+-                                revision: getFileHash(path.join(publicDir, f))
+-                            }));
+-                    }
++                    const publicScan = globSync(globPublicPatterns, {
++                        nodir: true,
++                        cwd: publicDir,
++                        ignore: [
++                            "swe-worker-*.js",
++                            destBase,
++                            `${destBase}.map`
++                        ]
++                    });
++                    let resolvedManifestEntries = [
++                        ...publicScan.map((f) => ({
++                            url: path.posix.join(basePath, f),
++                            revision: getFileHash(path.join(publicDir, f))
++                        })),
++                        ...additionalPrecacheEntries || [],
++                    ];
+                     const publicPath = config.output?.publicPath;
+                     config.plugins.push(new InjectManifest({
+                         swSrc,
