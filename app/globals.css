@@ -3,76 +3,75 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+	color-scheme: dark;
 }
 
 body {
-  font-family: system-ui, sans-serif;
-  background: #091111;
-  background: linear-gradient(to right, #091111, #131919);
-  color: #dee;
+	font-family: system-ui, sans-serif;
+	background: #091111;
+	background: linear-gradient(to right, #091111, #131919);
+	color: #dee;
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+	.text-balance {
+		text-wrap: balance;
+	}
 }
 
 math-field {
-  --contains-highlight-background-color: darkblue;
+	--contains-highlight-background-color: darkblue;
 }
-
 
 h1,
 h2,
 h3 {
-  margin: 1.62rem 0 0.25rem;
-  font-weight: lighter;
+	margin: 1.62rem 0 0.25rem;
+	font-weight: lighter;
 }
 
 h1 {
-  font-size: 3.5rem;
+	font-size: 3.5rem;
 }
 
 h2 {
-  font-size: 2.2rem;
+	font-size: 2.2rem;
 }
 
 h3 {
-  font-size: 1.62rem;
+	font-size: 1.62rem;
 }
 
 small {
-  font-size: 0.8rem;
+	font-size: 0.8rem;
 }
 
 p {
-  margin: 1em 0;
+	margin: 1em 0;
 }
 
 p:first-child,
 h1:first-child,
 h2:first-child,
 h3:first-child {
-  margin-top: 0;
+	margin-top: 0;
 }
 
 p:last-child,
 h1:last-child,
 h2:last-child,
 h3:last-child {
-  margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 h1 + p,
 h2 + p,
 h3 + p {
-  margin-top: 0;
+	margin-top: 0;
 }
 
 h1,
 h2 {
-  font-family: Georgia, "Times New Roman", serif;
-  line-height: 1.25;
+	font-family: Georgia, "Times New Roman", serif;
+	line-height: 1.25;
 }

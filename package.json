@@ -1,46 +1,45 @@
 {
-  "name": "qalculator2",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbo",
-    "dev-party": "partykit dev --live",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "postinstall": "cp ./node_modules/libqalculate-wasm/libqalculate.wasm ./public/libqalculate.wasm && cp ./node_modules/mathlive/dist/fonts/* ./public/mathlive-fonts/"
-  },
-  "dependencies": {
-    "@serwist/next": "^9.0.11",
-    "chart.js": "^4.4.7",
-    "chartjs-plugin-zoom": "^2.2.0",
-    "libqalculate-wasm": "0.0.6",
-    "mathlive": "0.102.0",
-    "next": "15.0.4",
-    "next-build-id": "^3.0.0",
-    "partysocket": "1.0.2",
-    "react": "^19.0.0",
-    "react-chartjs-2": "^5.2.0",
-    "react-dom": "^19.0.0",
-    "y-partykit": "^0.0.32",
-    "yjs": "^13.6.20"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.13",
-    "partykit": "^0.0.110",
-    "postcss": "^8",
-    "serwist": "^9.0.11",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5"
-  },
-  "packageManager": "pnpm@9.7.1",
-  "pnpm": {
-    "patchedDependencies": {
-      "@serwist/next": "patches/@serwist__next.patch"
-    }
-  }
+	"name": "qalculator2",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev --turbo",
+		"dev-party": "partykit dev --live",
+		"build": "next build",
+		"start": "next start",
+		"lint": "biome check .",
+		"postinstall": "cp ./node_modules/libqalculate-wasm/libqalculate.wasm ./public/libqalculate.wasm && cp ./node_modules/mathlive/dist/fonts/* ./public/mathlive-fonts/"
+	},
+	"dependencies": {
+		"@serwist/next": "^9.0.11",
+		"chart.js": "^4.4.7",
+		"chartjs-plugin-zoom": "^2.2.0",
+		"libqalculate-wasm": "0.0.6",
+		"mathlive": "0.102.0",
+		"next": "15.0.4",
+		"next-build-id": "^3.0.0",
+		"partysocket": "1.0.2",
+		"react": "^19.0.0",
+		"react-chartjs-2": "^5.2.0",
+		"react-dom": "^19.0.0",
+		"y-partykit": "^0.0.32",
+		"yjs": "^13.6.20"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@types/node": "^20",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"partykit": "^0.0.110",
+		"postcss": "^8",
+		"serwist": "^9.0.11",
+		"tailwindcss": "^3.4.1",
+		"typescript": "^5"
+	},
+	"packageManager": "pnpm@9.7.1",
+	"pnpm": {
+		"patchedDependencies": {
+			"@serwist/next": "patches/@serwist__next.patch"
+		}
+	}
 }

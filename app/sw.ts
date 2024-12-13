@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 /// <reference lib="webworker" />
 
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
@@ -10,7 +9,7 @@ declare global {
 		__SW_MANIFEST: (PrecacheEntry | string)[] | undefined;
 	}
 }
-const currencyDataApiUrl = '/api/getCurrencyData';
+const currencyDataApiUrl = "/api/getCurrencyData";
 
 const serwist = new Serwist({
 	precacheEntries: self.__SW_MANIFEST,
@@ -25,28 +24,30 @@ const serwist = new Serwist({
 			// refetch & update currency data
 			matcher: ({ request }) => request.url === currencyDataApiUrl,
 			handler: new StaleWhileRevalidate({
-				plugins: [{
-					async fetchDidSucceed({ response }) {
-						if (response.status != 200) {
-							console.error("error fetching currencyData");
-						}
-						const currencyData = await response.json();
-						const clients = await self.clients.matchAll();
-						clients.forEach((client) =>
-							client.postMessage({
-								type: 'updateCurrencyData',
-								data: currencyData,
-							}),
-						);
-						return response;
-					}
-				}]
-			})
+				plugins: [
+					{
+						async fetchDidSucceed({ response }) {
+							if (response.status !== 200) {
+								console.error("error fetching currencyData");
+							}
+							const currencyData = await response.json();
+							const clients = await self.clients.matchAll();
+							for (const client of clients) {
+								client.postMessage({
+									type: "updateCurrencyData",
+									data: currencyData,
+								});
+							}
+							return response;
+						},
+					},
+				],
+			}),
 		},
 		{
 			matcher: () => true,
 			handler: new CacheFirst(),
-		}
+		},
 	],
 });
 
