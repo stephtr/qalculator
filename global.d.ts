@@ -1,4 +1,5 @@
 import type { MathfieldElement } from "mathlive";
+import type { KVNamespace } from "@cloudflare/workers-types/2023-07-01";
 
 declare global {
 	namespace React.JSX {
