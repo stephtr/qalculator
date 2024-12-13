@@ -17,6 +17,7 @@
     "libqalculate-wasm": "0.0.6",
     "mathlive": "0.102.0",
     "next": "15.0.4",
+    "next-build-id": "^3.0.0",
     "partysocket": "1.0.2",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.2.0",

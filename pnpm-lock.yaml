@@ -26,6 +26,9 @@ importers:
       next:
         specifier: 15.0.4
         version: 15.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      next-build-id:
+        specifier: ^3.0.0
+        version: 3.0.0
       partysocket:
         specifier: 1.0.2
         version: 1.0.2
@@ -1566,6 +1569,10 @@ packages:
 
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
+
+  next-build-id@3.0.0:
+    resolution: {integrity: sha512-B3JCsL/9Z/wkmo3EySukQHCgx89Aw0i4LPi2MEhCboQBJ6wpkYTIu1z6hOYKuw/S1Wy8ZRqCEq0dVY/ST6jGqg==}
+    engines: {node: '>=8'}
 
   next@15.0.4:
     resolution: {integrity: sha512-nuy8FH6M1FG0lktGotamQDCXhh5hZ19Vo0ht1AOIQWrYJLP598TIUagKtvJrfJ5AGwB/WmDqkKaKhMpVifvGPA==}
@@ -3779,6 +3786,8 @@ snapshots:
   nanoid@3.3.7: {}
 
   natural-compare@1.4.0: {}
+
+  next-build-id@3.0.0: {}
 
   next@15.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:

@@ -17,6 +17,9 @@ const serwist = new Serwist({
 	skipWaiting: true,
 	clientsClaim: true,
 	navigationPreload: true,
+	precacheOptions: {
+		cleanupOutdatedCaches: true,
+	},
 	runtimeCaching: [
 		{
 			// refetch & update currency data
