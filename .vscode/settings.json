@@ -6,13 +6,6 @@
 	"files.insertFinalNewline": true,
 	"javascript.preferences.quoteStyle": "single",
 	"typescript.preferences.quoteStyle": "single",
-	"eslint.validate": [
-		"javascript",
-		"javascriptreact",
-		"typescript",
-		"typescriptreact",
-		"json"
-	],
 	"[javascript]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},

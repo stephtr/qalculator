@@ -13,7 +13,6 @@ const activeZoomPlugin = false;
 
 if (typeof window !== "undefined") {
 	if (activeZoomPlugin) {
-		// eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
 		const zoomPlugin = require("chartjs-plugin-zoom").default;
 		ChartJS.register(zoomPlugin);
 	}

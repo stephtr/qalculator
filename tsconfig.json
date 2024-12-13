@@ -21,7 +21,8 @@
 		"paths": {
 			"@/*": ["./*"]
 		},
-		"target": "ES2017"
+		"target": "ES2017",
+		"types": ["@cloudflare/workers-types/2024-07-29"]
 	},
 	"include": [
 		"next-env.d.ts",
