@@ -19,7 +19,7 @@
 	export function updateCurrentResult(_: any, ensureResult = false) {
 		const isSetCommand = currentInput.startsWith('set ');
 		const isAssignment =
-			currentInput.includes(':=') || /^\s*\w+\s*=/.test(currentInput);
+			currentInput.includes(':=') || /^\s*\w+(\(\))?\s*=/.test(currentInput);
 		if (isSetCommand || isAssignment) {
 			currentResult = '';
 			return;
