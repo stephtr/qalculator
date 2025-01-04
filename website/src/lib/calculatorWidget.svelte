@@ -18,7 +18,7 @@
 	let currentResult = '';
 	export function updateCurrentResult(_: any, ensureResult = false) {
 		const isSetCommand = currentInput.startsWith('set ');
-		const isAssignment =
+		const isAssignment = // TODO: switch to https://github.com/Qalculate/libqalculate/blob/a8b6cf562a3a2fe8dc05b6b466d3ac6782d3654e/src/qalc.cc#L7472
 			currentInput.includes(':=') || /^\s*\w+(\(\))?\s*=/.test(currentInput);
 		if (isSetCommand || isAssignment) {
 			currentResult = '';
