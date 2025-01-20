@@ -20,7 +20,7 @@
 	<a href="https://qalculate.github.io/manual/qalculate-definitions-functions.html" target="_blank">Functions</a> • 
 	<a href="https://qalculate.github.io/manual/qalculate-definitions-variables.html" target="_blank">Variables</a> • 
 	<a href="https://qalculate.github.io/manual/qalculate-definitions-units.html" target="_blank">Units</a> • 
-	<a href="https://qalculate.github.io/manual/qalculate-examples.html" target="_blank">Examples</a>
+	<a href="/examples">Examples</a>
 </p>
 
 <h3>Feedback</h3>
