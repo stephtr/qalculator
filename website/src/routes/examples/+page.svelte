@@ -24,8 +24,8 @@
 {/each}
 <h3>More...</h3>
 <div class="example">
-	The examples are based on
-	<a href="https://qalculate.github.io/index.html">Qalculate</a>. For a full
+	These examples are based on
+	<a href="https://qalculate.github.io/manual/qalculate-examples.html">Qalculate's examples</a>. For a full
 	list of supported functions, have a look at
 	<a href="https://qalculate.github.io/manual/">Qalculate's manual</a>!
 </div>
