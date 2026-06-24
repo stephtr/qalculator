@@ -81,6 +81,8 @@
 		fetch('/api/getCurrencyData').then(async (response) => {
 			const json = await response.json();
 			calculator.updateCurrencyData(json);
+		}).catch((error) => {
+			console.error('Failed to fetch currency data:', error);
 		});
 	}
 	let isTouchScreen = false;
