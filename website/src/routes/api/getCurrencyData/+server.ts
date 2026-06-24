@@ -6,7 +6,7 @@ export async function GET({ platform }): Promise<Response> {
 		const cachedEntry = JSON.parse(
 			(await platform.env.CACHE.get('currencyData')) as string,
 		);
-		if (cachedEntry.timestamp > Date.now() - 12 * 3600 * 1000) {
+		if (cachedEntry.timestamp > Date.now() - 20 * 3600 * 1000) {
 			return new Response(JSON.stringify(cachedEntry.data), {
 				headers: {
 					'Content-Type': 'application/json',
