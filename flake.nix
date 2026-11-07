@@ -93,7 +93,7 @@
         version = "2.9.12";
         url = "https://download.gnome.org/sources/libxml2/2.9/libxml2-2.9.12.tar.xz";
         hash = "sha256-KKkvarHzEaz15HhWTEkIjvCsdwkNnHGbvF1Rjx/mLrk=";
-        flags = "--without-python --without-iconv";
+        flags = "--with-minimum --with-tree --with-output --with-sax1 --without-python --without-iconv";
       };
       qalc = (wasmLib {
         pname = "wasm-libqalculate";
