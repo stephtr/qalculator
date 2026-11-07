@@ -14,3 +14,4 @@ build/
 *.local
 .DS_Store
 /result
+/result-calc

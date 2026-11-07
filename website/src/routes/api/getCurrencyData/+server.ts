@@ -1,7 +1,7 @@
 import type { CurrencyData } from '$lib/calculator';
-import { EXCHANGERATE_KEY } from '$env/static/private';
+import type { RequestHandler } from './$types';
 
-export async function GET({ platform }): Promise<Response> {
+export const GET: RequestHandler = async ({ platform }) => {
 	if (platform?.env.CACHE) {
 		const cachedEntry = JSON.parse(
 			(await platform.env.CACHE.get('currencyData')) as string,
@@ -23,12 +23,13 @@ export async function GET({ platform }): Promise<Response> {
 		rates: {},
 	};
 
-	if (!EXCHANGERATE_KEY) {
+	const key = platform?.env.EXCHANGERATE_KEY;
+	if (!key) {
 		// eslint-disable-next-line no-console
 		console.warn('Warning: No EXCHANGERATE_KEY defined');
 	} else {
 		const resp = await fetch(
-			`http://api.exchangerate.host/live?source=EUR&access_key=${EXCHANGERATE_KEY}`,
+			`http://api.exchangerate.host/live?source=EUR&access_key=${key}`,
 		);
 		if (!resp.ok)
 			throw new Error(`error fetching currency data: ${resp.statusText}`);
@@ -70,4 +71,4 @@ export async function GET({ platform }): Promise<Response> {
 			'cache-control': `public, max-age=${6 * 3600}`,
 		},
 	});
-}
+};

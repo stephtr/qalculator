@@ -17,6 +17,14 @@ Work on an updated version has started, see the [v2 branch](https://github.com/s
 Live at https://qalculator.xyz/
 [![Screenshot](website/static/app_screenshot_desktop.png)](https://qalculator.xyz/)
 
+## Build and deploy
+
+Run `nix build` from the repository root. Deploy `result/` to Cloudflare Pages;
+it includes the website, calculator modules, and API worker.
+
+Set the `EXCHANGERATE_KEY` runtime secret in Cloudflare Pages to enable currency
+updates.
+
 ## Development
 
 This repo is split into two parts:

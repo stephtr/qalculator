@@ -1,8 +1,8 @@
 # Build the calculator
 
-From the repository root, run `nix build`.
+From the repository root, run `nix build .#calc --out-link result-calc`.
 
-`result/` contains the browser files and `report.json`: raw, gzip, and Brotli
+`result-calc/` contains the browser files and `report.json`: raw, gzip, and Brotli
 sizes, plus seven fresh-process Node startup samples in milliseconds. Startup
 includes compilation, initialization, and variable discovery, not network time.
 

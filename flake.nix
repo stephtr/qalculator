@@ -1,5 +1,5 @@
 {
-  description = "Qalculator WebAssembly build";
+  description = "Qalculator website and WebAssembly build";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/3ec636362e1816bc2f0888fa0fa2c69f1bc9e504";
 
@@ -162,10 +162,52 @@
           cp calc.js calc.wasm calc.deferred.wasm report.json coverage.json "$out/"
         '';
       };
+      siteSrc = pkgs.lib.cleanSourceWith {
+        src = ./.;
+        filter = path: type:
+          let name = baseNameOf path; in
+          !(builtins.elem name [ "node_modules" ".svelte-kit" "build" "result" ".git" ])
+          && !(builtins.elem name [ "calc.js" "calc.wasm" "calc.deferred.wasm" ]);
+      };
+      site = pkgs.stdenvNoCC.mkDerivation {
+        pname = "qalculator-site";
+        version = "0.0.1";
+        src = siteSrc;
+        nativeBuildInputs = [ pkgs.nodejs pkgs.pnpm_10 pkgs.pnpmConfigHook ];
+        pnpmDeps = pkgs.fetchPnpmDeps {
+          pname = "qalculator-site";
+          src = pkgs.lib.fileset.toSource {
+            root = ./.;
+            fileset = pkgs.lib.fileset.unions [
+              ./package.json ./website/package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml
+            ];
+          };
+          pnpm = pkgs.pnpm_10;
+          fetcherVersion = 5;
+          hash = "sha256-wDhKgrcOcFvI892IMWs/Zgeg+nEesvd+wDG+gWo7sXA=";
+        };
+        buildPhase = ''
+          runHook preBuild
+          cp ${calc}/calc.js ${calc}/calc.wasm ${calc}/calc.deferred.wasm website/static/
+          pnpm --filter website build
+          runHook postBuild
+        '';
+        installPhase = ''
+          runHook preInstall
+          cp -r website/.svelte-kit/cloudflare "$out"
+          for file in calc.js calc.wasm calc.deferred.wasm; do
+            cmp "${calc}/$file" "$out/$file"
+          done
+          test -s "$out/index.html"
+          test -s "$out/_worker.js"
+          test -s "$out/_routes.json"
+          runHook postInstall
+        '';
+      };
     in {
       packages.${system} = {
-        default = calc;
-        inherit sdk calc;
+        default = site;
+        inherit sdk calc site;
       };
       devShells.${system}.default = pkgs.mkShell {
         packages = tools;
