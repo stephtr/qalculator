@@ -112,6 +112,10 @@
   ],
   "uncommon": [
     {"kind":"primes","expr":"nthprime(100001)"},
+    {"kind":"primes","expr":"nthprime(100000) - 1299709","text":"0"},
+    {"kind":"primes","expr":"nthprime(1000000) - 15485863","text":"0"},
+    {"kind":"primes","expr":"nthprime(100000000) - 2038074743","text":"0"},
+    {"kind":"primes","expr":"nthprime(1000000000)"},
     {"kind":"primes","expr":"isprime(32416190071)"},
     {"kind":"primes","expr":"nextprime(1000000000000)"},
     {"kind":"primes","expr":"primes(100)"},

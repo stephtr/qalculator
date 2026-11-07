@@ -104,6 +104,7 @@
         deps = [ gmp mpfr xml ];
         flags = "--enable-compiled-definitions --without-libcurl --without-icu --disable-nls --disable-textport --disable-unittests --with-gnuplot-call=byo";
         prepare = ''
+          python3 ${./lib/tools/primes.py} libqalculate/primes.h ${./lib/tools/primes.inc}
           NOCONFIGURE=1 NO_AUTOMAKE=1 ./autogen.sh
           export LIBXML_LIBS="-L${xml}/lib -lxml2"
           export LIBXML_CFLAGS="-I${xml}/include/libxml2"
@@ -149,7 +150,7 @@
             --keep-funcs=@tools/keep-functions.txt --enable-mutable-globals \
             --export-prefix=% -o1 calc.wasm -o2 calc.deferred.wasm
           for file in calc.wasm calc.deferred.wasm; do
-            wasm-opt "$file" --strip-debug -o "$file"
+            wasm-opt "$file" --memory-packing --strip-debug -o "$file"
           done
           node tools/profile.mjs verify .
           node tools/measure.mjs .
