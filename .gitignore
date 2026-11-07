@@ -13,3 +13,4 @@ build/
 .svelte-kit/
 *.local
 .DS_Store
+/result
