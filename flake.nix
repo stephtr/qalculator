@@ -36,7 +36,7 @@
               --set EM_CONFIG "$out/emscripten-config" \
               --prefix PATH : '${pkgs.lib.makeBinPath [ pkgs.python3 pkgs.nodejs ]}'
           done
-          for tool in llvm-nm llvm-ar llvm-objdump llvm-size wasm-opt wasm-dis; do
+          for tool in llvm-nm llvm-ar llvm-objdump llvm-size wasm-opt wasm-dis wasm-split; do
             ln -s "$root/bin/$tool" "$out/bin/$tool"
           done
           runHook postInstall
@@ -139,14 +139,25 @@
             -L${qalc}/lib -L${gmp}/lib -L${mpfr}/lib -L${xml}/lib \
             -lqalculate -lgmp -lmpfr -lxml2 calc.o \
             -s ENVIRONMENT=web -s FILESYSTEM=0 -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
-            --profiling-funcs -o calc.js
-          wasm-opt calc.wasm --strip-debug -o calc.wasm
+            --profiling-funcs -s SPLIT_MODULE=1 --pre-js tools/loader.js \
+            '-sEXPORTED_FUNCTIONS=["_main","_malloc","_free"]' -o calc.js
+          mkdir reference
+          cp calc.js reference/
+          cp calc.wasm.orig reference/calc.wasm
+          node tools/profile.mjs train .
+          wasm-split calc.wasm.orig --profile=profile.data \
+            --keep-funcs=@tools/keep-functions.txt --enable-mutable-globals \
+            --export-prefix=% -o1 calc.wasm -o2 calc.deferred.wasm
+          for file in calc.wasm calc.deferred.wasm; do
+            wasm-opt "$file" --strip-debug -o "$file"
+          done
+          node tools/profile.mjs verify .
           node tools/measure.mjs .
           runHook postBuild
         '';
         installPhase = ''
           mkdir -p "$out"
-          cp calc.js calc.wasm report.json "$out/"
+          cp calc.js calc.wasm calc.deferred.wasm report.json coverage.json "$out/"
         '';
       };
     in {

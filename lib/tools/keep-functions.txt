@@ -1,0 +1,3 @@
+__gmpn_com
+mpfr_powerof2_raw
+Number::operator--\28int\29
