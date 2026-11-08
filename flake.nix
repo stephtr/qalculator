@@ -65,9 +65,9 @@
             runHook preConfigure
             ${cacheSetup}
             export CC=emcc CXX=em++ AR=emar RANLIB=emranlib NM=emnm
-            export CFLAGS="-g -O2" CXXFLAGS="-g -O2"
+            export CFLAGS="-g -Oz" CXXFLAGS="-g -Oz"
             export CPPFLAGS="${pkgs.lib.concatMapStringsSep " " (dep: "-I${dep}/include") deps}"
-            export LDFLAGS="${pkgs.lib.concatMapStringsSep " " (dep: "-L${dep}/lib") deps}"
+            export LDFLAGS="-Oz ${pkgs.lib.concatMapStringsSep " " (dep: "-L${dep}/lib") deps}"
             ${prepare}
             emconfigure ./configure --prefix="$out" --disable-shared ${flags}
             runHook postConfigure
@@ -134,9 +134,9 @@
         buildPhase = ''
           runHook preBuild
           ${cacheSetup}
-          em++ -c calc.cc -O2 -o calc.o \
+          em++ -c calc.cc -Oz -o calc.o \
             -I${qalc}/include -I${gmp}/include -I${mpfr}/include -I${xml}/include/libxml2
-          emcc --bind -O2 \
+          emcc --bind -Oz \
             -L${qalc}/lib -L${gmp}/lib -L${mpfr}/lib -L${xml}/lib \
             -lqalculate -lgmp -lmpfr -lxml2 calc.o \
             -s ENVIRONMENT=web -s FILESYSTEM=0 -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
