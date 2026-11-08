@@ -9,8 +9,22 @@ const currencyDataApiUrl = '/api/getCurrencyData';
 const worker = self as unknown as ServiceWorkerGlobalScope;
 const CACHE_KEY = `cache-${version}`;
 
-const toCache = build.concat(files).concat(['/', currencyDataApiUrl]);
-const staticAssets = new Set(toCache);
+const startupFiles = new Set([
+	'/calc.js',
+	'/calc.wasm',
+	'/manifest.webmanifest',
+	'/logo.png',
+	'/logo_maskable.png',
+]);
+
+// Keep route code offline, but fetch deferred WASM and secondary media only on use.
+const toCache = build
+	.filter((path) => /\.(js|css)$/.test(path))
+	.concat(files.filter((path) => startupFiles.has(path)))
+	.concat(['/', currencyDataApiUrl]);
+const staticAssets = new Set(
+	build.concat(files).concat(['/', currencyDataApiUrl]),
+);
 
 self.addEventListener('message', async (evt) => {
 	if (evt.data?.type === 'update') {
@@ -44,8 +58,7 @@ async function fetchAndCache(req: Request) {
 	const cache = await caches.open(CACHE_KEY);
 	try {
 		const resp = await fetch(req);
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		cache.put(req, resp.clone());
+		await cache.put(req, resp.clone());
 		return resp;
 	} catch (err) {
 		const resp = await cache.match(req);

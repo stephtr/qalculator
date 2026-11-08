@@ -7,6 +7,7 @@ declare global {
 		interface Platform {
 			env: {
 				CACHE: any;
+				EXCHANGERATE_KEY?: string;
 			};
 		}
 	}
